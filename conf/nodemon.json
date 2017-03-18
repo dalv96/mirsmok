@@ -1,0 +1,5 @@
+{
+  "verbose": true,
+  "ignore": [ "views", "public", "logs", "*.log"],
+  "delay":1000
+}

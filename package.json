@@ -1,0 +1,29 @@
+{
+  "name": "mirsmok",
+  "version": "0.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "start": "node main.js",
+    "dev": "./node_modules/.bin/nodemon --config ./conf/nodemon.json",
+    "pro": "./node_modules/.bin/forever -a --minUptime 1000 --spinSleepTime 3000 start main.js",
+    "prostop": "./node_modules/.bin/forever stop main.js"
+  },
+  "author": "Vladislav Telichko",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.17.1",
+    "connect-mongo": "^1.3.2",
+    "express": "^4.15.2",
+    "express-session": "^1.15.1",
+    "forever": "^0.15.3",
+    "helmet": "^3.5.0",
+    "log4js": "^1.1.1",
+    "mongodb": "^2.2.25",
+    "mongoose": "^4.9.0",
+    "nconf": "^0.8.4",
+    "nodemon": "^1.11.0",
+    "pug": "^2.0.0-beta11",
+    "serve-favicon": "^2.4.1"
+  }
+}

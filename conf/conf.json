@@ -1,0 +1,10 @@
+{
+    "server": {
+        "port": 8081
+    },
+    "database": {
+        "port": 21017,
+        "url": "localhost",
+        "name": "mirsmok"
+    }
+}

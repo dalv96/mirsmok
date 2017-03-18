@@ -1,0 +1,16 @@
+doctype
+html
+    head
+        block title
+            title Система мониторинга отзывов клиентов
+        block head
+            link(rel='stylesheet' href='/public/css/bootstrap.min.css')
+            script(src='/public/js/jquery-3.2.0.min.js')
+    body
+        header
+            block header
+                if(user)
+                    a(href='/logout') Выйти
+        div
+            block content
+        footer
