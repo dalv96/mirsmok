@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 const conf = require('./conf');
 const db = require('./controllers/connect').connections[0];

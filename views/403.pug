@@ -1,0 +1,17 @@
+doctype
+html
+    head
+        block title
+            title Нет доступа
+        block head
+            link(rel='stylesheet' href='/public/css/error.css')
+    body
+        header
+            block header
+                h1.tit Ошибка 403
+        div
+            block content
+                h2 Вы не имеете доступа к этой странице
+                br
+                a.link.awesome(href='/') << Вернутся на главную страницу
+        footer

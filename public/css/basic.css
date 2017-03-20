@@ -1,0 +1,46 @@
+nav {
+    top: 0;
+    background: #1a7abe;
+    min-width: 600px;
+}
+
+nav ul {
+    display: flex;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    padding: 15px;
+    display: block;
+    transition: 0.3s all;
+}
+
+nav li {
+    transition: 0.3s all;
+}
+
+nav li:hover {
+    color: white;
+    background: #134d76;
+    text-decoration: none;
+}
+
+nav a:hover {
+    color: white;
+    text-decoration: none;
+    transform: translateY(3px);
+}
+
+.exit {
+    margin-left: 0em;
+    margin-right: 2em;
+}
+
+.profile {
+    margin-left: auto;
+    margin-right: 0em;
+}

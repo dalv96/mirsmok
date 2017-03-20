@@ -1,0 +1,17 @@
+doctype
+html
+    head
+        block title
+            title Страница не найдена
+        block head
+            link(rel='stylesheet' href='/public/css/error.css')
+    body
+        header
+            block header
+                h1.tit Ошибка 404
+        div
+            block content
+                h2 Вы ищите страницу, которой не существует
+                br
+                a.link.awesome(href='/') << Вернутся на главную страницу
+        footer

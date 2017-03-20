@@ -1,0 +1,35 @@
+extend ../basic
+append head
+	link(rel='stylesheet' href='/public/css/users.css')
+append content
+
+	h1 Список пользователей
+	button.btn.btn-default.addUser(onclick='location="/admin/addUser"')
+		span.glyphicon.glyphicon-plus.plus
+		| Добавить пользователя
+	.table-responsive.container-fluid
+		table.table.table-hover
+			thead
+				tr
+					th Логин
+					th E-mail
+					th Ф.И.О.
+					th Телефон
+					th Права
+			tbody
+				each user in users
+					tr
+						td
+							a(href="/admin/users/"+user.login)= user.login
+							if(user.status == 1)
+								span(class="glyphicon glyphicon-alert blocked" title="Этот пользователь заблокирован")
+						if(user.email)
+							td= user.email
+						else
+							td Не указан
+						td= user.fullName
+						if(user.number)
+							td= user.number
+						else
+							td Не указан
+						td= roles[user.role].name

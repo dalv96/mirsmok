@@ -3,7 +3,7 @@
 var mongoose = require('../controllers/connect');
 
 var Account = mongoose.Schema({
-    login : {
+    login: {
 		type: String,
 		required: true,
 		unique: true,
@@ -22,9 +22,18 @@ var Account = mongoose.Schema({
         type: Number,
         required: true
     },
+    department: {
+        type: String
+    },
     fullName: {
         type: String,
         required: true
+    },
+    number: {
+        type: String
+    },
+    email: {
+        type: String
     }
 
 });

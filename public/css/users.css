@@ -1,0 +1,20 @@
+.blocked {
+    color: orange;
+    margin-left: 0.5em;
+}
+.addUser {
+	margin: 0 0 1em 1em;
+}
+.plus {
+	margin-right: 0.5em;
+}
+.block {
+	margin-left: 23em;
+}
+.delete {
+	margin-left: 2em;
+}
+form {
+	min-width: 710px;
+	max-width: 710px;
+}

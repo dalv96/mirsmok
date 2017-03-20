@@ -46,5 +46,26 @@ module.exports = {
             }
         })
 
+    },
+
+    isAdmin: function (req, res, next) {
+        if(res.locals.user.role == 0) next();
+        else res.render('403');
+    },
+
+    isManager: function (req, res, next) {
+        if(res.locals.user.role == 1) next();
+        else res.render('403');
+    },
+
+    isInit: function (req, res, next) {
+        if(res.locals.user.role == 2) next();
+        else res.render('403');
+    },
+
+    isCollector: function (req, res, next) {
+        if(res.locals.user.role == 3) next();
+        else res.render('403');
     }
+
 }
