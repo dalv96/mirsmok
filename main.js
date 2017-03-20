@@ -27,7 +27,7 @@ app.use(session({
     resave: false,
     saveUninitialized: true,
     cookie: {
-        maxAge: 15 * 60 * 1000 // 15 minutes
+        maxAge: 14 * 24 * 60 * 60 * 1000 // 2 недели
     },
     unset: 'destroy',
     secret: 'qwerty',

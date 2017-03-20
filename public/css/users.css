@@ -5,16 +5,26 @@
 .addUser {
 	margin: 0 0 1em 1em;
 }
+.addUser:hover .plus {
+	transform: rotateZ(360deg);
+}
 .plus {
 	margin-right: 0.5em;
+	transition: 0.5s all;
 }
 .block {
-	margin-left: 23em;
+	margin-left: 10.5em;
 }
 .delete {
-	margin-left: 2em;
+	margin-left: 1em;
 }
 form {
-	min-width: 710px;
-	max-width: 710px;
+	min-width: 500px;
+	max-width: 500px;
+}
+.some {
+    margin-left: 1em;
+}
+._block {
+    margin-bottom: 3em;
 }

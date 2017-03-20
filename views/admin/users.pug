@@ -2,8 +2,8 @@ extend ../basic
 append head
 	link(rel='stylesheet' href='/public/css/users.css')
 append content
-
-	h1 Список пользователей
+	.some
+		h1 Список пользователей
 	button.btn.btn-default.addUser(onclick='location="/admin/addUser"')
 		span.glyphicon.glyphicon-plus.plus
 		| Добавить пользователя

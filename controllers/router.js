@@ -17,6 +17,10 @@ module.exports = function(app) {
         res.render('main');
     });
 
+    app.get('/profile', account.getProfile);
+    app.post('/profile', account.editProfile);
+    app.post('/profile/pass', account.editProfilePass);
+
     // ****************** АДМИНИСТРАТОР ************************
     app.all('/admin/*', auth.isAdmin);
 
@@ -25,7 +29,7 @@ module.exports = function(app) {
     app.get('/admin/users', account.getAll);
 
     app.post('/admin/users/:login', account.edit);
-    app.put('/admin/users/:login/pass', account.editPass);
+    app.post('/admin/users/:login/pass', account.editPass);
     app.put('/admin/users/:login/block', account.block);
     app.delete('/admin/users/:login', account.delete);
     app.get('/admin/users/:login', account.getOne);

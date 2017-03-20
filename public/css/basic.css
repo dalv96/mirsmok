@@ -29,6 +29,12 @@ nav li:hover {
     text-decoration: none;
 }
 
+nav a:focus {
+	color: white;
+    text-decoration: none;
+    background: #134d76;
+}
+
 nav a:hover {
     color: white;
     text-decoration: none;
