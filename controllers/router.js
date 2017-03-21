@@ -3,6 +3,8 @@
 const auth = require('./authorization');
 const account = require('./account');
 const models = require('../models');
+const order = require('./order');
+
 module.exports = function(app) {
 
     app.locals.roles = models.Account.roles;
@@ -41,6 +43,7 @@ module.exports = function(app) {
     // ****************** ИНИЦИАТОР ****************************
 
     app.all('/init/*', auth.isInit);
+    app.post('/init', order.init);
 
     // ****************** СБОРЩИК ОТЗЫВОВ **********************
 

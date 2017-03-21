@@ -8,16 +8,13 @@ var Order = mongoose.Schema({
 		required: true,
 		unique: true
 	},
-    typeOrder: {
+    type: {
         type: String,
         required: true
     },
     dateEvent: {
         type: Date,
         required: true
-    },
-    tt: {
-        type: String
     },
     nameAbon: {
         type: String,
@@ -36,12 +33,13 @@ var Order = mongoose.Schema({
         required: true
     },
     themeTT: {
-        type: String,
-        required: true
+        type: String
+    },
+    numberTT: {
+        type: String
     },
     personalAcc: {
-        type: String,
-        required: true
+        type: String
     },
     nameCont: {
         type: String
@@ -51,8 +49,9 @@ var Order = mongoose.Schema({
 var order;
 
 Order.statics.getNext = function () {
-    return order.findOne({ sort:{ 'id': -1 } }).exec().then( o => {
-        if(o) return o.id;
+    return order.find().sort({ 'id': -1 }).exec().then( o => {
+        console.log(o[0].id);
+        if(o[0]) return ++o[0].id;
         else return 1;
     });
 }

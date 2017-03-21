@@ -13,7 +13,8 @@ html
                 if(__user)
                     nav
                         ul.menu
-                            li: a(href='/' tabindex='990') Главная страница
+                            li: a(href='/' tabindex='990') 
+                                span Главная страница
                             if(__user.role == 0)
                                 li: a(href='/admin/users' tabindex='991') Пользователи
                             li: a(href='/info' tabindex='992') Статистика
@@ -22,3 +23,7 @@ html
         div
             block content
         footer
+            .developBy
+                p Design by 
+                    a(href='http://www.miranda-media.ru/') Miranda-Media 
+                    | in 2017

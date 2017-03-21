@@ -50,3 +50,14 @@ nav a:hover {
     margin-left: auto;
     margin-right: 0em;
 }
+
+.__block {
+    margin-left: 1em;
+}
+
+.developBy {
+    font-size: 9pt;
+    position: fixed;
+    bottom: 0;
+    right: 0.5em;
+}

@@ -1,0 +1,59 @@
+h2 Инициализация заявки
+hr
+form.form-horizontal(method='POST' action='/init')
+    ul.list-group
+        li.list-group-item
+            .form-group
+                label.control-label.col-sm-3 Тип проведенных работ
+                .col-sm-6
+                    select.form-control(onChange='changeType(this.value)' name='type' required)
+                        option(value='0' selected) Инсталяция
+                        option(value='1' ) Ремонт
+        li.list-group-item
+            .form-group
+                label.control-label.col-sm-3 Дата выезда
+                .col-sm-2
+                    input.form-control(type='date' name='date' required)
+        li.list-group-item
+            .form-group
+                label.control-label.col-sm-3 Ф.И.О. абонента
+                .col-sm-6
+                    input.form-control(type='text' name='nameAbon' required)
+        li.list-group-item
+            .form-group
+                label.control-label.col-sm-3 Номер телефона абонента
+                .col-sm-3
+                    input.form-control(type='text' name='phone' required)
+        li.list-group-item
+            .form-group
+                label.control-label.col-sm-3 Адрес
+                .col-sm-6
+                    input.form-control(type='text' name='adress' required)
+        li.list-group-item
+            .form-group
+                label.control-label.col-sm-3 Ф.И.О. исполнителя
+                .col-sm-6
+                    input.form-control(type='text' name='nameExec')
+        
+        li.list-group-item.repairs_hide
+            .form-group
+                label.control-label.col-sm-3 Номер ТТ
+                .col-sm-6
+                    input.form-control(type='text' name='numberTT')
+        li.list-group-item.repairs_hide
+            .form-group
+                label.control-label.col-sm-3 Тема ТТ
+                .col-sm-6
+                    input.form-control(type='text' name='themeTT')
+                        
+        li.list-group-item.install
+            .form-group
+                label.control-label.col-sm-3 Лицевой счет
+                .col-sm-3
+                    input.form-control(type='text' name='personalAcc')                
+        li.list-group-item.install
+            .form-group
+                label.control-label.col-sm-3 Ф.И.О. подрядчика
+                .col-sm-6
+                    input.form-control(type='text' name='nameCont')
+        button.btn.btn-success.col-sm-offset-5.col-sm-3.subm(type='submit') Создать

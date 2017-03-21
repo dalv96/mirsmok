@@ -1,12 +1,12 @@
 extend basic
 block append head
     block title
-        title Вход в СМОК
+        title СМОК - Вход в систему
     link(rel='stylesheet' href='/public/css/login.css')
 block append content
     div(class="container")
         form.form-signin(method='post')
-            h3.form-signin-heading.titl Вход
+            h3.form-signin-heading.titl Вход в систему
             label(for="inputEmail" class='sr-only') Логин
             input(type="text" name='login' class="form-control" placeholder="Логин" required autofocus)
             label(for="inputPassword" class="sr-only") Пароль

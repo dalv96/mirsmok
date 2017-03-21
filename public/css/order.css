@@ -1,0 +1,36 @@
+.list-group-item {
+    padding: 0 0 0 0;
+}
+.__block ul li:nth-child(n+1) {
+    background-color: #e8f3fa;
+}
+.__block ul li:nth-child(2n) {
+    background-color: white;
+}
+.form-group {
+    margin: 5px 0 5px 0;
+}
+.form-group .control-label {
+    text-align: left;
+    margin-left: 1em;
+}
+.__block {
+    max-width: 95%;
+}
+.repairs_hide {
+    display: none;
+}
+.repairs {
+    display: block;
+}
+.install {
+    display: block;
+}
+.install_hide {
+    display: none;
+}
+.subm {
+    transition: all 0.3s;
+    margin-top: 1em;
+    font-size: 14pt;
+}

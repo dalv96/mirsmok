@@ -3,7 +3,7 @@ append head
 	script(src='/public/js/account.js')
 	link(rel='stylesheet' href='/public/css/users.css')
 append content
-	.some
+	.__block
 		h2 Редактирование пользователя
 
 		form.col-xs-6._block(method='POST')
@@ -25,12 +25,16 @@ append content
 
 			p
 				label Права
-				select(name="role" id="role" class="input-area form-control" required)
-					each role in roles
-						if(role.id == user.role)
-							option( selected value=role.id )= role.name
-						else
-							option( value=role.id )= role.name
+				if(user.login == 'admin')
+					select(name="role" id="role" class="input-area form-control" required disabled)
+						option(value='0') Администратор
+				else
+					select(name="role" id="role" class="input-area form-control" required)
+						each role in roles
+							if(role.id == user.role)
+								option( selected value=role.id )= role.name
+							else
+								option( value=role.id )= role.name
 			hr
 			button(type="submit" class="btn btn-default" id="submit") Сохранить
 			if(user.login != 'admin')
