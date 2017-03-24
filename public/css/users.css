@@ -25,3 +25,9 @@ form {
 ._block {
     margin-bottom: 3em;
 }
+.depart {
+    display: block;
+}
+.hide {
+    display: none;
+}

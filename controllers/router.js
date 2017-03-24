@@ -8,6 +8,7 @@ const order = require('./order');
 module.exports = function(app) {
 
     app.locals.roles = models.Account.roles;
+    app.locals.deps = models.Account.deps;
 
     app.post('/login', auth.checkAuthorisation);
 
@@ -16,7 +17,17 @@ module.exports = function(app) {
     app.get('/logout', auth.logout);
 
     app.get('/', function (req, res) {
-        res.render('main');
+        switch (res.locals.__user.role) {
+            case 0:
+                res.redirect('/admin/users');
+                break;
+            case 2:
+                res.redirect('/init');
+                break;
+            case 3:
+                res.redirect('/collector/orders')
+                break;
+        }
     });
 
     app.get('/profile', account.getProfile);
@@ -42,12 +53,15 @@ module.exports = function(app) {
 
     // ****************** ИНИЦИАТОР ****************************
 
-    app.all('/init/*', auth.isInit);
+    app.all('/init*', auth.isInit);
+    app.get('/init', order.getInitPage);
     app.post('/init', order.init);
 
     // ****************** СБОРЩИК ОТЗЫВОВ **********************
 
     app.all('/collector/*', auth.isCollector);
+    app.get('/collector/orders', order.getOrdersPage)
+    app.get('/collector/orders/:id', order.collect);
 
 
     app.all('*', function (req, res) {

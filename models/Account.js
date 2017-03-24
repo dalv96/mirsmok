@@ -23,7 +23,7 @@ var Account = mongoose.Schema({
         required: true
     },
     department: {
-        type: String
+        type: Number
     },
     fullName: {
         type: String,
@@ -50,7 +50,20 @@ var roles = [
     };
 });
 
+var deps = [
+    'ГУС Симферополь',
+    'ГУС Евпатория',
+    'ГУС Севастополь',
+    'ГУС Феодосия',
+].map( (item, i) => {
+    return {
+        name: item,
+        id: i
+    };
+});
+
 Account.statics.roles = roles;
+Account.statics.deps = deps;
 
 var account = mongoose.model('Account', Account);
 

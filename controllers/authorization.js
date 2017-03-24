@@ -14,6 +14,9 @@ module.exports = {
                     fullName: acc.fullName,
                     role: acc.role
                 };
+                if(acc.role == 2) {
+                    res.locals.__user.dep = acc.department;
+                }
                 next();
             })
         } else {

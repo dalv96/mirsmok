@@ -1,0 +1,70 @@
+extend basic
+append head
+    link(rel='stylesheet' href='/public/css/order.css')
+    script(src='/public/js/order.js')
+append content
+    .__block
+        h2 Отзыв клиента
+        hr
+        form.form-horizontal
+            ul.list-group
+                li.list-group-item
+                    .form-group
+                        label.control-label.col-sm-3 Тип проведенных работ
+                        .col-sm-6
+                            select.form-control(onChange='changeType(this.value)' required disabled)
+                                if(order.type == 0)
+                                    option(value='0' selected) Инсталяция
+                                else
+                                    option(value='1' selected) Ремонт
+                li.list-group-item
+                    .form-group
+                        label.control-label.col-sm-3 Дата выезда
+                        .col-sm-2
+                            input.form-control(type='text' value=date required disabled)
+                li.list-group-item
+                    .form-group
+                        label.control-label.col-sm-3 Ф.И.О. абонента
+                        .col-sm-6
+                            input.form-control(type='text' value=order.nameAbon required disabled)
+                li.list-group-item
+                    .form-group
+                        label.control-label.col-sm-3 Номер телефона абонента
+                        .col-sm-3
+                            input.form-control(type='text' value=order.phone required disabled)
+                li.list-group-item
+                    .form-group
+                        label.control-label.col-sm-3 Адрес
+                        .col-sm-6
+                            input.form-control(type='text' value=order.adress required disabled)
+
+                li.list-group-item
+                    .form-group
+                        label.control-label.col-sm-3 Ф.И.О. исполнителя
+                        .col-sm-6
+                            input.form-control(type='text' value=order.nameExec disabled)
+                                
+                if(order.type == '1')
+                    li.list-group-item.repairs
+                        .form-group
+                            label.control-label.col-sm-3 Номер ТТ
+                            .col-sm-6
+                                input.form-control(type='text' value=order.numberTT disabled)
+                    li.list-group-item.repairs
+                        .form-group
+                            label.control-label.col-sm-3 Тема ТТ
+                            .col-sm-6
+                                input.form-control(type='text' value=order.themeTT disabled)
+                else                
+                    li.list-group-item
+                        .form-group
+                            label.control-label.col-sm-3 Ф.И.О. подрядчика
+                            .col-sm-6
+                                input.form-control(type='text' value=order.nameCont disabled)
+                                    
+                    li.list-group-item.install
+                        .form-group
+                            label.control-label.col-sm-3 Лицевой счет
+                            .col-sm-3
+                                input.form-control(type='text' value=order.personalAcc disabled)
+                

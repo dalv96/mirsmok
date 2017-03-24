@@ -1,0 +1,24 @@
+extend basic
+append head
+    link(rel='stylesheet' href='/public/css/order.css')
+    script(src='/public/js/order.js')
+append content
+    h3 Заявки для проработки
+    .table-responsive.container-fluid
+        table.table.table-hover
+            thead
+                tr
+                    th Номер
+                    th Инициатор
+                    th Тип проведенных работ
+                    th Ф.И.О. клиента
+            tbody
+                each order in orders
+                    tr(onclick="location = '/collector/orders/" + order.id + "'")
+                        td №#{order.id}
+                        td= deps[order.initiator].name
+                        if(order.type == 0)
+                            td Инсталяция
+                        else
+                            td Ремонт
+                        td= order.nameAbon

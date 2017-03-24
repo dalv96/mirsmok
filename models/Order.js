@@ -43,6 +43,15 @@ var Order = mongoose.Schema({
     },
     nameCont: {
         type: String
+    },
+    stage: {
+        type: Number
+    },
+    initiator: {
+        type: Number
+    },
+    dateInit: {
+        type: Date
     }
 });
 
@@ -50,7 +59,6 @@ var order;
 
 Order.statics.getNext = function () {
     return order.find().sort({ 'id': -1 }).exec().then( o => {
-        console.log(o[0].id);
         if(o[0]) return ++o[0].id;
         else return 1;
     });

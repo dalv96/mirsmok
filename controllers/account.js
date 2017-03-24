@@ -69,6 +69,9 @@ module.exports = {
                     role: req.body.role,
                     fullName: req.body.fullName
                 });
+                if(req.body.role == 2) {
+                    acc.department = req.body.dep;
+                }
                 return acc.save();
             } else {
                 return 'true';
@@ -84,7 +87,8 @@ module.exports = {
             a.fullName = req.body.fullName;
             a.role = req.body.role;
             a.email = req.body.email;
-            a.number = req.body.number
+            a.number = req.body.number;
+            a.department = req.body.department;
             return a.save();
         }).then( () => res.redirect('/admin/users') )
     },

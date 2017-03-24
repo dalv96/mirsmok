@@ -21,3 +21,11 @@ function deleteAcc() {
     }
     return false;
 }
+
+function changeRole(f) {
+    if(f==2) {
+        $('.hide').removeClass('hide').addClass('depart');
+    } else {
+        $('.depart').addClass('hide').removeClass('depart');
+    }
+}
