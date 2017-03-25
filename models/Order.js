@@ -52,6 +52,20 @@ var Order = mongoose.Schema({
     },
     dateInit: {
         type: Date
+    },
+    answers: {
+        firstQ: {
+            type: Number
+        },
+        secQ: {
+            type: Number
+        },
+        thirdQ: {
+            type: Boolean
+        },
+        comment: {
+            type: String
+        }
     }
 });
 

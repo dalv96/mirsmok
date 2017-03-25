@@ -70,33 +70,32 @@ append content
                                     
             form(method='POST')
                 if(order.type == '0')
-                    form
                         ul.list-group
                             li.zapol.list-group-item
                                 .form-group
                                     label.control-label.col-sm-5 Устроило ли клиента время/сроки подключения услуги?
                                     .col-sm-1
                                         .small
-                                            input.form-control(type='number' min='0' max='10' value='0' )
+                                            input.form-control(type='number' name='first' min='0' max='10' value='0' )
                             li.list-group-item.zapol
                                 .form-group
                                     label.control-label.col-sm-5 Соответствует ли Вашим ожиданиям скорость/качество услуги выбранному тарифному плану? 
                                     .col-sm-1
                                         .small
-                                            input.form-control(type='number' min='0' max='10' value='0' )
+                                            input.form-control(type='number' name='sec' min='0' max='10' value='0' )
                             li.list-group-item.zapol
                                 .form-group
                                     label.control-label.col-sm-5 Продемонстрировали ли Вам возможность входа в Личный кабинет, самостоятельной проверки скорости, где и как оплатить?  
                                     .col-sm-1
                                         .small
-                                            select.form-control
+                                            select.form-control(name='third')
                                                 option(value='0') Нет
                                                 option(value='1' selected) Да
                             li.list-group-item.zapol
                                 .form-group
                                     label.control-label.col-sm-5 Рекомендации клиента по улучшению
                                     .col-sm-5
-                                        textarea.form-control(rows=5)
+                                        textarea.form-control(rows=5 name='comment')
                 else     
                         ul.list-group   
                             li.list-group-item.install
@@ -104,24 +103,24 @@ append content
                                     label.control-label.col-sm-5 Устроило ли Вас время/ сроки решения Вашего вопроса?
                                     .col-sm-1
                                         .small
-                                            input.form-control(type='number' min='0' max='10' value='0' )
+                                            input.form-control(type='number' name='first' min='0' max='10' value='0' )
                             li.list-group-item.install
                                 .form-group
                                     label.control-label.col-sm-5 Соответствует ли параметры услуги (скорость/качество услуги) выбранному тарифному плану? 
                                     .col-sm-1
                                         .small
-                                            input.form-control(type='number' min='0' max='10' value='0' )
+                                            input.form-control(type='number' name='sec' min='0' max='10' value='0' )
                             li.list-group-item.install
                                 .form-group
                                     label.control-label.col-sm-5 Продемонстрировали ли Вам возможность входа в Личный кабинет, самостоятельной проверки скорости 
                                     .col-sm-1
                                         .small
-                                            select.form-control
+                                            select.form-control(name='third')
                                                 option(value='0') Нет
                                                 option(value='1' selected) Да
                             li.list-group-item.zapol
                                 .form-group
                                     label.control-label.col-sm-5 Рекомендации клиента по улучшению
                                     .col-sm-5
-                                        textarea.form-control(rows=5)
+                                        textarea.form-control(rows=5 name='comment')
                 button(type='submit').btn.btn-success.col-sm-offset-5.col-sm-3.subm Сохранить отзыв

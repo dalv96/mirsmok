@@ -62,7 +62,7 @@ module.exports = function(app) {
     app.all('/collector/*', auth.isCollector);
     app.get('/collector/orders', order.getOrdersPage)
     app.get('/collector/orders/:id', order.collect);
-
+    app.post('/collector/orders/:id', order.saveOrder);
 
     app.all('*', function (req, res) {
         res.render('404')

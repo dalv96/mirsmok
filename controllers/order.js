@@ -46,6 +46,16 @@ module.exports = {
             var d = common.dateToStr(o.dateEvent);
             res.render('order', {order: o, date: d});
         })
+    },
 
+    saveOrder: function (req, res) {
+        Order.findOne({ id: req.params.id }).then( o => {
+            o.stage = 1;
+            o.answers.firstQ = req.body.first;
+            o.answers.secQ = req.body.sec;
+            o.answers.thirdQ = req.body.third;
+            o.answers.comment = req.body.comment;
+            return o.save();
+        }).then(() => res.redirect('/'));
     }
 };
