@@ -112,7 +112,6 @@ module.exports = {
         }
         Order.find(option).then( o => {
             var averages = common.calculateAverages(o);
-            console.log(averages);
             res.render('analitic', {averages, period:req.query.period});
         })
     },
@@ -125,7 +124,6 @@ module.exports = {
 
     getContent: function (req, res) {
         Order.findOne({'id' : req.params.id}).then( o => {
-            console.log(o);
             if (o) {
                 var d = common.dateToStr(o.dateEvent);
                 res.render('orderContent', {order: o, date: d});
