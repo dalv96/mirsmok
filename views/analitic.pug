@@ -1,0 +1,47 @@
+extend basic
+append head
+    link(rel='stylesheet' href='/public/css/analitic.css')
+    script(src='/public/js/jsapi.js')
+    script(src='/public/js/analitic.js')
+    -var av = JSON.stringify(averages);
+    script.
+        var av = JSON.parse(("#{av}").replace(/&quot;/g, '"'));
+        drawGra(av);
+append content
+    .inf
+        h3 Средние значения оценок клиентов
+        .period
+            .row
+                label.control-label.col-sm-3.same Укажите желаемый период
+                .col-sm-4
+                    select.form-control(onChange='changePeriod(this.value)')
+                        if(period == 'all')
+                            option(value='all' selected) За все время
+                        else 
+                            option(value='all') За все время
+                        if(period == 'year')
+                            option(value='year' selected) За последний год
+                        else
+                            option(value='year') За последний год
+                        if(period == 'season')
+                            option(value='season' selected) За последние три месяца
+                        else
+                            option(value='season') За последние три месяца
+                        if(period == 'month')
+                            option(value='month' selected) За последний месяц
+                        else
+                            option(value='month') За последний месяц
+                        if(period == 'week')
+                            option(value='week' selected) За последнюю неделю
+                        else
+                            option(value='week') За последнюю неделю
+                        if(period == 'day')
+                            option(value='day' selected) За сегодня
+                        else
+                            option(value='day') За сегодня
+                        
+        .row
+            p.all Всего проработано заявок : #{averages.common.i}
+            #oil(style="width: 1000px; height: 500px;")
+            #chart_div
+            button.btn.btn-success.link(onclick='location="/orders?filter=comment"') Показать заявки с коментариями

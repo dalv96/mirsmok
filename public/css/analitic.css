@@ -1,0 +1,23 @@
+.inf {
+    margin-left: 1em;
+    width: 95%
+}
+#oil {
+    height: 400px;
+}
+.period {
+    margin-top: 2em;
+    margin-left: 2em;
+    max-width: 70em;
+}
+.same {
+    line-height: 25px;
+}
+.all {
+    margin-top: 2em;
+    margin-left: 5em;
+}
+.link {
+    margin-left: 5em;
+    margin-bottom: 5em;
+}

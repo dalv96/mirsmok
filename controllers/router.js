@@ -21,6 +21,9 @@ module.exports = function(app) {
             case 0:
                 res.redirect('/admin/users');
                 break;
+            case 1:
+                res.redirect('/analitic');
+                break;
             case 2:
                 res.redirect('/init');
                 break;
@@ -33,7 +36,9 @@ module.exports = function(app) {
     app.get('/profile', account.getProfile);
     app.post('/profile', account.editProfile);
     app.post('/profile/pass', account.editProfilePass);
-
+    app.get('/orders', order.search);
+    app.get('/orders/:id', order.getContent);
+    app.get('/analitic', order.getAnaliticPage);
     // ****************** АДМИНИСТРАТОР ************************
     app.all('/admin/*', auth.isAdmin);
 

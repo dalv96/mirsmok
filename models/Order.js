@@ -72,8 +72,8 @@ var Order = mongoose.Schema({
 var order;
 
 Order.statics.getNext = function () {
-    return order.find().sort({ 'id': -1 }).exec().then( o => {
-        if(o[0]) return ++o[0].id;
+    return order.find().exec().then( o => {
+        if(o[o.length-1]) return ++o[o.length-1].id;
         else return 1;
     });
 }

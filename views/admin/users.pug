@@ -18,7 +18,7 @@ append content
 					th Права
 			tbody
 				each user in users
-					tr
+					tr(onclick='location="/admin/users/'+user.login +'"')
 						td
 							a(href="/admin/users/"+user.login)= user.login
 							if(user.status == 1)

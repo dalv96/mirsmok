@@ -38,3 +38,6 @@
 .small {
     min-width: 10em;
 }
+tr {
+    cursor: pointer;
+}

@@ -36,15 +36,18 @@ module.exports = {
                 order.numberTT = req.body.numberTT;
                 order.themeTT = req.body.themeTT;
             }
+            console.log('Init order', order.id);
             return order.save();
         }).then(()=> res.redirect('/'))
 
     },
 
     collect: function (req, res) {
-        Order.findOne({ id: req.params.id }).then( o => {
-            var d = common.dateToStr(o.dateEvent);
-            res.render('order', {order: o, date: d});
+        Order.findOne({stage:0, id: req.params.id }).then( o => {
+            if (o) {
+                var d = common.dateToStr(o.dateEvent);
+                res.render('order', {order: o, date: d});
+            } else res.render('404');
         })
     },
 
@@ -55,7 +58,78 @@ module.exports = {
             o.answers.secQ = req.body.sec;
             o.answers.thirdQ = req.body.third;
             o.answers.comment = req.body.comment;
+            console.log('Saving order ', o.id);
             return o.save();
         }).then(() => res.redirect('/'));
+    },
+
+    getAnaliticPage: function (req, res) {
+        var option = {
+            stage: 1
+        };
+        var now = new Date();
+        switch (req.query.period) {
+            case 'year':
+                option = {
+                    stage: 1,
+                    dateInit: {
+                        $gte: new Date(now.getFullYear() - 1, now.getMonth(), now.getDate() + 1)
+                    }
+                }
+                break;
+            case 'season':
+                option = {
+                    stage: 1,
+                    dateInit: {
+                        $gte: new Date(now.getFullYear(), now.getMonth() - 3, now.getDate() + 1)
+                    }
+                }
+                break;
+            case 'month':
+                option = {
+                    stage: 1,
+                    dateInit: {
+                        $gte: new Date(now.getFullYear(), now.getMonth() -1, now.getDate() + 1)
+                    }
+                }
+                break;
+            case 'week':
+                option = {
+                    stage: 1,
+                    dateInit: {
+                        $gte: new Date(now.getFullYear(), now.getMonth(), now.getDate() - 6)
+                    }
+                }
+                break;
+            case 'day':
+                option = {
+                    stage: 1,
+                    dateInit: {
+                        $gte: new Date(now.getFullYear(), now.getMonth(), now.getDate())
+                    }
+                }
+                break;
+        }
+        Order.find(option).then( o => {
+            var averages = common.calculateAverages(o);
+            console.log(averages);
+            res.render('analitic', {averages, period:req.query.period});
+        })
+    },
+
+    search: function (req, res) {
+        Order.find({'answers.comment' : {$ne: "" }}).sort({_id:-1}).then( o => {
+            res.render('ordersSearch', {orders: o});
+        })
+    },
+
+    getContent: function (req, res) {
+        Order.findOne({'id' : req.params.id}).then( o => {
+            console.log(o);
+            if (o) {
+                var d = common.dateToStr(o.dateEvent);
+                res.render('orderContent', {order: o, date: d});
+            } else res.render('404');
+        })
     }
 };
