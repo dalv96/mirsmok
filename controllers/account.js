@@ -33,6 +33,7 @@ module.exports = {
                 a.fullName = req.body.fullName;
                 a.email = req.body.email;
                 a.number = req.body.number;
+                console.log('Editing profile', a.login);
                 return a.save();
             }
         }).then( () => res.redirect('/profile') );
@@ -43,6 +44,7 @@ module.exports = {
             if(password.createHash(req.body.passOld) == a.password ) {
                 if( req.body.pass == req.body.passRep ) {
                     a.password = password.createHash(req.body.pass);
+                    console.log('Editing profile pass', a.login);
                     return a.save();
                 }
             }
@@ -72,6 +74,7 @@ module.exports = {
                 if(req.body.role == 2) {
                     acc.department = req.body.dep;
                 }
+                console.log('Create user', acc.login);
                 return acc.save();
             } else {
                 return 'true';
@@ -89,6 +92,7 @@ module.exports = {
             a.email = req.body.email;
             a.number = req.body.number;
             a.department = req.body.department;
+            console.log('Editing user', a.login);
             return a.save();
         }).then( () => res.redirect('/admin/users') )
     },
@@ -98,6 +102,7 @@ module.exports = {
             console.log(a);
             if( req.body.pass == req.body.passRep ) {
                 a.password = password.createHash(req.body.pass);
+                console.log('Editing pass', a.login);
                 return a.save();
             }
         }).then( () => res.redirect('/admin/users') );
@@ -107,6 +112,7 @@ module.exports = {
         if(req.params.login != 'admin')
             Account.findOne({login: req.params.login, status: { $gt: -1 } }).then( a => {
                 if(a) {
+                    console.log('Delete user', a.login);
                     a.login = Date.now() + a.login;
                     a.status = -1;
                     a.password = '!deleted!'
@@ -122,9 +128,11 @@ module.exports = {
                     switch (a.status) {
                         case 0:
                             a.status = 1;
+                            console.log('Unblock user', a.login);
                             break;
                         case 1:
                             a.status = 0;
+                            console.log('Block user', a.login);
                             break;
                     }
                     return a.save();

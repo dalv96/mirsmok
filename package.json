@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node main.js",
     "dev": "./node_modules/.bin/nodemon --config ./conf/nodemon.json",
-    "pro": "./node_modules/.bin/forever -a --minUptime 1000 --spinSleepTime 3000 start main.js",
+    "pro": "./node_modules/.bin/forever -a --minUptime 1000 --spinSleepTime 3000 -l forever.log -o forever.log -e forever.log start main.js",
     "prostop": "./node_modules/.bin/forever stop main.js"
   },
   "author": "Vladislav Telichko",
