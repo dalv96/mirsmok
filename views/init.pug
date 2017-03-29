@@ -4,6 +4,11 @@ append head
     script(src='/public/js/order.js')
 append content
     .__block
+        if(success) 
+            script.
+                var notyf = new Notyf();
+                notyf.confirm('Заявка была успешно инициализирована!');
+        
         h2 Инициализация заявки
         hr
         form.form-horizontal(method='POST' action='/init')

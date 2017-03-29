@@ -3,6 +3,10 @@ append head
     link(rel='stylesheet' href='/public/css/order.css')
     script(src='/public/js/order.js')
 append content
+    if(success) 
+        script.
+            var notyf = new Notyf();
+            notyf.confirm('Заявка была успешно сохранена!');
     h3 Заявки для проработки
     .table-responsive.container-fluid
         table.table.table-hover

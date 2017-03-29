@@ -38,7 +38,7 @@ module.exports = {
             }
             console.log('Init order', order.id);
             return order.save();
-        }).then(()=> res.redirect('/'))
+        }).then(()=> res.render('init', {success:true}))
 
     },
 
