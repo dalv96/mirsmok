@@ -38,6 +38,8 @@ module.exports = function(app) {
     app.post('/profile/pass', account.editProfilePass);
     app.get('/orders', order.search);
     app.get('/orders/:id', order.getContent);
+    app.post('/orders/:id', order.editOrder);
+
     app.get('/analitic', order.getAnaliticPage);
     // ****************** АДМИНИСТРАТОР ************************
     app.all('/admin/*', auth.isAdmin);

@@ -29,7 +29,7 @@ var Order = mongoose.Schema({
         required: true
     },
     nameExec: {
-        type: String,
+        type: [String],
         required: true
     },
     themeTT: {

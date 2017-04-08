@@ -1,4 +1,4 @@
-extend basic
+extend ../basic
 append head
     link(rel='stylesheet' href='/public/css/order.css')
     script(src='/public/js/order.js')
@@ -21,7 +21,7 @@ append content
                     .form-group
                         label.control-label.col-sm-3 Дата выезда
                         .col-sm-2
-                            input.form-control(type='text' value=date required disabled)
+                            input.form-control(type='date' value=date required disabled)
                 li.list-group-item
                     .form-group
                         label.control-label.col-sm-3 Ф.И.О. абонента
@@ -37,12 +37,12 @@ append content
                         label.control-label.col-sm-3 Адрес
                         .col-sm-6
                             input.form-control(type='text' value=order.adress required disabled)
-
-                li.list-group-item
-                    .form-group
-                        label.control-label.col-sm-3 Ф.И.О. исполнителя
-                        .col-sm-6
-                            input.form-control(type='text' value=order.nameExec disabled)
+                each name in order.nameExec
+                    li.list-group-item
+                        .form-group
+                            label.control-label.col-sm-3 Ф.И.О. исполнителя
+                            .col-sm-6
+                                input.form-control(type='text' value=name disabled)
                                 
                 if(order.type == '1')
                     li.list-group-item.repairs

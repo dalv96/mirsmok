@@ -1,9 +1,13 @@
-extend basic
+extend ../basic
 append head
     link(rel='stylesheet' href='/public/css/order.css')
     script(src='/public/js/order.js')
 append content
-    h3 Заявки c коментариями
+    if(success) 
+        script.
+            var notyf = new Notyf();
+            notyf.confirm('Заявка была успешно сохранена!');
+    h3 Заявки для проработки
     .table-responsive.container-fluid
         table.table.table-hover
             thead
@@ -14,7 +18,7 @@ append content
                     th Ф.И.О. клиента
             tbody
                 each order in orders
-                    tr(onclick="location = '/orders/" + order.id + "'")
+                    tr(onclick="location = '/collector/orders/" + order.id + "'")
                         td №#{order.id}
                         td= deps[order.initiator].name
                         if(order.type == 0)

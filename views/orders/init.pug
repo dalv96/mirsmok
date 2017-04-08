@@ -1,4 +1,4 @@
-extend basic
+extend ../basic
 append head
     link(rel='stylesheet' href='/public/css/order.css')
     script(src='/public/js/order.js')
@@ -23,8 +23,8 @@ append content
                 li.list-group-item
                     .form-group
                         label.control-label.col-sm-3 Дата выезда
-                        .col-sm-2
-                            input.form-control(type='date' name='date'  required)
+                        .col-sm-6
+                            input.form-control(type='date' name='date' required)
                 li.list-group-item
                     .form-group
                         label.control-label.col-sm-3 Ф.И.О. абонента
@@ -33,7 +33,7 @@ append content
                 li.list-group-item
                     .form-group
                         label.control-label.col-sm-3 Номер телефона абонента
-                        .col-sm-3
+                        .col-sm-6
                             input.form-control(type='text' name='phone' required)
                 li.list-group-item
                     .form-group
@@ -44,8 +44,17 @@ append content
                     .form-group
                         label.control-label.col-sm-3 Ф.И.О. исполнителя
                         .col-sm-6
-                            input.form-control(type='text' name='nameExec')
-                
+                            input.form-control.inpt(type='text' name='nameExec1' value=__user.fullName disabled required)
+                li.list-group-item
+                    .form-group
+                        label.control-label.col-sm-3 
+                        .col-sm-6
+                            input.form-control.inpt(type='text' name='nameExec2')
+                li.list-group-item
+                    .form-group
+                        label.control-label.col-sm-3
+                        .col-sm-6
+                            input.form-control.inpt(type='text' name='nameExec3')
                 li.list-group-item.repairs_hide
                     .form-group
                         label.control-label.col-sm-3 Номер ТТ
@@ -60,7 +69,7 @@ append content
                 li.list-group-item.install
                     .form-group
                         label.control-label.col-sm-3 Лицевой счет
-                        .col-sm-3
+                        .col-sm-6
                             input.form-control(type='text' name='personalAcc')                
                 li.list-group-item.install
                     .form-group
