@@ -1,5 +1,5 @@
 body {
-    min-width: 600px;
+    min-width: 700px;
 }
 
 input {
@@ -23,7 +23,7 @@ input {
     opacity: 1;
 }
 
-table td{
+table td {
     border-top: 0px !important;
 }
 
@@ -64,7 +64,6 @@ img {
 tr:hover > .vis {
     opacity: 1;
 }
-
 
 .vis:hover img, .visSave:hover img {
     transform: scale(1.5);

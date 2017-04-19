@@ -5,18 +5,30 @@ append head
 append content
     .__block
         h1 Справочник исполнителей
+        br
+        .addExec
+            form(action='/admin/exec/add' method='POST')
+                .row
+                    .col-xs-6.col-md-2
+                        input.form-control#addExec(type='text' name='name' maxlength='30' required)
+                    button(type='submit').btn.btn-default.col-xs-2.col-md-1 Добавить
+        br
         .table-exec
             table.table.table-hover
                 tbody
-                    tr
-                        td.fullName#item1
-                            input.form-control.inpInvis#exec1(type='text' value='Петров Иванов')
-                            span.control-label#label1 Петров Иванов
-                        td.fn#edit1.vis(onclick='startEdit(1)')
-                            img( width='15' height='15' src='/public/edit.svg' title='Редактировать' alt='Edit')
-                        td.fn#save1.invis
-                            img( width='15' height='15' src='/public/save.svg' title='Сохранить' alt='Save')
-                        td.fn#rm1.vis
-                            img( width='15' height='15' src='/public/delete.svg' title='Удалить' alt='Delete')
-                        td.fn#cancel1.invis(onclick='cancelEdit(1)')
-                            img( width='15' height='15' src='/public/cancel.svg' title='Отменить' alt='Cancel')
+                    each exec,id in execs
+                        tr
+                            td.fullName(id='item'+id)
+                                input.form-control.inpInvis(type='text' id='exec'+id maxlength='30' value=exec.name)
+                                span.control-label(id='label'+id)= exec.name
+                            td.fn.vis(id='edit'+id onclick='startEdit('+id+')')
+                                img( width='15' height='15' src='/public/edit.svg' title='Редактировать' alt='Edit')
+                            td.fn.invis(id='save'+id onclick='saveExec("' + exec.name+ '",' +id+ ')')
+                                img( width='15' height='15' src='/public/save.svg' title='Сохранить' alt='Save')
+                            if(!exec.usage)
+                                td.fn.vis(id='rm'+id onclick='deleteExec("'+exec.name+'")')
+                                    img( width='15' height='15' src='/public/delete.svg' title='Удалить' alt='Delete')
+                            else
+                                td.fn.invis
+                            td.fn.invis(id='cancel'+id onclick='cancelEdit('+id+')')
+                                img( width='15' height='15' src='/public/cancel.svg' title='Отменить' alt='Cancel')

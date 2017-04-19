@@ -57,6 +57,9 @@ module.exports = function(app) {
     app.get('/admin/users/:login', account.getOne);
 
     app.get('/admin/exec', executor.getAll);
+    app.post('/admin/exec/add', executor.add);
+    app.post('/admin/exec/delete', executor.delete);
+    app.post('/admin/exec/edit', executor.edit);
     // ****************** РУКОВОДИТЕЛЬ *************************
 
     app.all('/manager/*', auth.isManager);

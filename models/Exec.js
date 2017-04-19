@@ -3,12 +3,12 @@
 var mongoose = require('../controllers/connect');
 
 var Exec = mongoose.Schema({
-    id: {
-        type: Number,
+    name: {
+        type: String,
         required: true
     },
-    fullName: {
-        type: String,
+    usage: {
+        type: Boolean,
         required: true
     }
 });
