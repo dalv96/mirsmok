@@ -4,6 +4,8 @@ const auth = require('./authorization');
 const account = require('./account');
 const models = require('../models');
 const order = require('./order');
+const executor = require('./executor');
+
 
 module.exports = function(app) {
 
@@ -54,6 +56,7 @@ module.exports = function(app) {
     app.delete('/admin/users/:login', account.delete);
     app.get('/admin/users/:login', account.getOne);
 
+    app.get('/admin/exec', executor.getAll);
     // ****************** РУКОВОДИТЕЛЬ *************************
 
     app.all('/manager/*', auth.isManager);

@@ -20,10 +20,11 @@ html
                                 span Главная страница
                             if(__user.role == 0)
                                 li: a(href='/admin/users' tabindex='991') Пользователи
-                            li: a(href='/analitic' tabindex='992') Статистика
-                            li: a(href='/orders?filter=my' tabindex='992') Мои заявки
-                            li.profile: a(href='/profile' tabindex='993') Мой профиль
-                            li.exit: a(href='/logout' tabindex='994') Выйти
+                                li: a(href='/admin/exec' tabindex='992') Исполнители
+                            li: a(href='/analitic' tabindex='993') Статистика
+                            li: a(href='/orders?filter=my' tabindex='994') Мои заявки
+                            li.profile: a(href='/profile' tabindex='995') Мой профиль
+                            li.exit: a(href='/logout' tabindex='996') Выйти
         div
             block content
         footer

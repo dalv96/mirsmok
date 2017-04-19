@@ -1,0 +1,71 @@
+body {
+    min-width: 600px;
+}
+
+input {
+    transition: all 0.4s;
+}
+
+.inpInvis {
+    visibility: hidden;
+}
+
+.inpVis {
+    visibility: visible;
+    opacity: 0;
+}
+
+.invis {
+    opacity: 0;
+}
+
+.see {
+    opacity: 1;
+}
+
+table td{
+    border-top: 0px !important;
+}
+
+.fullName input {
+    width: 20em;
+    display: inline-block;
+}
+
+.fullName span {
+    position: relative;
+    left: -19.07em;
+    z-index: 9999;
+}
+
+.table-exec {
+    max-width: 700px;
+}
+
+.fn img{
+    margin-top: 8px;
+}
+
+img {
+    transition: all 0.2s;
+}
+
+.vis {
+    transition: all 0.3s;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.visSave {
+    opacity: 1;
+    cursor: pointer;
+}
+
+tr:hover > .vis {
+    opacity: 1;
+}
+
+
+.vis:hover img, .visSave:hover img {
+    transform: scale(1.5);
+}

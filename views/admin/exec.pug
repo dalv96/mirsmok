@@ -1,0 +1,22 @@
+extend ../basic
+append head
+    link(rel='stylesheet' href='/public/css/exec.css')
+    script(src='/public/js/exec.js')
+append content
+    .__block
+        h1 Справочник исполнителей
+        .table-exec
+            table.table.table-hover
+                tbody
+                    tr
+                        td.fullName#item1
+                            input.form-control.inpInvis#exec1(type='text' value='Петров Иванов')
+                            span.control-label#label1 Петров Иванов
+                        td.fn#edit1.vis(onclick='startEdit(1)')
+                            img( width='15' height='15' src='/public/edit.svg' title='Редактировать' alt='Edit')
+                        td.fn#save1.invis
+                            img( width='15' height='15' src='/public/save.svg' title='Сохранить' alt='Save')
+                        td.fn#rm1.vis
+                            img( width='15' height='15' src='/public/delete.svg' title='Удалить' alt='Delete')
+                        td.fn#cancel1.invis(onclick='cancelEdit(1)')
+                            img( width='15' height='15' src='/public/cancel.svg' title='Отменить' alt='Cancel')

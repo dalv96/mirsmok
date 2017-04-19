@@ -12,60 +12,52 @@ var Order = mongoose.Schema({
         type: String,
         required: true
     },
-    dateEvent: {
-        type: Date,
-        required: true
-    },
-    nameAbon: {
-        type: String,
-        required: true
-    },
-    adress: {
-        type: String,
-        required: true
-    },
-    phone: {
-        type: String,
-        required: true
+    stage: {
+        type: Number
     },
     nameExec: {
         type: [String],
         required: true
     },
-    themeTT: {
-        type: String
-    },
-    numberTT: {
-        type: String
-    },
-    personalAcc: {
-        type: String
-    },
-    nameCont: {
-        type: String
-    },
-    stage: {
+    depInit: {
         type: Number
     },
-    initiator: {
-        type: Number
-    },
-    dateInit: {
-        type: Date
-    },
-    answers: {
-        firstQ: {
-            type: Number
+    info: {
+        dateInit: {
+            type: Date
         },
-        secQ: {
-            type: Number
+        dateEvent: {
+            type: Date,
+            required: true
         },
-        thirdQ: {
-            type: Boolean
+        nameAbon: {
+            type: String,
+            required: true
         },
-        comment: {
+        adress: {
+            type: String,
+            required: true
+        },
+        phone: {
+            type: String,
+            required: true
+        },
+        themeTT: {
+            type: String
+        },
+        numberTT: {
+            type: String
+        },
+        personalAcc: {
+            type: String
+        },
+        nameCont: {
             type: String
         }
+    },
+    answers: {
+        values: [Number],
+        comment: String
     }
 });
 
