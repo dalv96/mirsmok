@@ -104,7 +104,7 @@ module.exports = {
             case 'year':
                 option = {
                     stage: 1,
-                    dateInit: {
+                    'info.dateInit': {
                         $gte: new Date(now.getFullYear() - 1, now.getMonth(), now.getDate() + 1)
                     }
                 }
@@ -112,7 +112,7 @@ module.exports = {
             case 'season':
                 option = {
                     stage: 1,
-                    dateInit: {
+                    'info.dateInit': {
                         $gte: new Date(now.getFullYear(), now.getMonth() - 3, now.getDate() + 1)
                     }
                 }
@@ -120,7 +120,7 @@ module.exports = {
             case 'month':
                 option = {
                     stage: 1,
-                    dateInit: {
+                    'info.dateInit': {
                         $gte: new Date(now.getFullYear(), now.getMonth() -1, now.getDate() + 1)
                     }
                 }
@@ -128,7 +128,7 @@ module.exports = {
             case 'week':
                 option = {
                     stage: 1,
-                    dateInit: {
+                    'info.dateInit': {
                         $gte: new Date(now.getFullYear(), now.getMonth(), now.getDate() - 6)
                     }
                 }
@@ -136,13 +136,14 @@ module.exports = {
             case 'day':
                 option = {
                     stage: 1,
-                    dateInit: {
+                    'info.dateInit': {
                         $gte: new Date(now.getFullYear(), now.getMonth(), now.getDate())
                     }
                 }
                 break;
         }
-        Order.find(option).then( o => {
+        Order.find(option).populate('author').then( o => {
+            console.log(o);
             var averages = common.calculateAverages(o);
             res.render('analitic', {averages, period:req.query.period});
         })
@@ -151,7 +152,7 @@ module.exports = {
     search: function (req, res) {
         switch (req.query.filter) {
             case 'comment':
-                Order.find({'answers.comment' : {$ne: "" }}).populate('author').sort({_id:-1}).then( o => {
+                Order.find({'answers.comment' : {$ne: null }}).populate('author').sort({_id:-1}).then( o => {
                     res.render('orders/ordersSearch', {orders: o});
                 })
                 break;

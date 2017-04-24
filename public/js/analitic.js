@@ -4,12 +4,12 @@ function drawGra(averages) {
     google.setOnLoadCallback(drawChart);
     function drawChart() {
         var data = google.visualization.arrayToDataTable([
-            ['Отдел', '1-й вопрос', '2-й вопрос', '3-й вопрос'],
-            ['Общий', averages.common.first, averages.common.sec, averages.common.third],
-            ['ГУС Симферополь', averages.department['0'].first, averages.department['0'].sec, averages.department['0'].third],
-            ['ГУС Евпатория',  averages.department['1'].first, averages.department['1'].sec, averages.department['1'].third],
-            ['ГУС Севастополь',  averages.department['2'].first, averages.department['2'].sec, averages.department['2'].third],
-            ['ГУС Феодосия', averages.department['3'].first, averages.department['3'].sec, averages.department['3'].third]
+            ['Отдел', '1-й вопрос', '2-й вопрос', '3-й вопрос','4-й вопрос'],
+            ['Общий', averages.common.values[0], averages.common.values[1], averages.common.values[2], averages.common.values[3]],
+            ['ГУС Симферополь', averages.department['0'].values[0], averages.department['0'].values[1], averages.department['0'].values[2], averages.department['0'].values[3]],
+            ['ГУС Евпатория',  averages.department['1'].values[0], averages.department['1'].values[1], averages.department['1'].values[2], averages.department['1'].values[3]],
+            ['ГУС Севастополь',  averages.department['2'].values[0], averages.department['2'].values[1], averages.department['2'].values[2], averages.department['2'].values[3]],
+            ['ГУС Феодосия', averages.department['3'].values[0], averages.department['3'].values[1], averages.department['3'].values[2], averages.department['3'].values[3]]
         ]);
         var options = {
             title: 'Оценки пользователей',

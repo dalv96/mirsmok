@@ -5,7 +5,7 @@ append head
 append content
     .__block
         h2 Отзыв клиента
-        if(order.stage == 0)
+        if(order.stage == 0 && __user.role == 2)
             span.delete
                 button.btn.btn-danger(onclick='deleteOrder('+ order.id + ')') Удалить заявку
         hr
