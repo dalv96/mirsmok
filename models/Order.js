@@ -13,14 +13,20 @@ var Order = mongoose.Schema({
         required: true
     },
     stage: {
-        type: Number
-    },
-    nameExec: {
-        type: [String],
+        type: Number,
         required: true
     },
-    depInit: {
-        type: Number
+    author: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Account',
+        required: true
+    },
+    nameExec: {
+        type: [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Exec'
+        }],
+        required: true
     },
     info: {
         dateInit: {
@@ -50,12 +56,13 @@ var Order = mongoose.Schema({
         },
         personalAcc: {
             type: String
-        },
-        nameCont: {
-            type: String
         }
     },
     answers: {
+        collector: {
+            type : mongoose.Schema.Types.ObjectId,
+            ref: 'Account'
+        },
         values: [Number],
         comment: String
     }

@@ -2,86 +2,73 @@
 
 var models = require('../models');
 var Order = models.Order;
+var Account = models.Account;
+var Exec = models.Exec;
 var common = require('./common');
+
+function render(res, success) {
+    Exec.find().sort({ name: 1 }).then(execs => {
+        res.render('orders/init', {execs: execs, success: success});
+    })
+}
 
 module.exports = {
     getInitPage: function (req, res) {
-        res.render('orders/init');
+        Exec.find().sort({ name: 1 }).then(execs => {
+            render(res, false);
+        })
     },
 
     getOrdersPage: function (req, res) {
-        Order.find({ stage: 0 }).sort({ dateInit: -1}).then( o => {
+        Order.find({ stage: 0 }).populate('author').sort({ id: -1 }).then( o => {
             res.render('orders/orders', {orders: o});
         })
     },
 
     init: function (req, res) {
         Order.getNext().then( ids => {
-            var arr = [res.locals.__user.fullName];
-            for (var i = 2; i <= 3; i++) {
-                if(req.body['nameExec'+i]) {
-                    arr.push(req.body['nameExec'+i]);
-                }
-            }
             var order = new Order({
                 id: ids,
                 type: req.body.type,
                 stage: 0,
-                dateEvent: new Date(req.body.date),
-                dateInit: new Date(),
-                nameAbon: req.body.nameAbon,
-                phone: req.body.phone,
-                nameExec: arr,
-                adress: req.body.adress,
-                initiator: res.locals.__user.dep
+                author: res.locals.__user._id,
+                nameExec: [req.body.mainExec, req.body.subExec || null],
+                info: {
+                    dateInit: new Date(),
+                    dateEvent: new Date(req.body.date),
+                    nameAbon: req.body.nameAbon,
+                    phone: req.body.phone,
+                    adress: req.body.adress,
+                }
             })
             if(req.body.type == 0) { //Инсталяция
-                order.personalAcc = req.body.personalAcc;
-                order.nameCont = req.body.nameCont;
+                order.info.personalAcc = req.body.personalAcc;
             } else { // Ремонты
-                order.numberTT = req.body.numberTT;
-                order.themeTT = req.body.themeTT;
+                order.info.numberTT = req.body.numberTT;
+                order.info.themeTT = req.body.themeTT;
             }
             console.log('Init order', order.id);
             return order.save();
-        }).then(()=> res.render('orders/init', {success:true}))
-
+        }).then(()=> render(res, true))
     },
 
     editOrder: function (req, res) {
         Order.findOne({ id: req.params.id }).then( o => {
-            if(res.locals.__user.role == 3) {
-                o.stage = 1;
-                o.answers.firstQ = req.body.first;
-                o.answers.secQ = req.body.sec;
-                o.answers.thirdQ = req.body.third;
-                o.answers.comment = req.body.comment;
-            }
             if(res.locals.__user.role == 2) {
-                var arr = [o.nameExec[0]];
-                for (var i = 2; i <= 3; i++) {
-                    if(req.body['nameExec'+i]) {
-                        arr.push(req.body['nameExec'+i]);
-                    }
+                o.info.dateEvent = req.body.dateEvent;
+                o.info.nameAbon = req.body.nameAbon;
+                o.info.adress = req.body.adress;
+                o.info.phone = req.body.phone;
+                if(o.type == 0) {
+                    o.info.numberTT = req.body.numberTT;
+                    o.info.themeTT = req.body.themeTT;
                 }
-                o.type = req.body.type;
-                o.dateEvent = new Date(req.body.date);
-                o.nameAbon = req.body.nameAbon;
-                o.phone = req.body.phone;
-                o.nameExec = arr;
-                o.adress = req.body.adress;
-
-                if(req.body.type == 0) { //Инсталяция
-                    o.personalAcc = req.body.personalAcc;
-                    o.nameCont = req.body.nameCont;
-                    o.numberTT = null;
-                    o.themeTT = null;
-                } else { // Ремонты
-                    o.numberTT = req.body.numberTT;
-                    o.themeTT = req.body.themeTT;
-                    o.personalAcc = null;
-                    o.nameCont = null;
-                }
+                if(o.type == 1)
+                    o.info.personalAcc = req.body.personalAcc;
+            }
+            if(res.locals.__user.role == 3) {
+                o.answers.values = req.body.answers;
+                o.answers.comment = req.body.comment;
             }
             console.log('Editing order ', o.id);
             return o.save();
@@ -89,10 +76,10 @@ module.exports = {
     },
 
     collect: function (req, res) {
-        Order.findOne({stage:0, id: req.params.id }).then( o => {
+        Order.findOne({stage:0, id: req.params.id }).populate('author nameExec').then( o => {
             if (o) {
-                var d = common.dateToStr(o.dateEvent);
-                res.render('orders/order', {order: o, date: d});
+                var d = common.dateToStr(o.info.dateEvent);
+                res.render('orders/order', {order: o, date: d, edit:2});
             } else res.render('404');
         })
     },
@@ -100,9 +87,8 @@ module.exports = {
     saveOrder: function (req, res) {
         Order.findOne({ id: req.params.id }).then( o => {
             o.stage = 1;
-            o.answers.firstQ = req.body.first;
-            o.answers.secQ = req.body.sec;
-            o.answers.thirdQ = req.body.third;
+            o.answers.collector = res.locals.__user._id;
+            o.answers.values = req.body.answers;
             o.answers.comment = req.body.comment;
             console.log('Saving order ', o.id);
             return o.save();
@@ -165,18 +151,21 @@ module.exports = {
     search: function (req, res) {
         switch (req.query.filter) {
             case 'comment':
-                Order.find({'answers.comment' : {$ne: "" }}).sort({_id:-1}).then( o => {
+                Order.find({'answers.comment' : {$ne: "" }}).populate('author').sort({_id:-1}).then( o => {
                     res.render('orders/ordersSearch', {orders: o});
                 })
                 break;
             case 'my':
-                var filter = res.locals.__user.dep || {$ne: null};
-                    Order.find({initiator:filter}).sort({_id:-1}).then( o => {
+                var filter = {};
+                if( res.locals.__user.dep != null) {
+                    filter = {'author' : res.locals.__user._id};
+                } else filter = {'answers.collector': res.locals.__user._id};
+                    Order.find(filter).populate('author').sort({_id:-1}).then( o => {
                         res.render('orders/ordersSearch', {orders: o});
                     })
                 break;
             default:
-                Order.find().sort({_id:-1}).then( o => {
+                Order.find().populate('author').sort({_id:-1}).then( o => {
                     res.render('orders/ordersSearch', {orders: o});
                 })
                 break;
@@ -185,11 +174,25 @@ module.exports = {
     },
 
     getContent: function (req, res) {
-        Order.findOne({'id' : req.params.id}).then( o => {
+        Order.findOne({'id' : req.params.id}).populate('author nameExec').then( o => {
             if (o) {
-                var d = common.dateToStr(o.dateEvent);
-                res.render('orders/orderEdit', {order: o, date: d});
+                var d = common.dateToStr(o.info.dateEvent);
+                var editFlag;
+                if(res.locals.__user.role == 2 && o.stage == 0) {
+                    editFlag = 1;
+                }
+                if( res.locals.__user.role == 3 && o.stage == 1) editFlag = 2;
+                res.render('orders/order', {order: o, date: d, edit: editFlag});
             } else res.render('404');
         })
+    },
+
+    delete: function (req, res) {
+        Order.findOne({'id' : req.params.id}).populate('author').then( o => {
+            if(o.stage == 0 && res.locals.__user.role == 2) {
+                return o.remove();
+            }
+        }).then(() => res.status(200).send('Ok'))
+
     }
 };

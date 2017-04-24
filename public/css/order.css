@@ -41,3 +41,6 @@
 tr {
     cursor: pointer;
 }
+.delete {
+    float: right;
+}

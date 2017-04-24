@@ -41,7 +41,8 @@ module.exports = function(app) {
     app.get('/orders', order.search);
     app.get('/orders/:id', order.getContent);
     app.post('/orders/:id', order.editOrder);
-
+    app.delete('/orders/:id',  order.delete);
+    
     app.get('/analitic', order.getAnaliticPage);
     // ****************** АДМИНИСТРАТОР ************************
     app.all('/admin/*', auth.isAdmin);

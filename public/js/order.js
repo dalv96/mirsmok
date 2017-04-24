@@ -7,3 +7,13 @@ function changeType(f) {
         $('.install_hide').addClass('install').removeClass('install_hide');
     }
 }
+function deleteOrder(id) {
+    if(confirm("Вы уверены, что хотите удалить эту заявку?")) {
+        $.ajax({
+            method: "DELETE",
+            url: location.href,
+            succes: location = '/orders'
+        });
+    }
+    return false;
+}

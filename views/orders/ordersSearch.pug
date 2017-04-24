@@ -16,9 +16,9 @@ append content
                 each order in orders
                     tr(onclick="location = '/orders/" + order.id + "'")
                         td №#{order.id}
-                        td= deps[order.initiator].name
+                        td= deps[order.author.department].name
                         if(order.type == 0)
                             td Инсталяция
                         else
                             td Ремонт
-                        td= order.nameAbon
+                        td= order.info.nameAbon

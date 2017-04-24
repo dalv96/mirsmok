@@ -49,12 +49,18 @@ append content
                     .form-group
                         label.control-label.col-sm-3 Ф.И.О иполнителей
                         .col-sm-6
-                            input.form-control.inpt(type='text' name='nameMainExec')
+                            select.form-control.inpt(name='mainExec' required)
+                                option
+                                    each exec in execs
+                                        option(value=exec._id)= exec.name
                 li.list-group-item
                     .form-group
                         label.control-label.col-sm-3
                         .col-sm-6
-                            input.form-control.inpt(type='text' name='nameSubExec')
+                            select.form-control.inpt(name='subExec')
+                                option
+                                each exec in execs
+                                    option(value=exec._id)= exec.name
                 li.list-group-item.repairs_hide
                     .form-group
                         label.control-label.col-sm-3 Номер ТТ
@@ -70,10 +76,5 @@ append content
                     .form-group
                         label.control-label.col-sm-3 Лицевой счет
                         .col-sm-6
-                            input.form-control(type='text' name='personalAcc')                
-                li.list-group-item.install
-                    .form-group
-                        label.control-label.col-sm-3 Ф.И.О. подрядчика
-                        .col-sm-6
-                            input.form-control(type='text' name='nameCont')
+                            input.form-control(type='text' name='personalAcc')
                 button.btn.btn-success.col-sm-offset-5.col-sm-3.subm(type='submit') Создать

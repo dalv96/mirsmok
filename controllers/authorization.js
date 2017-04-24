@@ -10,6 +10,7 @@ module.exports = {
         if (req.session.__user) {
             Account.findOne({login: req.session.__user}).then( acc => {
                 res.locals.__user = {
+                    _id: acc._id,
                     login: acc.login,
                     fullName: acc.fullName,
                     role: acc.role
