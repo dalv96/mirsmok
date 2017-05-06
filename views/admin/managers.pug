@@ -1,0 +1,34 @@
+extend ../basic
+append head
+    link(rel='stylesheet' href='/public/css/exec.css')
+    script(src='/public/js/exec.js')
+append content
+    .__block
+        h1 Справочник бригадиров
+        br
+        .addExec
+            form(action='/admin/managers/add' method='POST')
+                .row
+                    .col-xs-6.col-md-2
+                        input.form-control#addExec(type='text' name='name' maxlength='30' required)
+                    button(type='submit').btn.btn-default.col-xs-2.col-md-1 Добавить
+        br
+        .table-exec
+            table.table.table-hover
+                tbody
+                    each manager,id in managers
+                        tr
+                            td.fullName(id='item'+id)
+                                input.form-control.inpInvis(type='text' id='exec'+id maxlength='30' value=manager.name)
+                                span.control-label(id='label'+id)= manager.name
+                            td.fn.vis(id='edit'+id onclick='startEdit('+id+')')
+                                img( width='15' height='15' src='/public/edit.svg' title='Редактировать' alt='Edit')
+                            td.fn.invis(id='save'+id onclick='saveMan("' + manager.name+ '",' +id+ ')')
+                                img( width='15' height='15' src='/public/save.svg' title='Сохранить' alt='Save')
+                            if(!manager.usage)
+                                td.fn.vis(id='rm'+id onclick='deleteMan("'+manager.name+'")')
+                                    img( width='15' height='15' src='/public/delete.svg' title='Удалить' alt='Delete')
+                            else
+                                td.fn.invis
+                            td.fn.invis(id='cancel'+id onclick='cancelEdit('+id+')')
+                                img( width='15' height='15' src='/public/cancel.svg' title='Отменить' alt='Cancel')

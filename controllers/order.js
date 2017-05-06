@@ -143,7 +143,6 @@ module.exports = {
                 break;
         }
         Order.find(option).populate('author').then( o => {
-            console.log(o);
             var averages = common.calculateAverages(o);
             res.render('analitic', {averages, period:req.query.period});
         })

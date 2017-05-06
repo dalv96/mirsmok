@@ -4,12 +4,12 @@ var mongoose = require('../controllers/connect');
 
 var Order = mongoose.Schema({
     id: {
-		type: String,
+		type: Number,
 		required: true,
 		unique: true
 	},
     type: {
-        type: String,
+        type: Number,
         required: true
     },
     stage: {
@@ -71,10 +71,12 @@ var Order = mongoose.Schema({
 var order;
 
 Order.statics.getNext = function () {
-    return order.find().exec().then( o => {
-        if(o[o.length-1]) return ++o[o.length-1].id;
-        else return 1;
-    });
+    return order.find().sort({id: -1}).exec().then( o => {
+        if(o[0] != null) {
+            const newID = o[0].id + 1;
+            return newID;
+        } else return 1;
+    })
 }
 
 order = mongoose.model('Order', Order);

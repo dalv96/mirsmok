@@ -5,7 +5,7 @@ const account = require('./account');
 const models = require('../models');
 const order = require('./order');
 const executor = require('./executor');
-
+const manager = require('./manager');
 
 module.exports = function(app) {
 
@@ -42,7 +42,7 @@ module.exports = function(app) {
     app.get('/orders/:id', order.getContent);
     app.post('/orders/:id', order.editOrder);
     app.delete('/orders/:id',  order.delete);
-    
+
     app.get('/analitic', order.getAnaliticPage);
     // ****************** АДМИНИСТРАТОР ************************
     app.all('/admin/*', auth.isAdmin);
@@ -61,6 +61,11 @@ module.exports = function(app) {
     app.post('/admin/exec/add', executor.add);
     app.post('/admin/exec/delete', executor.delete);
     app.post('/admin/exec/edit', executor.edit);
+
+    app.get('/admin/managers', manager.getAll);
+    app.post('/admin/managers/add', manager.add);
+    app.post('/admin/managers/delete', manager.delete);
+    app.post('/admin/managers/edit', manager.edit);
     // ****************** РУКОВОДИТЕЛЬ *************************
 
     app.all('/manager/*', auth.isManager);

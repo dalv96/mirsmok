@@ -38,7 +38,6 @@ module.exports = {
             }
         };
         value.forEach(item => {
-            console.log(item);
             for (var i = 0; i < 4; i++) {
                 averages.common.values[i] += item.answers.values[i];
                 averages.department[item.author.department].values[i] = (averages.department[item.author.department].values[i] || 0) + item.answers.values[i];

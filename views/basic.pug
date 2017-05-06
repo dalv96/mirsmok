@@ -21,10 +21,12 @@ html
                             if(__user.role == 0)
                                 li: a(href='/admin/users' tabindex='991') Пользователи
                                 li: a(href='/admin/exec' tabindex='992') Исполнители
-                            li: a(href='/analitic' tabindex='993') Статистика
-                            li: a(href='/orders?filter=my' tabindex='994') Мои заявки
-                            li.profile: a(href='/profile' tabindex='995')= __user.fullName + ' (' + __user.login + ')'
-                            li.exit: a(href='/logout' tabindex='996') Выйти
+                                li: a(href='/admin/managers' tabindex='993') Бригадиры
+                                
+                            li: a(href='/analitic' tabindex='994') Статистика
+                            li: a(href='/orders?filter=my' tabindex='995') Мои заявки
+                            li.profile: a(href='/profile' tabindex='996')= __user.fullName + ' (' + __user.login + ')'
+                            li.exit: a(href='/logout' tabindex='997') Выйти
         div
             block content
         footer

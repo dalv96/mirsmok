@@ -17,6 +17,7 @@ function startEdit(number) {
     $('#exec'+number).addClass('inpVis').removeClass('inpInvis').animate({
         opacity: 1
     }, 200);
+    $('#exec'+number).focus()
 }
 
 function cancelEdit(number) {
@@ -58,6 +59,33 @@ function saveExec(name, id) {
         $.ajax({
             type: "POST",
             url: "/admin/exec/edit",
+            data: "name="+name+'&newName='+newName,
+            success: function(msg){
+                location=location;
+            }
+        });
+    }
+}
+
+
+function deleteMan(id) {
+    $.ajax({
+      type: "POST",
+      url: "/admin/managers/delete",
+      data: "name="+id,
+      success: function(msg){
+        location=location;
+      }
+    });
+}
+
+
+function saveMan(name, id) {
+    var newName = $('#exec'+id).val().trim();
+    if(name != newName) {
+        $.ajax({
+            type: "POST",
+            url: "/admin/managers/edit",
             data: "name="+name+'&newName='+newName,
             success: function(msg){
                 location=location;
