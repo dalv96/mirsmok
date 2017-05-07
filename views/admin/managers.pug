@@ -1,7 +1,7 @@
 extend ../basic
 append head
-    link(rel='stylesheet' href='/public/css/exec.css')
-    script(src='/public/js/exec.js')
+    link(rel='stylesheet' href='/public/css/manager.css')
+    script(src='/public/js/manager.js')
 append content
     .__block
         h1 Справочник бригадиров
@@ -16,19 +16,19 @@ append content
         .table-exec
             table.table.table-hover
                 tbody
-                    each manager,id in managers
+                    each manager in managers
                         tr
-                            td.fullName(id='item'+id)
-                                input.form-control.inpInvis(type='text' id='exec'+id maxlength='30' value=manager.name)
-                                span.control-label(id='label'+id)= manager.name
-                            td.fn.vis(id='edit'+id onclick='startEdit('+id+')')
+                            td.fullName(id='item'+manager.id)
+                                input.form-control.inpInvis(type='text' id='exec'+manager.id maxlength='30' value=manager.name)
+                                span.control-label(id='label'+manager.id)= manager.name
+                            td.fn.vis(id='edit'+manager.id onclick='startEdit('+manager.id+')')
                                 img( width='15' height='15' src='/public/edit.svg' title='Редактировать' alt='Edit')
-                            td.fn.invis(id='save'+id onclick='saveMan("' + manager.name+ '",' +id+ ')')
+                            td.fn.invis(id='save'+manager.id onclick='saveMan("' + manager.name+ '",' +manager.id+ ')')
                                 img( width='15' height='15' src='/public/save.svg' title='Сохранить' alt='Save')
                             if(!manager.usage)
-                                td.fn.vis(id='rm'+id onclick='deleteMan("'+manager.name+'")')
+                                td.fn.vis(id='rm'+manager.id onclick='deleteMan("'+manager.id+'")')
                                     img( width='15' height='15' src='/public/delete.svg' title='Удалить' alt='Delete')
                             else
                                 td.fn.invis
-                            td.fn.invis(id='cancel'+id onclick='cancelEdit('+id+')')
+                            td.fn.invis(id='cancel'+manager.id onclick='cancelEdit('+manager.id+')')
                                 img( width='15' height='15' src='/public/cancel.svg' title='Отменить' alt='Cancel')

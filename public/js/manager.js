@@ -7,7 +7,7 @@ function startEdit(number) {
     }, 200).addClass('invis').removeClass('vis');
     $("#rm"+number).animate({
         opacity:0
-    }, 200).addClass('invis').removeClass('vis')
+    }, 200).addClass('invis').removeClass('vis');
     $("#save"+number).animate({
         opacity: 1
     }, 200).addClass('visSave');
@@ -45,32 +45,43 @@ function cancelEdit(number) {
 }
 
 function deleteExec(id) {
-    if(!$('#rm'+id).hasClass('invis')) {
+    $.ajax({
+      type: "POST",
+      url: "/admin/exec/delete",
+      data: "name="+id,
+      success: function(msg){
+        location=location;
+      }
+    });
+}
+
+function saveExec(name, id) {
+    var newName = $('#exec'+id).val();
+    console.log(newName);
+    if(name != newName) {
+        $.ajax({
+            type: "POST",
+            url: "/admin/exec/edit",
+            data: "name="+name+'&newName='+newName,
+            success: function(msg){
+                location=location;
+            }
+        });
+    }
+}
+
+function deleteExec(id) {
+    if($('#rm'+id).hasClass('invis')) {
         $.ajax({
           type: "POST",
           url: "/admin/exec/delete",
-          data: "id="+id,
+          data: "name="+id,
           success: function(msg){
             location=location;
           }
         });
     }
 }
-
-function saveExec(id) {
-    var newName = $('#exec'+id).val();
-    var newMan = $('#manager'+id).val();
-    $.ajax({
-        type: "POST",
-        url: "/admin/exec/edit",
-        data: "id="+id+'&newName='+newName+'&newMan='+newMan,
-        success: function(msg){
-            location=location;
-        }
-    });
-
-}
-
 
 function deleteMan(id) {
     if(!$('#rm'+id).hasClass('invis')) {

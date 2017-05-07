@@ -9,26 +9,41 @@ append content
         .addExec
             form(action='/admin/exec/add' method='POST')
                 .row
-                    .col-xs-6.col-md-2
+                    .col-xs-4.col-md-2
                         input.form-control#addExec(type='text' name='name' maxlength='30' required)
+                    .col-xs-4.col-md-2        
+                        select.form-control(type='text' name='manager')
+                            option
+                            each man in managers    
+                                option(value = man.id )= man.name 
                     button(type='submit').btn.btn-default.col-xs-2.col-md-1 Добавить
         br
         .table-exec
             table.table.table-hover
                 tbody
-                    each exec,id in execs
+                    each exec in execs
                         tr
-                            td.fullName(id='item'+id)
-                                input.form-control.inpInvis(type='text' id='exec'+id maxlength='30' value=exec.name)
-                                span.control-label(id='label'+id)= exec.name
-                            td.fn.vis(id='edit'+id onclick='startEdit('+id+')')
+                            td.fullName(id='item'+exec.id)
+                                input.form-control.inpInvis(type='text' id='exec'+exec.id maxlength='30' value=exec.name)
+                                span.control-label(id='label'+exec.id)= exec.name
+                                    if(exec.manager)
+                                        |  (#{exec.manager.name})
+                            td.fullName(id='itemMan'+exec.id)
+                                select.form-control.inpInvis(type='text' id='manager'+exec.id)
+                                    option
+                                    each man in managers
+                                        if(exec.manager)
+                                            option(value = man.id selected= (man.id == exec.manager.id ))= man.name 
+                                        else
+                                            option(value = man.id )= man.name 
+                            td.fn.vis(id='edit'+exec.id onclick='startEdit('+exec.id+')')
                                 img( width='15' height='15' src='/public/edit.svg' title='Редактировать' alt='Edit')
-                            td.fn.invis(id='save'+id onclick='saveExec("' + exec.name+ '",' +id+ ')')
+                            td.fn.invis(id='save'+exec.id onclick='saveExec("' +exec.id+ '")')
                                 img( width='15' height='15' src='/public/save.svg' title='Сохранить' alt='Save')
                             if(!exec.usage)
-                                td.fn.vis(id='rm'+id onclick='deleteExec("'+exec.name+'")')
+                                td.fn.vis(id='rm'+exec.id onclick='deleteExec("'+exec.id+'")')
                                     img( width='15' height='15' src='/public/delete.svg' title='Удалить' alt='Delete')
                             else
                                 td.fn.invis
-                            td.fn.invis(id='cancel'+id onclick='cancelEdit('+id+')')
+                            td.fn.invis(id='cancel'+exec.id onclick='cancelEdit('+exec.id+')')
                                 img( width='15' height='15' src='/public/cancel.svg' title='Отменить' alt='Cancel')
