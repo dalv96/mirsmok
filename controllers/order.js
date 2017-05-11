@@ -12,6 +12,19 @@ function render(res, success) {
     })
 }
 
+function changeUsage(main, sub) {
+    Exec.find(main).then(exec => {
+        exec.usage = true;
+        exec.save()
+    })
+    if(sub != null) {
+        Exec.find(sub).then(exec => {
+            exec.usage = true;
+            exec.save()
+        })    
+    }
+}
+
 module.exports = {
     getInitPage: function (req, res) {
         Exec.find().sort({ name: 1 }).then(execs => {
@@ -49,7 +62,10 @@ module.exports = {
             }
             console.log('Init order', order.id);
             return order.save();
-        }).then(()=> render(res, true))
+        }).then(()=> {
+            changeUsage(req.body.mainExec, req.body.subExec);
+            render(res, true);
+        })
     },
 
     editOrder: function (req, res) {
