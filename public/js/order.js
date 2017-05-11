@@ -17,3 +17,13 @@ function deleteOrder(id) {
     }
     return false;
 }
+
+function change(id, el) {
+    if (el.checked) {
+        $('#a'+id).attr('min', -1).animate({
+            opacity: 0
+        }, 200).val(-1).css('visibility', 'hidden');
+    } else $('#a'+id).attr('min', 0).animate({
+        opacity: 1
+    }, 200).val(0).css('visibility', 'visible ');
+}

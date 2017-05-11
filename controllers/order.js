@@ -68,7 +68,9 @@ module.exports = {
             }
             if(res.locals.__user.role == 3) {
                 o.answers.values = req.body.answers;
-                o.answers.comment = req.body.comment;
+                if(req.body.comment.trim().length < 1) {
+                    o.answers.comment = null;
+                } else o.answers.comment = req.body.comment.trim();
             }
             console.log('Editing order ', o.id);
             return o.save();
@@ -89,7 +91,9 @@ module.exports = {
             o.stage = 1;
             o.answers.collector = res.locals.__user._id;
             o.answers.values = req.body.answers;
-            o.answers.comment = req.body.comment;
+            if(req.body.comment.trim().length < 1) {
+                o.answers.comment = null;
+            } else o.answers.comment = req.body.comment.trim();
             console.log('Saving order ', o.id);
             return o.save();
         }).then(() => res.redirect('/'));

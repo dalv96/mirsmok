@@ -44,3 +44,12 @@ tr {
 .delete {
     float: right;
 }
+
+.cant label {
+    margin-left: 0.5em;
+    font-weight: normal;
+}
+
+.invis {
+    visibility: hidden;
+}

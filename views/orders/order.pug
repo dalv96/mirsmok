@@ -72,35 +72,47 @@ append content
                                 .col-sm-3
                                     input.form-control(type='text' value=order.info.personalAcc disabled=(edit==1)?false:true)
                                         
-                    ul.list-group
-                        li.zapol.list-group-item
-                            .form-group
-                                label.control-label.col-sm-5 Соответствует ли услуга договорным условиям (тарифному плану), и довольны ли Вы ее качеством?
-                                .col-sm-1
-                                    .small
-                                        input.form-control(type='number' name='answers' min='0' max='10' value=order.answers.values[0]||'0' disabled=(edit==2)?false:true)
-                        li.list-group-item.zapol
-                            .form-group
-                                label.control-label.col-sm-5 Продемонстрировал ли наш инженер использование ЛК?
-                                .col-sm-1
-                                    .small
-                                        input.form-control(type='number' name='answers' min='0' max='10' value=order.answers.values[1]||'0' disabled=(edit==2)?false:true)
-                        li.list-group-item.zapol
-                            .form-group
-                                label.control-label.col-sm-5 Оцените, пожалуйста, от 1 до 10 доброжелательность и корректность нашего специалиста
-                                .col-sm-1
-                                    .small
-                                        input.form-control(type='number' name='answers' min='0' max='10' value=order.answers.values[2]||'0' disabled=(edit==2)?false:true)
-                        li.list-group-item.install
-                            .form-group
-                                label.control-label.col-sm-5 Оцените, пожалуйста, от 1 до 10 внимательность нашего специалиста к пожеланиям
-                                .col-sm-1
-                                    .small
-                                        input.form-control(type='number' name='answers' min='0' max='10' value=order.answers.values[3]||'0' disabled=(edit==2)?false:true)
-                        li.list-group-item.zapol
-                            .form-group
-                                label.control-label.col-sm-5 Комментарий клиента
-                                .col-sm-5
-                                    textarea.form-control(rows=5 name='comment' disabled=(edit==2)?false:true)=order.answers.comment
+                ul.list-group
+                    li.zapol.list-group-item
+                        .form-group
+                            label.control-label.col-sm-5 Соответствует ли услуга договорным условиям (тарифному плану), и довольны ли Вы ее качеством?
+                            .col-sm-1
+                                .small
+                                    input.form-control(type='number' id='a1' name='answers' class=(order.answers.values[0] == -1)?'invis':'' min=(order.answers.values[0] == -1)?'-1':'0' max='10' value=order.answers.values[0]||'0' disabled=(edit==2)?false:true)
+                            .col-sm-offset-1.col-sm-2.cant
+                                input(type="checkbox" name='q1' id='q1' onchange=('change(1, this)') checked=(order.answers.values[0] == -1) disabled=(edit==2)?false:true)
+                                label(for='q1') Нет ответа
+                    li.list-group-item.zapol
+                        .form-group
+                            label.control-label.col-sm-5 Продемонстрировал ли наш инженер использование ЛК?
+                            .col-sm-1
+                                .small
+                                    input.form-control(type='number' id='a2' name='answers' class=(order.answers.values[1] == -1)?'invis':'' min=(order.answers.values[1] == -1)?'-1':'0' max='10' value=order.answers.values[1]||'0' disabled=(edit==2)?false:true)
+                            .col-sm-offset-1.col-sm-2.cant
+                                input(type="checkbox" name='q2' id='q2' onchange=('change(2, this)') checked=(order.answers.values[1] == -1) disabled=(edit==2)?false:true)
+                                label(for='q2') Нет ответа
+                    li.list-group-item.zapol
+                        .form-group
+                            label.control-label.col-sm-5 Оцените, пожалуйста, от 1 до 10 доброжелательность и корректность нашего специалиста
+                            .col-sm-1
+                                .small
+                                    input.form-control(type='number' id='a3' name='answers' class=(order.answers.values[2] == -1)?'invis':'' min=(order.answers.values[2] == -1)?'-1':'0' max='10' value=order.answers.values[2]||'0' disabled=(edit==2)?false:true)
+                            .col-sm-offset-1.col-sm-2.cant
+                                input(type="checkbox" name='q3' id='q3' onchange=('change(3, this)') checked=(order.answers.values[2] == -1) disabled=(edit==2)?false:true)
+                                label(for='q3') Нет ответа
+                    li.list-group-item.install
+                        .form-group
+                            label.control-label.col-sm-5 Оцените, пожалуйста, от 1 до 10 внимательность нашего специалиста к пожеланиям
+                            .col-sm-1
+                                .small
+                                    input.form-control(type='number' id='a4' name='answers' class=(order.answers.values[3] == -1)?'invis':'' min=(order.answers.values[3] == -1)?'-1':'0' max='10' value=order.answers.values[3]||'0' disabled=(edit==2)?false:true)
+                            .col-sm-offset-1.col-sm-2.cant
+                                input(type="checkbox" name='q4' id='q4' onchange=('change(4, this)') checked=(order.answers.values[3] == -1) disabled=(edit==2)?false:true)
+                                label(for='q4') Нет ответа
+                    li.list-group-item.zapol
+                        .form-group
+                            label.control-label.col-sm-5 Комментарий клиента
+                            .col-sm-5
+                                textarea.form-control(rows=5 name='comment' disabled=(edit==2)?false:true)=order.answers.comment
 
-                    button(type='submit').btn.btn-success.col-sm-offset-5.col-sm-3.subm Сохранить
+                button(type='submit').btn.btn-success.col-sm-offset-5.col-sm-3.subm Сохранить

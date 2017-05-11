@@ -5,8 +5,8 @@ var mongoose = require('../controllers/connect');
 var Order = mongoose.Schema({
     id: {
 		type: Number,
-		required: true,
-		unique: true
+        required: true,
+        unique: true
 	},
     type: {
         type: Number,
