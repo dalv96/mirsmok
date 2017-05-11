@@ -101,6 +101,6 @@ append content
                             .form-group
                                 label.control-label.col-sm-5 Комментарий клиента
                                 .col-sm-5
-                                    textarea.form-control(rows=5 name='comment' value=order.answers.comment disabled=(edit==2)?false:true)
+                                    textarea.form-control(rows=5 name='comment' disabled=(edit==2)?false:true)=order.answers.comment
 
                     button(type='submit').btn.btn-success.col-sm-offset-5.col-sm-3.subm Сохранить
