@@ -39,6 +39,9 @@ function cancelEdit(number) {
     $("#cancel"+number).animate({
         opacity: 0
     }, 200).removeClass('visSave');
+    $('#manager'+number).animate({
+        opacity: 0
+    }, 200, () => $('#manager'+number).addClass('inpInvis').removeClass('inpVis'));
     $('#exec'+number).animate({
         opacity: 0
     }, 200, () => $('#exec'+number).addClass('inpInvis').removeClass('inpVis'));
