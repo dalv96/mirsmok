@@ -1,6 +1,8 @@
 extend ../basic
 append head
     link(rel='stylesheet' href='/public/css/order.css')
+    link(rel='stylesheet' href='/public/css/jquery-ui.css')
+    script(src='/public/js/jquery-ui.min.js')
     script(src='/public/js/order.js')
 append content
     .__block
@@ -24,7 +26,7 @@ append content
                     .form-group
                         label.control-label.col-sm-3 Дата выезда
                         .col-sm-6
-                            input.form-control(type='date' name='date' placeholder='дд.мм.гггг' required)
+                            input.form-control(type='date' id='dateWork' name='date' placeholder='дд.мм.гггг' required)
                 li.list-group-item
                     .form-group
                         label.control-label.col-sm-3 Ф.И.О. абонента

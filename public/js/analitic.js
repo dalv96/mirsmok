@@ -1,10 +1,15 @@
 'use strict';
 
 window.onload = function () {
+    var i = document.createElement("input");
+    i.setAttribute("type", "date");
+    if(i.type != 'date') {
+        $('#downDate').datepicker();
+        $('#upDate').datepicker()
+    }
     window.completed = 0;
     window.uncompleted = 0;
     initAnalitic(window.orders.all);
-
 
     window.chart = {};
     window.chart.bar = {};

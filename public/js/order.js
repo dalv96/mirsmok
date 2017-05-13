@@ -1,3 +1,10 @@
+window.onload = function () {
+    var i = document.createElement("input");
+    i.setAttribute("type", "date");
+    if(i.type != 'date') {
+        $('#dateWork').datepicker();
+    }
+}
 function changeType(f) {
     if(f==1) {
         $('.repairs_hide').addClass('repairs').removeClass('repairs_hide');

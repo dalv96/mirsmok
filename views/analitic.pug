@@ -1,6 +1,8 @@
 extend basic
 append head
     link(rel='stylesheet' href='/public/css/analitic.css')
+    link(rel='stylesheet' href='/public/css/jquery-ui.css')
+    script(src='/public/js/jquery-ui.min.js')
     script(src='/public/js/Chart.js')
     script(src='/public/js/analitic.js')
     -var av = JSON.stringify(orders);
@@ -25,11 +27,11 @@ append content
                         
                 .typeSelect
                     label Начальная дата :
-                    input.form-control(type='date' onchange='changeMainDownDate(this.value)')
+                    input.form-control(type='date' id='downDate' onchange='changeMainDownDate(this.value)')
                         
                 .typeSelect
                     label Конечная дата :
-                    input.form-control(type='date' onchange='changeMainUpDate(this.value)')
+                    input.form-control(type='date' id='upDate' onchange='changeMainUpDate(this.value)')
                         
                 .typeSelect
                     label Сортировка :
