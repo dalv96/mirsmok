@@ -27,33 +27,17 @@ window.onload = function () {
         'ГУС Феодосия'
     ];
 
+    window.chart.pie = {};
+    window.chart.pie.labels = [
+        'Проработанные заявки',
+        'Не проработанные заявки'
+    ];
+    window.chart.pie.option = {
+        responsive: false
+    };
 
     drawMainGraph();
-    // var ctx = document.getElementById("sameChart");
-    // var sameChart = new Chart(ctx, {
-    //     type: 'pie',
-    //     data: {
-    //         labels: [
-    //             "Red",
-    //             "Blue"
-    //         ],
-    //         datasets: [
-    //             {
-    //                 data: [167, 73],
-    //                 backgroundColor: [
-    //                     "#FF6384",
-    //                     "#36A2EB"
-    //                 ],
-    //                 hoverBackgroundColor: [
-    //                     "#FF6384",
-    //                     "#36A2EB"
-    //                 ]
-    //             }]
-    //     },
-    //     options: {
-    //         responsive: false
-    //     }
-    // });
+    drawPieGraph();
 }
 
 
@@ -72,6 +56,7 @@ function parseOrders(orders) {
         pre: 0,
         end: 0
     };
+
     for (var i = 0; i < orders.length; i++) {
         if (orders[i].stage == 1) {
 
@@ -179,7 +164,6 @@ function getAnalitic(orders, type, downTime, upTime) {
 
 function changeMainType(type) {
     window.type = type;
-    console.log(window.downDate);
     getAnalitic(orders, type, window.downDate, window.upDate);
 }
 
@@ -193,6 +177,24 @@ function changeMainUpDate(date) {
     getAnalitic(orders, window.type, window.downDate, new Date(date));
 }
 
+function changePieDep(dep) {
+    window.completed = 0;
+    window.uncompleted = 0;
+    if(dep >= 0) {
+        for (var i = 0; i < window.orders.all.length; i++) {
+            if(window.orders.all[i].department == dep) {
+                if(window.orders.all[i].stage == 0) window.uncompleted++;
+                else window.completed++;
+            }
+        }
+    } else for (var i = 0; i < window.orders.all.length; i++) {
+        if(window.orders.all[i].stage == 0) window.uncompleted++;
+        else window.completed++;
+    }
+
+    drawPieGraph();
+}
+
 function initAnalitic(orders, downTime, upTime) {
     window.orders.tmp = dateParse(orders, downTime, upTime);
     window.orders.tmp = parseOrders(window.orders.tmp);
@@ -202,6 +204,35 @@ function initAnalitic(orders, downTime, upTime) {
     for (var i = 0; i < 4; i++) {
         window.avrgs.department[i] = calculateAverages(window.orders.tmp.department[i]);
     }
+}
+
+
+function drawPieGraph() {
+    window.chart.pie.datasets = [
+        {
+            data: [window.completed, window.uncompleted],
+            backgroundColor: [
+                "#36A2EB",
+                "#FF6384"
+            ],
+            hoverBackgroundColor: [
+                "#36A2EB",
+                "#FF6384"
+            ]
+        }
+    ];
+
+    $('#pieChart').remove();
+    $(".pieChart").append('<canvas id="pieChart" width=350 height=350>');
+    var ctx = document.getElementById("pieChart");
+    var sameChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: window.chart.pie.labels,
+            datasets: window.chart.pie.datasets
+        },
+        options: window.chart.pie.option
+    });
 }
 
 function drawMainGraph() {
@@ -233,7 +264,7 @@ function drawMainGraph() {
     ];
 
     $('#mainChart').remove();
-        $(".mainChart").append('<canvas id="mainChart" width=900 height=400>');
+    $(".mainChart").append('<canvas id="mainChart" width=900 height=400>');
     var ctx = document.getElementById("mainChart");
 
     var mainChart = new Chart(ctx, {

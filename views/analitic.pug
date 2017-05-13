@@ -11,37 +11,53 @@ append head
 append content
     .inf
         h3 Статистика
-        .row
-            //- p.all Всего заявок : #{orders.length}
-            .typeSelect
-                label Тип работ :
-                select.form-control(onchange='changeMainType(this.value)')
-                    option(value = '-1') Все
-                    option(value = '0') Инсталяции
-                    option(value = '1') Ремонт
-                    
-            .typeSelect
-                label Начальная дата :
-                input.form-control(type='date' onchange='changeMainDownDate(this.value)')
-                    
-            .typeSelect
-                label Конечная дата :
-                input.form-control(type='date' onchange='changeMainUpDate(this.value)')
-                    
-            .typeSelect
-                label Сортировка :
-                select.form-control(onchange='changeMainSort(this.value)')
-                    option(value = '0')
-                    option(value = '1') По 1-му вопросу
-                    option(value = '2') По 2-му вопросу
-                    option(value = '3') По 3-му вопросу
-                    option(value = '4') По 4-му вопросу
-                    
-        .row
+        br
+        .qwerty    
+            h4 Средние значения оценок клиентов по ГУС-ам
+            .row
+                //- p.all Всего заявок : #{orders.length}
+                .typeSelect
+                    label Тип работ :
+                    select.form-control(onchange='changeMainType(this.value)')
+                        option(value = '-1') Все
+                        option(value = '0') Инсталяции
+                        option(value = '1') Ремонт
+                        
+                .typeSelect
+                    label Начальная дата :
+                    input.form-control(type='date' onchange='changeMainDownDate(this.value)')
+                        
+                .typeSelect
+                    label Конечная дата :
+                    input.form-control(type='date' onchange='changeMainUpDate(this.value)')
+                        
+                .typeSelect
+                    label Сортировка :
+                    select.form-control(onchange='changeMainSort(this.value)' disabled)
+                        option(value = '0')
+                        option(value = '1') По 1-му вопросу
+                        option(value = '2') По 2-му вопросу
+                        option(value = '3') По 3-му вопросу
+                        option(value = '4') По 4-му вопросу
+                        
+            .row
+                br
+                .mainChart
+                    canvas(id='mainChart' width="800" height="400")
             br
-            .mainChart
-                canvas(id='mainChart' width="900" height="400")
-        
-            //- canvas(id='sameChart' width="600" height="400")    
-            //- button.btn.btn-success.link(onclick='location="/orders?filter=comment"') Показать заявки с коментариями
-            
+            h4 Проработанные заявки
+            .row
+                .typeSelect_big
+                    label ГУС :
+                    select.form-control(onchange='changePieDep(this.value)')
+                        option(value = '-1') Все
+                        option(value = '0') ГУС Симферополь
+                        option(value = '1') ГУС Евпатория
+                        option(value = '2') ГУС Севастополь
+                        option(value = '3') ГУС Феодосия
+                        
+                .pieChart 
+                    br
+                    canvas(id='pieChart' width="350" height="350")    
+                button.btn.btn-success.link(onclick='location="/orders?filter=comment"') Показать заявки с коментариями
+                
