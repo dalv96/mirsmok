@@ -1,12 +1,13 @@
 'use strict';
 
 window.onload = function () {
-    var i = document.createElement("input");
-    i.setAttribute("type", "date");
-    if(i.type != 'date') {
+    var test = document.createElement("input");
+    test.setAttribute("type", "date");
+    if(test.type != 'date') {
         $('#downDate').datepicker();
         $('#upDate').datepicker()
     }
+
     window.completed = 0;
     window.uncompleted = 0;
     initAnalitic(window.orders.all);
@@ -119,7 +120,7 @@ function calculateAverages(list) {
     return averages;
 }
 
-function dateParse(orders,  downTime = new Date(2016, 0, 1), upTime = new Date(2030, 0, 1)) {
+function dateParse(orders, downTime = new Date(2016, 0, 1), upTime = new Date(2030, 0, 1)) {
     var ret = [];
     for (var i = 0; i < orders.length; i++) {
         orders[i].date = new Date(orders[i].date);
@@ -132,6 +133,7 @@ function dateParse(orders,  downTime = new Date(2016, 0, 1), upTime = new Date(2
 }
 
 function getAnalitic(orders, type, downTime, upTime) {
+    console.log(orders, type, downTime, upTime);
     switch (type) {
         case '0':
             window.orders.tmp = dateParse(window.orders.install, downTime, upTime);
@@ -168,18 +170,19 @@ function getAnalitic(orders, type, downTime, upTime) {
 }
 
 function changeMainType(type) {
+    console.log();
     window.type = type;
-    getAnalitic(orders, type, window.downDate, window.upDate);
+    getAnalitic(orders, type, window.downDateInit, window.upDateInit);
 }
 
 function changeMainDownDate(date) {
-    window.downDate = new Date(date);
-    getAnalitic(orders, window.type, new Date(date), window.upDate);
+    window.downDateInit = new Date(date);
+    getAnalitic(orders, window.type, new Date(date), window.upDateInit);
 }
 
 function changeMainUpDate(date) {
-    window.upDate = new Date(date);
-    getAnalitic(orders, window.type, window.downDate, new Date(date));
+    window.upDateInit = new Date(date);
+    getAnalitic(orders, window.type, window.downDateInit, new Date(date));
 }
 
 function changePieDep(dep) {
