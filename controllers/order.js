@@ -21,7 +21,7 @@ function changeUsage(main, sub) {
         Exec.find(sub).then(exec => {
             exec.usage = true;
             exec.save()
-        })    
+        })
     }
 }
 
@@ -116,55 +116,18 @@ module.exports = {
     },
 
     getAnaliticPage: function (req, res) {
-        var option = {
-            stage: 1
-        };
-        var now = new Date();
-        switch (req.query.period) {
-            case 'year':
-                option = {
-                    stage: 1,
-                    'info.dateInit': {
-                        $gte: new Date(now.getFullYear() - 1, now.getMonth(), now.getDate() + 1)
-                    }
+        Order.find().populate('author').then( o => {
+            var ret = o.map( item => {
+                return {
+                    stage: item.stage,
+                    type: item.type,
+                    date: item.info.dateInit,
+                    department: item.author.department,
+                    exec: item.nameExec,
+                    answers: item.answers.values
                 }
-                break;
-            case 'season':
-                option = {
-                    stage: 1,
-                    'info.dateInit': {
-                        $gte: new Date(now.getFullYear(), now.getMonth() - 3, now.getDate() + 1)
-                    }
-                }
-                break;
-            case 'month':
-                option = {
-                    stage: 1,
-                    'info.dateInit': {
-                        $gte: new Date(now.getFullYear(), now.getMonth() -1, now.getDate() + 1)
-                    }
-                }
-                break;
-            case 'week':
-                option = {
-                    stage: 1,
-                    'info.dateInit': {
-                        $gte: new Date(now.getFullYear(), now.getMonth(), now.getDate() - 6)
-                    }
-                }
-                break;
-            case 'day':
-                option = {
-                    stage: 1,
-                    'info.dateInit': {
-                        $gte: new Date(now.getFullYear(), now.getMonth(), now.getDate())
-                    }
-                }
-                break;
-        }
-        Order.find(option).populate('author').then( o => {
-            var averages = common.calculateAverages(o);
-            res.render('analitic', {averages, period:req.query.period});
+            })
+            res.render('analitic', {orders: ret});
         })
     },
 
