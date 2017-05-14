@@ -62,7 +62,7 @@ function parseOrders(orders) {
         pre: 0,
         end: 0
     };
-
+    // // TODO: Если список пустой
     for (var i = 0; i < orders.length; i++) {
         if (orders[i].stage == 1) {
 
@@ -122,18 +122,18 @@ function calculateAverages(list) {
 
 function dateParse(orders, downTime = new Date(2016, 0, 1), upTime = new Date(2030, 0, 1)) {
     var ret = [];
-    for (var i = 0; i < orders.length; i++) {
-        orders[i].date = new Date(orders[i].date);
-        if(orders[i].date > downTime && orders[i].date < upTime) {
-            ret.push(orders[i]);
+    if(orders) {
+        for (var i = 0; i < orders.length; i++) {
+            orders[i].date = new Date(orders[i].date);
+            if(orders[i].date > downTime && orders[i].date < upTime) {
+                ret.push(orders[i]);
+            }
         }
     }
-
     return ret;
 }
 
 function getAnalitic(orders, type, downTime, upTime) {
-    console.log(orders, type, downTime, upTime);
     switch (type) {
         case '0':
             window.orders.tmp = dateParse(window.orders.install, downTime, upTime);
