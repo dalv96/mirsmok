@@ -6,7 +6,9 @@ nav {
     background: #1a7abe;
     min-width: 600px;
 }
-
+body {
+    margin-top: 5em;
+}
 nav ul {
     display: flex;
     margin: 0;
