@@ -25,7 +25,8 @@ append content
             thead
                 tr
                     th Номер
-                    th Дата
+                    th Дата инициации
+                    th Дата выезда
                     th Инициатор
                     th Тип проведенных работ
                     th Ф.И.О. клиента
@@ -34,6 +35,7 @@ append content
                     tr(onclick="location = '/collector/orders/" + order.id + "'")
                         td №#{order.id}
                         td= dateToStr(order.info.dateInit)
+                        td= dateToStr(order.info.dateEvent)
                         td= deps[order.author.department].name
                         if(order.type == 0)
                             td Инсталяция
