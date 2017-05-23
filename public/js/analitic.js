@@ -169,8 +169,22 @@ function getAnalitic(orders, type, downTime, upTime) {
     drawMainGraph();
 }
 
+function changeExec(idx) {
+    if (window.orders.tmp.execs[idx]) {
+        var avr = calculateAverages(window.orders.tmp.execs[idx]);
+        $('#q1').text(avr[0].value);
+        $('#q2').text(avr[1].value);
+        $('#q3').text(avr[2].value);
+        $('#q4').text(avr[3].value);
+    } else {
+        $('#q1').text('-');
+        $('#q2').text('-');
+        $('#q3').text('-');
+        $('#q4').text('-');
+    }
+}
+
 function changeMainType(type) {
-    console.log();
     window.type = type;
     getAnalitic(orders, type, window.downDateInit, window.upDateInit);
 }
@@ -212,6 +226,7 @@ function initAnalitic(orders, downTime, upTime) {
     for (var i = 0; i < 4; i++) {
         window.avrgs.department[i] = calculateAverages(window.orders.tmp.department[i]);
     }
+    window.avrgs.execs = {};
 }
 
 

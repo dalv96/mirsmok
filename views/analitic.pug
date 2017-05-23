@@ -62,4 +62,34 @@ append content
                     br
                     canvas(id='pieChart' width="350" height="350")    
                 button.btn.btn-success.link(onclick='location="/orders?filter=comment"') Показать заявки с коментариями
+            h4 Оценки по исполнителям
+            .row
+                .typeSelect_big
+                    label Исполнитель :
+                    select.form-control(onchange='changeExec(this.value)')
+                        option
+                        each ex in execs
+                            option(value=ex._id)= ex.name
+                //- .typeSelect
+                //-     label Начальная дата :
+                //-     input.form-control(type='date' id='downDate' onchange='changeExecDownDate(this.value)')
+                //-         
+                //- .typeSelect
+                //-     label Конечная дата :
+                //-     input.form-control(type='date' id='upDate' onchange='changeExecUpDate(this.value)')
+                .information
+                    .row
+                        span Качество услуги : 
+                        span(id='q1')
+                    .row
+                        span Демонстрация ЛК : 
+                        span(id='q2')
+                    .row
+                        span Доброжелательность мастера : 
+                        span(id='q3')
+                    .row
+                        span Внимательность к пожеланиям : 
+                        span(id='q4')
+                    
+                    
                 

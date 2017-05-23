@@ -116,18 +116,20 @@ module.exports = {
     },
 
     getAnaliticPage: function (req, res) {
-        Order.find().populate('author').then( o => {
-            var ret = o.map( item => {
-                return {
-                    stage: item.stage,
-                    type: item.type,
-                    date: item.info.dateInit,
-                    department: item.author.department,
-                    exec: item.nameExec,
-                    answers: item.answers.values
-                }
+        Exec.find().then( ex => {
+            Order.find().populate('author').then( o => {
+                var ret = o.map( item => {
+                    return {
+                        stage: item.stage,
+                        type: item.type,
+                        date: item.info.dateInit,
+                        department: item.author.department,
+                        exec: item.nameExec,
+                        answers: item.answers.values
+                    }
+                })
+                res.render('analitic', {orders: ret, execs: ex});
             })
-            res.render('analitic', {orders: ret});
         })
     },
 
