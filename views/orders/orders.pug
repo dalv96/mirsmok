@@ -3,6 +3,18 @@ append head
     link(rel='stylesheet' href='/public/css/order.css')
     script(src='/public/js/order.js')
 append content
+    -function dateToStr(value) {
+    -    var year = value.getFullYear();
+    -    var month = value.getMonth() + 1;
+    -    if(month < 10) {
+    -        month = '0' + month;
+    -    }
+    -    var day = value.getDate();
+    -    if(day < 10) {
+    -        day = '0' + day;
+    -    }
+    -    return  day + '.' + month + '.' + year;
+    -}
     if(success) 
         script.
             var notyf = new Notyf();
@@ -13,6 +25,7 @@ append content
             thead
                 tr
                     th Номер
+                    th Дата
                     th Инициатор
                     th Тип проведенных работ
                     th Ф.И.О. клиента
@@ -20,6 +33,7 @@ append content
                 each order in orders
                     tr(onclick="location = '/collector/orders/" + order.id + "'")
                         td №#{order.id}
+                        td= dateToStr(order.info.dateInit)
                         td= deps[order.author.department].name
                         if(order.type == 0)
                             td Инсталяция

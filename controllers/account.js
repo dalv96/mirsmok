@@ -11,7 +11,7 @@ module.exports = {
     },
 
     getAll: function (req, res) {
-        Account.find({status: { $gt: -1 }}).then(a => {
+        Account.find({status: { $gt: -1 }}).sort('fullName').then(a => {
             res.render('admin/users', {users: a});
         }).catch(error => {
             console.error(error);

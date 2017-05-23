@@ -7,7 +7,7 @@ var Manager = models.Manager;
 
 module.exports = {
     getAll : function (req, res) {
-        Exec.find().populate('manager').then( es => {
+        Exec.find().sort('name').populate('manager').then( es => {
             Manager.find().then( mns => {
                 res.render('admin/exec', {execs: es, managers: mns});
             });
@@ -54,7 +54,6 @@ module.exports = {
         }).then(() => res.status(200).send('Ok'));
     },
     delete: function (req, res) {
-        console.log(req.body.id);
         Exec.findOne({id: req.body.id}).then( e => {
             if(e) {
                 if(e.usage == false) return e.remove();

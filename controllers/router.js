@@ -12,7 +12,7 @@ module.exports = function(app) {
     app.locals.roles = models.Account.roles;
     app.locals.deps = models.Account.deps;
     app.locals.appVersion = require('../package.json').version;
-    
+
     app.post('/login', auth.checkAuthorisation);
 
     app.all('*', auth.isLoggedIn);

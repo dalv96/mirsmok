@@ -5,7 +5,7 @@ var Manager = models.Manager;
 
 module.exports = {
     getAll : function (req, res) {
-        Manager.find().then( ms => {
+        Manager.find().sort('name').then( ms => {
             res.render('admin/managers', {managers: ms});
         });
     },

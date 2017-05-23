@@ -13,14 +13,14 @@ function render(res, success) {
 }
 
 function changeUsage(main, sub) {
-    Exec.find(main).then(exec => {
-        exec.usage = true;
-        exec.save()
+    Exec.findOne({_id: main}).then(ex => {
+        ex.usage = true;
+        ex.save();
     })
-    if(sub != null) {
-        Exec.find(sub).then(exec => {
-            exec.usage = true;
-            exec.save()
+    if(sub) {
+        Exec.findOne({_id: sub}).then(ex => {
+            ex.usage = true;
+            ex.save()
         })
     }
 }
@@ -63,7 +63,7 @@ module.exports = {
             console.log('Init order', order.id);
             return order.save();
         }).then(()=> {
-            changeUsage(req.body.mainExec, req.body.subExec);
+            changeUsage(req.body.mainExec, req.body.subExec || null);
             render(res, true);
         })
     },
