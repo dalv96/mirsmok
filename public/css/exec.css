@@ -35,7 +35,7 @@ table td {
 .fullName span {
     position: relative;
     left: -19.07em;
-    z-index: 9999;
+    z-index: 999;
 }
 
 .table-exec {

@@ -3,11 +3,13 @@ nav {
     top: 0;
     right: 0;
     left: 0;
+    z-index: 9999;
     background: #1a7abe;
     min-width: 600px;
 }
 body {
     margin-top: 5em;
+    z-index: 0;
 }
 nav ul {
     display: flex;
