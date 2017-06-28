@@ -28,13 +28,26 @@ append content
                     th Ф.И.О. клиента
             tbody
                 each order in orders
-                    tr(onclick="location = '/orders/" + order.id + "'")
-                        td №#{order.id}
-                        td= dateToStr(order.info.dateInit)
-                        td= dateToStr(order.info.dateEvent)
-                        td= deps[order.author.department].name
-                        if(order.type == 0)
-                            td Инсталяция
-                        else
-                            td Ремонт
-                        td= order.info.nameAbon
+                    if(order.answers != null)
+                        tr(onclick="location = '/orders/" + order.id + "'" class=(order.answers.values[0] == -1)?'order_not_answers':'')
+                            td №#{order.id}
+                            td= dateToStr(order.info.dateInit)
+                            td= dateToStr(order.info.dateEvent)
+                            td= deps[order.author.department].name
+                            if(order.type == 0)
+                                td Инсталяция
+                            else
+                                td Ремонт
+                            td= order.info.nameAbon
+                    else
+                        tr(onclick="location = '/orders/" + order.id + "'")
+                            td №#{order.id}
+                            td= dateToStr(order.info.dateInit)
+                            td= dateToStr(order.info.dateEvent)
+                            td= deps[order.author.department].name
+                            if(order.type == 0)
+                                td Инсталяция
+                            else
+                                td Ремонт
+                            td= order.info.nameAbon
+                            
