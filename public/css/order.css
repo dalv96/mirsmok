@@ -53,3 +53,9 @@ tr {
 .invis {
     visibility: hidden;
 }
+.order_not_answers {
+    background-color: #FFE4E1;
+}
+.order_not_answers:hover {
+    background-color: #FFD4E1;
+}
