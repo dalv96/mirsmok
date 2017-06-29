@@ -174,7 +174,7 @@ module.exports = {
 
     delete: function (req, res) {
         Order.findOne({'id' : req.params.id}).populate('author').then( o => {
-            if(o.stage == 0 && res.locals.__user.role == 2) {
+            if(o.stage == 0 && (res.locals.__user.role == 2 || res.locals.__user.role == 0)) {
                 return o.remove();
             }
         }).then(() => res.status(200).send('Ok'))
