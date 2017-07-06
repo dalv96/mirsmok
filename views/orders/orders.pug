@@ -24,12 +24,12 @@ append content
         table.table.table-hover#myTable
             thead
                 tr
-                    th(onclick="w3.sortHTML('#myTable','.item', 'td:nth-child(1)')") Номер
-                    th(onclick="w3.sortHTML('#myTable','.item', 'td:nth-child(2)')") Дата инициации
-                    th(onclick="w3.sortHTML('#myTable','.item', 'td:nth-child(3)')") Дата выезда
-                    th(onclick="w3.sortHTML('#myTable','.item', 'td:nth-child(4)')") Инициатор
-                    th(onclick="w3.sortHTML('#myTable','.item', 'td:nth-child(5)')") Тип проведенных работ
-                    th(onclick="w3.sortHTML('#myTable','.item', 'td:nth-child(6)')") Ф.И.О. клиента
+                    th Номер
+                    th Дата инициации
+                    th Дата выезда
+                    th Инициатор
+                    th Тип проведенных работ
+                    th Ф.И.О. клиента
             tbody
                 each order in orders
                     tr(onclick="location = '/collector/orders/" + order.id + "'").item
