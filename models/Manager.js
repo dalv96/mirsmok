@@ -11,9 +11,9 @@ var Manager = mongoose.Schema({
         type: String,
         required: true
     },
-    city: {
-        type: Number
-    },
+    city : {
+        type : mongoose.Schema.Types.ObjectId, ref: 'City',
+	},
     usage: {
         type: Boolean,
         required: true

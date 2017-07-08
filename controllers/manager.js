@@ -2,12 +2,19 @@
 
 var models = require('../models');
 var Manager = models.Manager;
+var City = models.City;
 
 module.exports = {
     getAll : function (req, res) {
-        Manager.find().sort('name').then( ms => {
-            res.render('admin/managers', {managers: ms});
-        });
+        City.find().sort('name').then( cities => {
+            Manager.find().sort('name').populate('city').then( ms => {
+                console.log(ms);
+                res.render('admin/managers', {
+                    managers: ms,
+                    cities: cities
+                });
+            });
+        })
     },
     add: function (req, res) {
         Manager.findOne({name: req.body.name}).then( m => {

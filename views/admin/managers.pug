@@ -13,10 +13,8 @@ append content
                         input.form-control#addExec(type='text' name='name' maxlength='30' required)
                     .col-xs-6.col-md-2
                         select.form-control(name='city' required)
-                            option(value=0) Симферополь
-                            option(value=1) Севастополь
-                            option(value=2) Феодосия
-                            option(value=3) Евпатория
+                            each city in cities
+                                option(value=city._id)= city.name
                                 
                     button(type='submit').btn.btn-default.col-xs-2.col-md-1 Добавить
         br
@@ -29,14 +27,15 @@ append content
                                 input.form-control.inpInvis(type='text' id='exec'+manager.id maxlength='30' value=manager.name)
                                 span.control-label(id='label'+manager.id)= manager.name
                                     if(manager.city)
-                                        | (#{manager.city})
+                                        | (#{manager.city.name})
                             td.fullName(id='item_city'+manager.id)
                                 select.form-control.inpInvis(name='city' id='city'+manager.id  required)
                                     option
-                                    option(value=0 checked=(manager.city == 0)) Симферополь
-                                    option(value=1 checked=(manager.city == 1)) Евпатория
-                                    option(value=2 checked=(manager.city == 2)) Севастополь
-                                    option(value=3 checked=(manager.city == 3)) Феодосия
+                                    each city in cities
+                                        if(manager.city)
+                                            option(value=city._id selected=(city.id == manager.city.id))= city.name
+                                        else
+                                            option(value=city._id)= city.name
                             td.fn.vis(id='edit'+manager.id onclick='startEdit('+manager.id+')')
                                 img( width='15' height='15' src='/public/edit.svg' title='Редактировать' alt='Edit')
                             td.fn.invis(id='save'+manager.id onclick='saveMan("' + manager.name+ '",' +manager.id+ ')')
