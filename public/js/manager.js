@@ -20,6 +20,9 @@ function startEdit(number) {
     $('#manager'+number).addClass('inpVis').removeClass('inpInvis').animate({
         opacity: 1
     }, 200);
+    $('#city'+number).addClass('inpVis').removeClass('inpInvis').animate({
+        opacity: 1
+    }, 200);
     $('#exec'+number).focus()
 }
 
@@ -30,6 +33,9 @@ function cancelEdit(number) {
     $("#edit"+number).animate({
         opacity:1
     }, 200, () => $("#edit"+number).attr('style', '').removeClass('invis').addClass('vis') )
+    $("#city"+number).animate({
+        opacity:1
+    }, 200, () => $("#city"+number).attr('style', '').removeClass('invis').addClass('vis') )
     $("#rm"+number).animate({
         opacity:1
     }, 200, () => $("#rm"+number).attr('style', '').removeClass('invis').addClass('vis'))
@@ -57,17 +63,15 @@ function deleteExec(id) {
 
 function saveExec(name, id) {
     var newName = $('#exec'+id).val();
-    console.log(newName);
-    if(name != newName) {
-        $.ajax({
-            type: "POST",
-            url: "/admin/exec/edit",
-            data: "name="+name+'&newName='+newName,
-            success: function(msg){
-                location=location;
-            }
-        });
-    }
+    $.ajax({
+        type: "POST",
+        url: "/admin/exec/edit",
+        data: "name="+name+'&newName='+newName,
+        success: function(msg){
+            location=location;
+        }
+    });
+
 }
 
 function deleteExec(id) {
@@ -99,14 +103,13 @@ function deleteMan(id) {
 
 function saveMan(name, id) {
     var newName = $('#exec'+id).val().trim();
-    if(name != newName) {
+    var city = $('#city'+id).val();
         $.ajax({
             type: "POST",
             url: "/admin/managers/edit",
-            data: "id="+id+'&newName='+newName,
+            data: "id="+id+'&newName='+newName+'&city='+city,
             success: function(msg){
                 location=location;
             }
         });
-    }
 }

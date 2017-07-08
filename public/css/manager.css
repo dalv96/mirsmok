@@ -1,5 +1,5 @@
 body {
-    min-width: 700px;
+    min-width: 900px;
 }
 
 input {
@@ -39,7 +39,7 @@ table td {
 }
 
 .table-exec {
-    max-width: 700px;
+    max-width: 900px;
 }
 
 .fn img{

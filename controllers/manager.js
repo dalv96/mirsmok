@@ -16,7 +16,8 @@ module.exports = {
                     var manager = new Manager({
                         id: ids,
                         name: req.body.name,
-                        usage: false
+                        usage: false,
+                        city: req.body.city
                     });
                     return manager.save();
                 }
@@ -27,8 +28,9 @@ module.exports = {
         Manager.findOne({id: req.body.id}).then( m => {
             if(m) {
                 return Manager.findOne({name: req.body.newName}).then(manager => {
-                    if(!manager) {
+                    if(!manager || m.id == manager.id) {
                         m.name = req.body.newName;
+                        m.city = req.body.city;
                         return m.save();
                     }
                 });

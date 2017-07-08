@@ -22,11 +22,12 @@ html
                                 li: a(href='/admin/users' tabindex='991') Пользователи
                                 li: a(href='/admin/exec' tabindex='992') Исполнители
                                 li: a(href='/admin/managers' tabindex='993') Бригадиры
+                                li: a(href='/admin/cities' tabindex='994') Города
                                 
-                            li: a(href='/analitic' tabindex='994') Статистика
-                            li: a(href='/orders?filter=my' tabindex='995') Мои заявки
-                            li.profile: a(href='/profile' tabindex='996')= __user.fullName + ' (' + __user.login + ')'
-                            li.exit: a(href='/logout' tabindex='997') Выйти
+                            li: a(href='/analitic' tabindex='995') Статистика
+                            li: a(href='/orders?filter=my' tabindex='996') Мои заявки
+                            li.profile: a(href='/profile' tabindex='997')= __user.fullName + ' (' + __user.login + ')'
+                            li.exit: a(href='/logout' tabindex='998') Выйти
         div
             block content
         footer

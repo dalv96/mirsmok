@@ -1,6 +1,6 @@
 extend ../basic
 append head
-    link(rel='stylesheet' href='/public/css/manager.css')
+    link(rel='stylesheet' href='/public/css/exec.css')
     script(src='/public/js/manager.js')
 append content
     .__block
@@ -11,6 +11,13 @@ append content
                 .row
                     .col-xs-6.col-md-2
                         input.form-control#addExec(type='text' name='name' maxlength='30' required)
+                    .col-xs-6.col-md-2
+                        select.form-control(name='city' required)
+                            option(value=0) Симферополь
+                            option(value=1) Севастополь
+                            option(value=2) Феодосия
+                            option(value=3) Евпатория
+                                
                     button(type='submit').btn.btn-default.col-xs-2.col-md-1 Добавить
         br
         .table-exec
@@ -21,6 +28,15 @@ append content
                             td.fullName(id='item'+manager.id)
                                 input.form-control.inpInvis(type='text' id='exec'+manager.id maxlength='30' value=manager.name)
                                 span.control-label(id='label'+manager.id)= manager.name
+                                    if(manager.city)
+                                        | (#{manager.city})
+                            td.fullName(id='item_city'+manager.id)
+                                select.form-control.inpInvis(name='city' id='city'+manager.id  required)
+                                    option
+                                    option(value=0 checked=(manager.city == 0)) Симферополь
+                                    option(value=1 checked=(manager.city == 1)) Евпатория
+                                    option(value=2 checked=(manager.city == 2)) Севастополь
+                                    option(value=3 checked=(manager.city == 3)) Феодосия
                             td.fn.vis(id='edit'+manager.id onclick='startEdit('+manager.id+')')
                                 img( width='15' height='15' src='/public/edit.svg' title='Редактировать' alt='Edit')
                             td.fn.invis(id='save'+manager.id onclick='saveMan("' + manager.name+ '",' +manager.id+ ')')

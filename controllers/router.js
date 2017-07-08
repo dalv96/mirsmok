@@ -6,6 +6,7 @@ const models = require('../models');
 const order = require('./order');
 const executor = require('./executor');
 const manager = require('./manager');
+const city = require('./city');
 
 module.exports = function(app) {
 
@@ -67,6 +68,11 @@ module.exports = function(app) {
     app.post('/admin/managers/add', manager.add);
     app.post('/admin/managers/delete', manager.delete);
     app.post('/admin/managers/edit', manager.edit);
+
+    app.get('/admin/cities', city.getAll);
+    app.post('/admin/cities/add', city.add);
+    app.post('/admin/cities/edit', city.edit);
+    // app.post('/admin/cities/delete', city.delete);
     // ****************** РУКОВОДИТЕЛЬ *************************
 
     app.all('/manager/*', auth.isManager);

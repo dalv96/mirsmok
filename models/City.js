@@ -2,7 +2,7 @@
 
 var mongoose = require('../controllers/connect');
 
-var Manager = mongoose.Schema({
+var City = mongoose.Schema({
     id: {
         type: Number,
         required: true
@@ -10,20 +10,13 @@ var Manager = mongoose.Schema({
     name: {
         type: String,
         required: true
-    },
-    city: {
-        type: Number
-    },
-    usage: {
-        type: Boolean,
-        required: true
     }
 });
 
-var manager;
+var city;
 
-Manager.statics.getNext = function () {
-    return manager.find().sort({id: -1}).exec().then( o => {
+City.statics.getNext = function () {
+    return city.find().sort({id: -1}).exec().then( o => {
         if(o[0] != null) {
             const newID = o[0].id + 1;
             return newID;
@@ -31,6 +24,6 @@ Manager.statics.getNext = function () {
     })
 }
 
-manager = mongoose.model('Manager', Manager);
+city = mongoose.model('City', City);
 
-module.exports = manager;
+module.exports = city;

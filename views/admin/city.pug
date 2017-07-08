@@ -1,0 +1,26 @@
+extend ../basic
+append head
+    link(rel='stylesheet' href='/public/css/city.css')
+    script(src='/public/js/city.js')
+        
+append content
+    .__block
+        h1 Справочник городов
+        br
+        .addRow
+            form(action='/admin/cities/add' method='POST')
+                input.form-control#addCity(type='text' name='name' maxlength='30' placeholder='Название города' required)        
+                button(type='submit').btn.btn-default.col-xs-2.col-md-1 Добавить
+        br
+        .control-table
+            each city in cities
+                .table-line
+                    .table-main
+                        //- label Симферополь
+                        input.form-control(id='city'+city.id value=city.name disabled)
+                    .table-save.ctrl
+                        img( width='15' height='15' src='/public/save.svg' title='Сохранить' alt='Save' onclick='saveItem(' +city.id + ')' id='save'+city.id).invis
+                    .table-edit.ctrl
+                        img( width='15' height='15' src='/public/edit.svg' title='Редактировать' alt='Edit' onclick='editItem(' +city.id + ')' id='edit'+city.id)
+                    .table-cancel.ctrl
+                        img( width='15' height='15' src='/public/cancel.svg' title='Отменить' alt='Cancel' onclick='cancelItem(' +city.id + ')' id='cancel'+city.id).invis

@@ -1,0 +1,60 @@
+.addRow {
+    width: 500px;
+}
+.addRow input {
+    display: inline-block;
+    margin-left: 1em;
+    width: 50%;
+}
+.addRow button {
+    float: none;
+    width: 20%;
+    margin-top: -2px;
+}
+.control-table {
+    margin-left: 1em;
+    display: table;
+    width: 500px;
+}
+.table-main {
+    line-height: 45px;
+    display: table-cell;
+    min-width: 200px;
+}
+.table-edit, .table-save, .table-cancel {
+    width: 40px;
+    line-height: 45px;
+    display: table-cell;
+}
+.table-edit img, .table-save img, .table-cancel img {
+    width: 100%;
+    height: 20px;
+}
+.table-line {
+    display: table-row;
+    transition: all 0.3s;
+    border-bottom: 5px;
+}
+.ctrl img {
+    opacity: 0;
+    transition: all 0.3s;
+}
+.ctrl:hover img {
+    transform: scale(1.5);
+}
+.table-line:hover {
+    background-color: #eee;
+}
+.table-line:hover > .ctrl img {
+    opacity: 1;
+}
+.control-table input {
+    display: inline-block;
+    width: 200px;
+}
+.invis {
+    visibility: hidden;
+}
+.vis {
+    visibility: visible;
+}
