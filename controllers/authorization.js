@@ -16,7 +16,7 @@ module.exports = {
                     role: acc.role
                 };
                 if(acc.role == 2) {
-                    res.locals.__user.dep = acc.department;
+                    res.locals.__user.city = acc.city;
                 }
                 next();
             })

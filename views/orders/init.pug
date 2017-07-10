@@ -20,7 +20,7 @@ append content
                         label.control-label.col-sm-3 Тип проведенных работ
                         .col-sm-6
                             select.form-control(onChange='changeType(this.value)' name='type' required)
-                                option(value='0' selected) Инсталяция
+                                option(value='0' selected) Инсталляция
                                 option(value='1' ) Ремонт
                 li.list-group-item
                     .form-group
@@ -51,18 +51,26 @@ append content
                     .form-group
                         label.control-label.col-sm-3 Ф.И.О иполнителей
                         .col-sm-6
-                            select.form-control.inpt(name='mainExec' required)
-                                option
-                                    each exec in execs
-                                        option(value=exec._id)= exec.name
+                            if(__user.city)
+                                select.form-control.inpt(name='mainExec' required)
+                                    option
+                                        each exec in execs
+                                            if(exec.manager.city == __user.city.toString())
+                                                option(value=exec._id)= exec.name
+                            else
+                                label Попросите администратора привязать город к Вашей учетной записи!
                 li.list-group-item
                     .form-group
                         label.control-label.col-sm-3
                         .col-sm-6
-                            select.form-control.inpt(name='subExec')
-                                option
-                                each exec in execs
-                                    option(value=exec._id)= exec.name
+                            if(__user.city)
+                                select.form-control.inpt(name='subExec')
+                                    option
+                                    each exec in execs
+                                        if(exec.manager.city == __user.city.toString())
+                                            option(value=exec._id)= exec.name
+                            else
+                                label Попросите администратора привязать город к Вашей учетной записи!
                 li.list-group-item.repairs_hide
                     .form-group
                         label.control-label.col-sm-3 Номер ТТ

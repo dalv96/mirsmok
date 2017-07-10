@@ -15,7 +15,9 @@ append content
 					th E-mail
 					th Ф.И.О.
 					th Телефон
+					th Город
 					th Права
+					
 			tbody
 				each user in users
 					tr(onclick='location="/admin/users/'+user.login +'"')
@@ -32,4 +34,7 @@ append content
 							td= user.number
 						else
 							td Не указан
+						td
+							if(user.city)
+								| #{user.city.name}
 						td= roles[user.role].name

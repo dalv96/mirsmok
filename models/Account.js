@@ -25,6 +25,9 @@ var Account = mongoose.Schema({
     department: {
         type: Number
     },
+    city : {
+        type : mongoose.Schema.Types.ObjectId, ref: 'City',
+	},
     fullName: {
         type: String,
         required: true

@@ -7,7 +7,7 @@ var Exec = models.Exec;
 var common = require('./common');
 
 function render(res, success) {
-    Exec.find().sort({ name: 1 }).then(execs => {
+    Exec.find().sort({ name: 1 }).populate('manager').then(execs => {
         res.render('orders/init', {execs: execs, success: success});
     })
 }

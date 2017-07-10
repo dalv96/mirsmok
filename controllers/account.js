@@ -2,16 +2,22 @@
 
 var models = require('../models');
 var Account = models.Account;
+var City = models.City;
+
 var password = require('./password');
 
 module.exports = {
 
     getPageCreate: function (req, res) {
-        res.render('admin/createUser');
+        City.find().then( cities => {
+            res.render('admin/createUser', {
+                cities: cities
+            });
+        })
     },
 
     getAll: function (req, res) {
-        Account.find({status: { $gt: -1 }}).sort('fullName').then(a => {
+        Account.find({status: { $gt: -1 }}).populate('city').sort('fullName').then(a => {
             res.render('admin/users', {users: a});
         }).catch(error => {
             console.error(error);
@@ -19,7 +25,7 @@ module.exports = {
     },
 
     getProfile: function (req, res) {
-        Account.findOne({ login: req.session.__user, status: { $gt: -1 }}).then(a => {
+        Account.findOne({ login: req.session.__user, status: { $gt: -1 }}).populate('city').then(a => {
             if(a)
                 res.render('profile', {user: a});
             else
@@ -28,7 +34,7 @@ module.exports = {
     },
 
     editProfile: function (req, res) {
-        Account.findOne({ login: req.session.__user, status: { $gt: -1 }}).then(a => {
+        Account.findOne({ login: req.session.__user, status: { $gt: -1 }}).populate('city').then(a => {
             if(a) {
                 a.fullName = req.body.fullName;
                 a.email = req.body.email;
@@ -52,11 +58,16 @@ module.exports = {
     },
 
     getOne: function (req, res) {
-        Account.findOne({ login: req.params.login, status: { $gt: -1 }}).then(a => {
-            if(a)
-                res.render('admin/editUser', {user: a});
-            else
-                res.render('404');
+        Account.findOne({ login: req.params.login, status: { $gt: -1 }}).populate('city').then(a => {
+            City.find().then( cities => {
+                if(a)
+                    res.render('admin/editUser', {
+                        user: a,
+                        cities: cities
+                    });
+                else
+                    res.render('404');
+            })
         })
     },
 
@@ -72,7 +83,8 @@ module.exports = {
                     fullName: req.body.fullName
                 });
                 if(req.body.role == 2) {
-                    acc.department = req.body.dep;
+                    acc.city = req.body.city;
+                    // acc.department = req.body.dep;
                 }
                 console.log('Create user', acc.login);
                 return acc.save();
@@ -91,7 +103,12 @@ module.exports = {
             a.role = req.body.role;
             a.email = req.body.email;
             a.number = req.body.number;
-            a.department = req.body.department;
+            if(a.role == 2) {
+                a.city = req.body.city;
+            } else {
+                if(a.city) a.city = undefined;
+            }
+            // a.department = req.body.department;
             console.log('Editing user', a.login);
             return a.save();
         }).then( () => res.redirect('/admin/users') )
