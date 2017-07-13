@@ -79,6 +79,9 @@ Order.statics.getNext = function () {
     })
 }
 
+var deepPopulate = require('mongoose-deep-populate')(mongoose);
+Order.plugin(deepPopulate);
+
 order = mongoose.model('Order', Order);
 
 module.exports = order;

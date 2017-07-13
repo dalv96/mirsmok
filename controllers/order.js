@@ -3,6 +3,8 @@
 var models = require('../models');
 var Order = models.Order;
 var Account = models.Account;
+var City = models.City;
+var Manager = models.Manager;
 var Exec = models.Exec;
 var common = require('./common');
 
@@ -33,7 +35,7 @@ module.exports = {
     },
 
     getOrdersPage: function (req, res) {
-        Order.find({ stage: 0 }).populate('author').sort({ id: -1 }).then( o => {
+        Order.find({ stage: 0 }).populate('author').populate('author.city').sort({ id: -1 }).then( o => {
             res.render('orders/orders', {orders: o});
         })
     },
@@ -117,18 +119,22 @@ module.exports = {
 
     getAnaliticPage: function (req, res) {
         Exec.find().then( ex => {
-            Order.find().populate('author').then( o => {
-                var ret = o.map( item => {
-                    return {
-                        stage: item.stage,
-                        type: item.type,
-                        date: item.info.dateInit,
-                        department: item.author.department,
-                        exec: item.nameExec,
-                        answers: item.answers.values
-                    }
+            City.find().then( ct => {
+                Manager.find().then( ms => {
+                    Order.find().populate('author').then( o => {
+                        var ret = o.map( item => {
+                            return {
+                                stage: item.stage,
+                                type: item.type,
+                                date: item.info.dateInit,
+                                city: item.author.city,
+                                exec: item.nameExec,
+                                answers: item.answers.values
+                            }
+                        })
+                        res.render('analitic', {orders: ret, execs: ex, cities: ct, managers: ms});
+                    })
                 })
-                res.render('analitic', {orders: ret, execs: ex});
             })
         })
     },
@@ -136,7 +142,7 @@ module.exports = {
     search: function (req, res) {
         switch (req.query.filter) {
             case 'comment':
-                Order.find({'answers.comment' : {$ne: null }}).populate('author').sort({_id:-1}).then( o => {
+                Order.find({'answers.comment' : {$ne: null }}).deepPopulate('author.city').sort({_id:-1}).then( o => {
                     res.render('orders/ordersSearch', {orders: o});
                 })
                 break;
@@ -145,12 +151,12 @@ module.exports = {
                 if( res.locals.__user.dep != null) {
                     filter = {'author' : res.locals.__user._id};
                 } else filter = {'answers.collector': res.locals.__user._id};
-                    Order.find(filter).populate('author').sort({_id:-1}).then( o => {
+                    Order.find(filter).deepPopulate('author.city').sort({_id:-1}).then( o => {
                         res.render('orders/ordersSearch', {orders: o});
                     })
                 break;
             default:
-                Order.find().populate('author').sort({_id:-1}).then( o => {
+                Order.find().deepPopulate('author.city').sort({_id:-1}).then( o => {
                     res.render('orders/ordersSearch', {orders: o});
                 })
                 break;

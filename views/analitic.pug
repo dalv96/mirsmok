@@ -4,12 +4,21 @@ append head
     link(rel='stylesheet' href='/public/css/jquery-ui.css')
     script(src='/public/js/jquery-ui.min.js')
     script(src='/public/js/Chart.js')
-    script(src='/public/js/analitic.js')
     -var av = JSON.stringify(orders);
+    -var ct = JSON.stringify(cities);
+    -var ms = JSON.stringify(managers);
+    
     script.
         var av = JSON.parse(("#{av}").replace(/&quot;/g, '"'));
+        var ct = JSON.parse(("#{ct}").replace(/&quot;/g, '"'));
+        var ms = JSON.parse(("#{ms}").replace(/&quot;/g, '"'));
+        window.cities = ct;
+        window.managers = ms;
         window.orders = {};
         window.orders.all = av;
+    script(src='/public/js/analitic.js')
+
+    
 append content
     .inf
         h3 Статистика
@@ -53,43 +62,49 @@ append content
                     label ГУС :
                     select.form-control(onchange='changePieDep(this.value)')
                         option(value = '-1') Все
-                        option(value = '0') ГУС Симферополь
-                        option(value = '1') ГУС Евпатория
-                        option(value = '2') ГУС Севастополь
-                        option(value = '3') ГУС Феодосия
+                        each city in cities
+                            option(value = city._id)= city.name
                         
                 .pieChart 
                     br
                     canvas(id='pieChart' width="350" height="350")    
                 button.btn.btn-success.link(onclick='location="/orders?filter=comment"') Показать заявки с коментариями
-            h4 Оценки по исполнителям
-            .row
-                .typeSelect_big
-                    label Исполнитель :
-                    select.form-control(onchange='changeExec(this.value)')
-                        option
-                        each ex in execs
-                            option(value=ex._id)= ex.name
-                //- .typeSelect
-                //-     label Начальная дата :
-                //-     input.form-control(type='date' id='downDate' onchange='changeExecDownDate(this.value)')
-                //-         
-                //- .typeSelect
-                //-     label Конечная дата :
-                //-     input.form-control(type='date' id='upDate' onchange='changeExecUpDate(this.value)')
-                .information
-                    .row
-                        span Качество услуги : 
-                        span(id='q1')
-                    .row
-                        span Демонстрация ЛК : 
-                        span(id='q2')
-                    .row
-                        span Доброжелательность мастера : 
-                        span(id='q3')
-                    .row
-                        span Внимательность к пожеланиям : 
-                        span(id='q4')
-                    
+                
+            h4 Аналитика по бригадирам - В разработке... 
+            br
+            h4 Аналитика по исполнителям - В разработке... 
+            br
+            //- .row
+            //-     .typeSelect_big
+            //-         label Бригадир :
+            //-         select.form-control(onchange='changeExec(this.value)')
+            //-             option
+            //-             each m in managers
+            //-                 option(value=m._id)= m.name
+            //-     //- .typeSelect
+            //-     //-     label Начальная дата :
+            //-     //-     input.form-control(type='date' id='downDate' onchange='changeExecDownDate(this.value)')
+            //-     //-         
+            //-     //- .typeSelect
+            //-     //-     label Конечная дата :
+            //-     //-     input.form-control(type='date' id='upDate' onchange='changeExecUpDate(this.value)')
+            //- .row
+            //-     br
+            //-     .manChart
+            //-         canvas(id='manChart' width="800" height="400")
+            //-     //- .information
+            //-     //-     .row
+            //-     //-         span Качество услуги : 
+            //-     //-         span(id='q1')
+            //-     //-     .row
+            //-     //-         span Демонстрация ЛК : 
+            //-     //-         span(id='q2')
+            //-     //-     .row
+            //-     //-         span Доброжелательность мастера : 
+            //-     //-         span(id='q3')
+            //-     //-     .row
+            //-     //-         span Внимательность к пожеланиям : 
+            //-     //-         span(id='q4')
+            //-         
                     
                 
