@@ -29,6 +29,14 @@ window.onload = function () {
     window.cities.forEach( item => {
         window.city[item._id] = item.name;
     })
+    window.manager = {};
+    window.managers.forEach( item => {
+        window.manager[item._id] = item.name;
+    })
+    window.exec = {};
+    window.execs.forEach( item => {
+        window.exec[item._id] = item.name;
+    })
     window.orders.install = [];
     window.orders.repair = [];
 
@@ -47,11 +55,15 @@ window.onload = function () {
         responsive: false
     };
 
+
+    window.selected = {};
+
     initAnalitic(window.orders.all);
 
     drawMainGraph();
     drawPieGraph();
-    // drawManGraph();
+    drawManagerGraph();
+    drawExecGraph();
 }
 
 
@@ -60,8 +72,6 @@ function parseOrders(orders) {
         all: [],
         completed: [],
         uncompleted: [],
-        install: [],
-        repair: [],
         city: {},
         exec: {},
         manager: {}
@@ -69,31 +79,39 @@ function parseOrders(orders) {
 
     for (var i = 0; i < orders.length; i++) {
         list.all.push(orders[i]);
-        if( window.orders.install == null) {
-
-
-        }
 
         (orders[i].stage == 0)?list.uncompleted.push(orders[i]):list.completed.push(orders[i]);
 
         if(list.city[orders[i].city] == null) list.city[orders[i].city] = [];
         list.city[orders[i].city].push(orders[i]);
 
-        if(orders[i].exec[0]) {
-            if(list.exec[orders[i].exec[0]] == null) list.exec[orders[i].exec[0]] = [];
-            list.exec[orders[i].exec[0]].push(orders[i]);
+        if(orders[i].exec[0] && orders[i].stage == 1) {
+            if(list.exec[orders[i].exec[0]._id] == null) list.exec[orders[i].exec[0]._id] = [];
+
+            if(!list.exec[orders[i].exec[0]._id].includes(orders[i]))
+                list.exec[orders[i].exec[0]._id].push(orders[i]);
         }
 
-        if(orders[i].exec[1]) {
-            if(list.exec[orders[i].exec[1]] == null) list.exec[orders[i].exec[1]] = [];
-            list.exec[orders[i].exec[1]].push(orders[i]);
+        if(orders[i].exec[1] && orders[i].stage == 1) {
+            if(list.exec[orders[i].exec[1]._id] == null) list.exec[orders[i].exec[1]._id] = [];
+
+            if(!list.exec[orders[i].exec[1]._id].includes(orders[i]))
+                list.exec[orders[i].exec[1]._id].push(orders[i]);
         }
 
-        if(list.manager[orders[i].manager] == null) list.manager[orders[i].manager] = [];
-        list.manager[orders[i].manager].push(orders[i]);
+        if(orders[i].manager[0] && orders[i].stage == 1) {
+            if(list.manager[orders[i].manager[0]] == null) list.manager[orders[i].manager[0]] = [];
+            if(!list.manager[orders[i].manager[0]].includes(orders[i]))
+                list.manager[orders[i].manager[0]].push(orders[i]);
+        }
+
+        if(orders[i].manager[1] && orders[i].stage == 1) {
+            if(list.manager[orders[i].manager[1]] == null) list.manager[orders[i].manager[1]] = [];
+            if(!list.manager[orders[i].manager[1]].includes(orders[i]))
+            list.manager[orders[i].manager[1]].push(orders[i]);
+        }
 
     }
-
     return list;
 }
 
@@ -156,6 +174,14 @@ function getAnalitic(orders, type, downTime, upTime) {
             for (var i in window.orders.tmp.city) {
                 window.avrgs.city[i] = calculateAverages(window.orders.tmp.city[i])
             }
+            window.avrgs.exec = {};
+            for (var i in window.orders.tmp.exec) {
+                window.avrgs.exec[i] = calculateAverages(window.orders.tmp.exec[i])
+            }
+            window.avrgs.manager = {};
+            for (var i in window.orders.tmp.manager) {
+                window.avrgs.manager[i] = calculateAverages(window.orders.tmp.manager[i])
+            }
             break;
         case '1':
             window.orders.tmp = dateParse(window.orders.repair, downTime, upTime);
@@ -165,6 +191,14 @@ function getAnalitic(orders, type, downTime, upTime) {
             window.avrgs.city =  {};
             for (var i in window.orders.tmp.city) {
                 window.avrgs.city[i] = calculateAverages(window.orders.tmp.city[i])
+            }
+            window.avrgs.exec = {};
+            for (var i in window.orders.tmp.exec) {
+                window.avrgs.exec[i] = calculateAverages(window.orders.tmp.exec[i])
+            }
+            window.avrgs.manager = {};
+            for (var i in window.orders.tmp.manager) {
+                window.avrgs.manager[i] = calculateAverages(window.orders.tmp.manager[i])
             }
             break;
         default:
@@ -176,25 +210,65 @@ function getAnalitic(orders, type, downTime, upTime) {
             for (var i in window.orders.tmp.city) {
                 window.avrgs.city[i] = calculateAverages(window.orders.tmp.city[i])
             }
+            window.avrgs.exec = {};
+            for (var i in window.orders.tmp.exec) {
+                window.avrgs.exec[i] = calculateAverages(window.orders.tmp.exec[i])
+            }
+            window.avrgs.manager = {};
+            for (var i in window.orders.tmp.manager) {
+                window.avrgs.manager[i] = calculateAverages(window.orders.tmp.manager[i])
+            }
             break;
     }
+    window.orders.tmp.completed = [];
+    window.orders.tmp.uncompleted = [];
+    if(window.orders.tmp.city[window.selected.department])
+        for (var i = 0; i < window.orders.tmp.city[window.selected.department].length; i++) {
+            if( window.orders.tmp.city[window.selected.department][i].stage == 1)
+                window.orders.tmp.completed.push(window.orders.tmp.city[window.selected.department][i]);
+            else window.orders.tmp.uncompleted.push(window.orders.tmp.city[window.selected.department][i]);
+        }
+    else
+        for (var i = 0; i < window.orders.tmp.all.length; i++) {
+            if( window.orders.tmp.all[i].stage == 1)
+                window.orders.tmp.completed.push(window.orders.tmp.all[i]);
+            else window.orders.tmp.uncompleted.push(window.orders.tmp.all[i]);
+        }
     drawMainGraph();
     drawPieGraph();
+    drawManagerGraph();
+    changeManager(window.selected.manager);
 }
 
-function changeExec(idx) {
-    if (window.orders.tmp.execs[idx]) {
-        var avr = calculateAverages(window.orders.tmp.execs[idx]);
-        $('#q1').text(avr[0].value);
-        $('#q2').text(avr[1].value);
-        $('#q3').text(avr[2].value);
-        $('#q4').text(avr[3].value);
+function changeManager(idx) {
+    if(idx) {
+        var os = window.orders.tmp.exec;
+        var ts = [];
+        window.selected.manager = idx;
+        window.execs.forEach( item => {
+            if(item.manager == idx) {
+                ts[item._id] = os[item._id];
+            }
+        });
+        window.avrgs.exec = {};
+        for (var i in ts) {
+            if(ts[i] != null)
+                window.avrgs.exec[i] = calculateAverages(ts[i])
+        }
     } else {
-        $('#q1').text('-');
-        $('#q2').text('-');
-        $('#q3').text('-');
-        $('#q4').text('-');
+            var os = window.orders.tmp.exec;
+            var ts = [];
+            window.selected.manager = null;
+            window.execs.forEach( item => {
+                ts[item._id] = os[item._id];
+            });
+            window.avrgs.exec = {};
+            for (var i in ts) {
+                if(ts[i] != null)
+                    window.avrgs.exec[i] = calculateAverages(ts[i])
+            }
     }
+    drawExecGraph();
 }
 
 function changeMainType(type) {
@@ -213,6 +287,7 @@ function changeMainUpDate(date) {
 }
 
 function changePieDep(dep) {
+    window.selected.department = dep;
     window.orders.tmp.completed = [];
     window.orders.tmp.uncompleted = [];
     if(window.orders.tmp.city[dep])
@@ -221,7 +296,12 @@ function changePieDep(dep) {
                 window.orders.tmp.completed.push(window.orders.tmp.city[dep][i]);
             else window.orders.tmp.uncompleted.push(window.orders.tmp.city[dep][i]);
         }
-
+    else
+        for (var i = 0; i < window.orders.tmp.all.length; i++) {
+            if( window.orders.tmp.all[i].stage == 1)
+                window.orders.tmp.completed.push(window.orders.tmp.all[i]);
+            else window.orders.tmp.uncompleted.push(window.orders.tmp.all[i]);
+        }
     drawPieGraph();
 }
 
@@ -234,7 +314,14 @@ function initAnalitic(orders, downTime, upTime) {
     for (var i in window.orders.tmp.city) {
         window.avrgs.city[i] = calculateAverages(window.orders.tmp.city[i])
     }
-    window.avrgs.execs = {};
+    window.avrgs.exec = {};
+    for (var i in window.orders.tmp.exec) {
+        window.avrgs.exec[i] = calculateAverages(window.orders.tmp.exec[i])
+    }
+    window.avrgs.manager = {};
+    for (var i in window.orders.tmp.manager) {
+        window.avrgs.manager[i] = calculateAverages(window.orders.tmp.manager[i])
+    }
 }
 
 
@@ -312,7 +399,7 @@ function drawMainGraph() {
     ];
 
     $('#mainChart').remove();
-    $(".mainChart").append('<canvas id="mainChart" width=900 height=400>');
+    $(".mainChart").append('<canvas id="mainChart" width=1050 height=400>');
     var ctx = document.getElementById("mainChart");
 
     var mainChart = new Chart(ctx, {
@@ -325,25 +412,24 @@ function drawMainGraph() {
     });
 }
 
-function drawManGraph() {
+function drawManagerGraph() {
     var avgrs = {
-        '0' : [window.avrgs.common[0].value],
-        '1' : [window.avrgs.common[1].value],
-        '2' : [window.avrgs.common[2].value],
-        '3' : [window.avrgs.common[3].value]
+        '0': [],
+        '1': [],
+        '2': [],
+        '3': []
     };
-    window.chart.bar.labels = [
-        'Средний по компании'
-    ];
-    for( var j in window.avrgs.city)
-        window.chart.bar.labels.push(window.city[j]);
+    window.chart.bar.man_labels = [ ];
+    for( var j in window.avrgs.manager)
+        window.chart.bar.man_labels.push(window.manager[j]);
+
     for (var d in avgrs) {
-        for (var i in window.avrgs.city) {
-            avgrs[d].push(window.avrgs.city[i][d].value)
+        for (var i in window.avrgs.manager) {
+            avgrs[d].push(window.avrgs.manager[i][d].value)
         }
     }
 
-    window.chart.bar.datasets = [
+    window.chart.bar.man_datasets = [
         {
             label: 'Качество услуги',
             data: avgrs[0],
@@ -370,15 +456,73 @@ function drawManGraph() {
         }
     ];
 
-    $('#manChart').remove();
-    $(".manChart").append('<canvas id="manChart" width=900 height=400>');
-    var ctx = document.getElementById("manChart");
+    $('#managerChart').remove();
+    $(".managerChart").append('<canvas id="managerChart" width=1050 height=400>');
+    var ctx = document.getElementById("managerChart");
 
     var mainChart = new Chart(ctx, {
         type: 'bar',
         data: {
             labels: window.chart.bar.man_labels,
             datasets: window.chart.bar.man_datasets
+        },
+        options: window.chart.bar.option
+    });
+}
+
+function drawExecGraph() {
+    var avgrs = {
+        '0': [],
+        '1': [],
+        '2': [],
+        '3': []
+    };
+    window.chart.bar.ex_labels = [ ];
+    for( var j in window.avrgs.exec)
+        window.chart.bar.ex_labels.push(window.exec[j]);
+
+    for (var d in avgrs) {
+        for (var i in window.avrgs.exec) {
+            avgrs[d].push(window.avrgs.exec[i][d].value)
+        }
+    }
+
+    window.chart.bar.ex_datasets = [
+        {
+            label: 'Качество услуги',
+            data: avgrs[0],
+            backgroundColor: 'rgba(255, 51, 51, 0.7)',
+            borderWidth: 1
+        },
+        {
+            label: 'Демонстрация ЛК',
+            data: avgrs[1],
+            backgroundColor: 'rgba(255, 153, 51, 0.7)',
+            borderWidth: 1
+        },
+        {
+            label: 'Доброжелательность мастера',
+            data: avgrs[2],
+            backgroundColor: 'rgba(102, 153, 102, 0.7)',
+            borderWidth: 1
+        },
+        {
+            label: 'Внимательность к пожеланиям',
+            backgroundColor: 'rgba(26, 122, 190, 0.7)',
+            data: avgrs[3],
+            borderWidth: 1
+        }
+    ];
+
+    $('#execChart').remove();
+    $(".execChart").append('<canvas id="execChart" width=1050 height=400>');
+    var ctx = document.getElementById("execChart");
+
+    var mainChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: window.chart.bar.ex_labels,
+            datasets: window.chart.bar.ex_datasets
         },
         options: window.chart.bar.option
     });

@@ -7,13 +7,18 @@ append head
     -var av = JSON.stringify(orders);
     -var ct = JSON.stringify(cities);
     -var ms = JSON.stringify(managers);
+    -var es = JSON.stringify(execs);
     
     script.
         var av = JSON.parse(("#{av}").replace(/&quot;/g, '"'));
         var ct = JSON.parse(("#{ct}").replace(/&quot;/g, '"'));
         var ms = JSON.parse(("#{ms}").replace(/&quot;/g, '"'));
+        var es = JSON.parse(("#{es}").replace(/&quot;/g, '"'));
+        
         window.cities = ct;
         window.managers = ms;
+        window.execs = es;
+        
         window.orders = {};
         window.orders.all = av;
     script(src='/public/js/analitic.js')
@@ -70,41 +75,22 @@ append content
                     canvas(id='pieChart' width="350" height="350")    
                 button.btn.btn-success.link(onclick='location="/orders?filter=comment"') Показать заявки с коментариями
                 
-            h4 Аналитика по бригадирам - В разработке... 
+            h4 Статистика по бригадирам
+            .row
+                br
+                .managerChart
+                    canvas(id='managerChart' width="800" height="400")
             br
-            h4 Аналитика по исполнителям - В разработке... 
+            h4 Статистика по исполнителям
+            .row
+                .typeSelect_big
+                    label Бригадир :
+                    select.form-control(onchange='changeManager(this.value)')
+                        option
+                        each m in managers
+                            option(value=m._id)= m.name
+            .row
+                br
+                .execChart
+                    canvas(id='execChart' width="1000" height="400")
             br
-            //- .row
-            //-     .typeSelect_big
-            //-         label Бригадир :
-            //-         select.form-control(onchange='changeExec(this.value)')
-            //-             option
-            //-             each m in managers
-            //-                 option(value=m._id)= m.name
-            //-     //- .typeSelect
-            //-     //-     label Начальная дата :
-            //-     //-     input.form-control(type='date' id='downDate' onchange='changeExecDownDate(this.value)')
-            //-     //-         
-            //-     //- .typeSelect
-            //-     //-     label Конечная дата :
-            //-     //-     input.form-control(type='date' id='upDate' onchange='changeExecUpDate(this.value)')
-            //- .row
-            //-     br
-            //-     .manChart
-            //-         canvas(id='manChart' width="800" height="400")
-            //-     //- .information
-            //-     //-     .row
-            //-     //-         span Качество услуги : 
-            //-     //-         span(id='q1')
-            //-     //-     .row
-            //-     //-         span Демонстрация ЛК : 
-            //-     //-         span(id='q2')
-            //-     //-     .row
-            //-     //-         span Доброжелательность мастера : 
-            //-     //-         span(id='q3')
-            //-     //-     .row
-            //-     //-         span Внимательность к пожеланиям : 
-            //-     //-         span(id='q4')
-            //-         
-                    
-                

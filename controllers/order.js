@@ -35,7 +35,7 @@ module.exports = {
     },
 
     getOrdersPage: function (req, res) {
-        Order.find({ stage: 0 }).populate('author').populate('author.city').sort({ id: -1 }).then( o => {
+        Order.find({ stage: 0 }).populate('author').deepPopulate('author.city').sort({ id: -1 }).then( o => {
             res.render('orders/orders', {orders: o});
         })
     },
@@ -118,24 +118,27 @@ module.exports = {
     },
 
     getAnaliticPage: function (req, res) {
-        Exec.find().then( ex => {
-            City.find().then( ct => {
-                Manager.find().then( ms => {
-                    Order.find().populate('author').then( o => {
-                        var ret = o.map( item => {
-                            return {
-                                stage: item.stage,
-                                type: item.type,
-                                date: item.info.dateInit,
-                                city: item.author.city,
-                                exec: item.nameExec,
-                                answers: item.answers.values
-                            }
-                        })
-                        res.render('analitic', {orders: ret, execs: ex, cities: ct, managers: ms});
-                    })
-                })
-            })
+        var execs = Exec.find();
+        var cities = City.find();
+        var managers = Manager.find();
+        var orders = Order.find().populate('author nameExec');
+
+        Promise.all([execs, cities, managers, orders]).then( val => {
+            var ret = val[3].map( item => {
+                var ms = [item.nameExec[0].manager];
+                if(item.nameExec[1])
+                    ms.push(item.nameExec[1].manager);
+                return {
+                    stage: item.stage,
+                    type: item.type,
+                    date: item.info.dateInit,
+                    city: item.author.city,
+                    exec: item.nameExec,
+                    manager: ms,
+                    answers: item.answers.values
+                }
+            });
+            res.render('analitic', {orders: ret, execs: val[0], cities: val[1], managers: val[2]});
         })
     },
 

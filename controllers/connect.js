@@ -5,6 +5,7 @@ var mongoose = require('mongoose');
 
 mongoose.Promise = global.Promise;
 var options = {
+    useMongoClient: true,
     promiseLibrary: global.Promise
 };
 
