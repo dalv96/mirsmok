@@ -8,7 +8,7 @@ const express = require('express');
 const router = require('./controllers/router');
 const app = express();
 const logger = require('./controllers/log');
-var morgan = require('morgan');
+const morgan = require('morgan');
 
 app.use('/public', express.static( __dirname + '/public'));
 app.use(favicon(__dirname + '/public/favicon.ico'));
@@ -24,7 +24,13 @@ const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
 
 app.use(require('helmet')());
-app.use(morgan(':method [:date[web]] :url :status :res[header] - :response-time ms'));
+
+morgan.token('date', function() {
+    var p = require('./controllers/common').dateToExtStr(new Date());
+    return p;
+});
+
+app.use(morgan('[HTTP] :date[web] :method :url :status :res[header] - :response-time ms'));
 
 app.use(session({
     resave: false,
