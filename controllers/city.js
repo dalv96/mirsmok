@@ -2,6 +2,7 @@
 
 var models = require('../models');
 var City = models.City;
+var logger = require('./log');
 
 module.exports = {
     getAll : function (req, res) {
@@ -17,18 +18,18 @@ module.exports = {
                         id: ids,
                         name: req.body.name
                     });
-                    console.log(req.body);
+                    logger.log(`Add city ${req.body.name}`);
                     return city.save();
                 }
             })
         }).then(() => res.redirect('/admin/cities'));
     },
     edit: function (req, res) {
-        console.log(req.body);
         City.findOne({id: req.body.id}).then( c => {
             if(c) {
                 return City.findOne({name: req.body.newName}).then(city => {
                     if(!city || c.id == city.id) {
+                        logger.log(`Edit city ${req.body.name} - ${req.body.newName}`);
                         c.name = req.body.newName;
                         return c.save();
                     }

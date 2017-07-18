@@ -3,6 +3,7 @@
 const models = require('../models');
 const Account = models.Account;
 const password = require('./password');
+const logger = require('./log');
 
 module.exports = {
 
@@ -22,7 +23,7 @@ module.exports = {
             })
         } else {
             if(req.path != '/login') {
-                console.log('Not auth user to:', req.path );
+                logger.log(`Not auth user to : ${req.path}`);
                 var rstr = '/login' + ( (req.originalUrl.length>1) ? '?trg='+encodeURIComponent(req.originalUrl) : '' );
 				res.redirect(rstr);
             } else res.render('login');
@@ -42,11 +43,11 @@ module.exports = {
         }).then( acc => {
             if (acc) {
                 req.session.__user = acc.login;
-                console.log('Success authorization by :', acc.login);
+                logger.log(`Success authorization by : ${acc.login}`);
                 var url = req.query.trg || '/';
                 res.redirect(url);
             } else {
-                console.log('Fail authorization');
+                logger.log(`Fail authorization`, 'WARN');
                 res.status(401).redirect(req.originalUrl);
             }
         })

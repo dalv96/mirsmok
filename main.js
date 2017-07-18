@@ -7,6 +7,8 @@ const favicon = require('serve-favicon');
 const express = require('express');
 const router = require('./controllers/router');
 const app = express();
+const logger = require('./controllers/log');
+var morgan = require('morgan');
 
 app.use('/public', express.static( __dirname + '/public'));
 app.use(favicon(__dirname + '/public/favicon.ico'));
@@ -22,6 +24,7 @@ const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
 
 app.use(require('helmet')());
+app.use(morgan(':method [:date[web]] :url :status :res[header] - :response-time ms'));
 
 app.use(session({
     resave: false,
@@ -43,5 +46,5 @@ app.use(session({
 router(app);
 
 app.listen(conf.get("server:port"), function() {
-    console.log('Server listening on port ' + conf.get("server:port"));
+    logger.log(`Server listening on port ${conf.get("server:port")}`);
 });

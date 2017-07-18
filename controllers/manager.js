@@ -3,12 +3,12 @@
 var models = require('../models');
 var Manager = models.Manager;
 var City = models.City;
+var logger = require('./log');
 
 module.exports = {
     getAll : function (req, res) {
         City.find().sort('name').then( cities => {
             Manager.find().sort('name').populate('city').then( ms => {
-                console.log(ms);
                 res.render('admin/managers', {
                     managers: ms,
                     cities: cities
@@ -26,6 +26,7 @@ module.exports = {
                         usage: false,
                         city: req.body.city
                     });
+                    logger.log(`Create manager ${manager.name}`);
                     return manager.save();
                 }
             })
@@ -36,6 +37,7 @@ module.exports = {
             if(m) {
                 return Manager.findOne({name: req.body.newName}).then(manager => {
                     if(!manager || m.id == manager.id) {
+                        logger.log(`Edit manager ${m.name} -> ${req.body.newName} `);
                         m.name = req.body.newName;
                         m.city = req.body.city;
                         return m.save();
@@ -47,7 +49,10 @@ module.exports = {
     delete: function (req, res) {
         Manager.findOne({id: req.body.id}).then( m => {
             if(m) {
-                if(m.usage == false) return m.remove();
+                if(m.usage == false) {
+                    logger.log(`Delete manager ${m.name}`);
+                    return m.remove();
+                }
             }
         }).then(() => res.status(200).send('Ok'))
     }

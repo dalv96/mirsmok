@@ -3,7 +3,7 @@
 var models = require('../models');
 var Account = models.Account;
 var City = models.City;
-
+var logger = require('./log');
 var password = require('./password');
 
 module.exports = {
@@ -20,7 +20,7 @@ module.exports = {
         Account.find({status: { $gt: -1 }}).populate('city').sort('fullName').then(a => {
             res.render('admin/users', {users: a});
         }).catch(error => {
-            console.error(error);
+            logger.log(error, 'ERROR');
         });
     },
 
@@ -39,7 +39,7 @@ module.exports = {
                 a.fullName = req.body.fullName;
                 a.email = req.body.email;
                 a.number = req.body.number;
-                console.log('Editing profile', a.login);
+                logger.log(`Editing profile - ${a.login}`);
                 return a.save();
             }
         }).then( () => res.redirect('/profile') );
@@ -50,7 +50,7 @@ module.exports = {
             if(password.createHash(req.body.passOld) == a.password ) {
                 if( req.body.pass == req.body.passRep ) {
                     a.password = password.createHash(req.body.pass);
-                    console.log('Editing profile pass', a.login);
+                    logger.log(`Editing profile pass - ${a.login}`);
                     return a.save();
                 }
             }
@@ -86,7 +86,7 @@ module.exports = {
                     acc.city = req.body.city;
                     // acc.department = req.body.dep;
                 }
-                console.log('Create user', acc.login);
+                logger.log(`Create user - ${acc.login}`);
                 return acc.save();
             } else {
                 return 'true';
@@ -109,17 +109,16 @@ module.exports = {
                 if(a.city) a.city = undefined;
             }
             // a.department = req.body.department;
-            console.log('Editing user', a.login);
+            logger.log(`Editing user - ${a.login}`);
             return a.save();
         }).then( () => res.redirect('/admin/users') )
     },
 
     editPass: function (req, res) {
         Account.findOne({ login: req.params.login, status: { $gt: -1 }}).then(a => {
-            console.log(a);
             if( req.body.pass == req.body.passRep ) {
                 a.password = password.createHash(req.body.pass);
-                console.log('Editing pass', a.login);
+                logger.log(`Editing pass - ${a.login}`);
                 return a.save();
             }
         }).then( () => res.redirect('/admin/users') );
@@ -129,12 +128,13 @@ module.exports = {
         if(req.params.login != 'admin')
             Account.findOne({login: req.params.login, status: { $gt: -1 } }).then( a => {
                 if(a) {
-                    console.log('Delete user', a.login);
+                    logger.log(`Delete user - ${a.login}`);
                     a.login = Date.now() + a.login;
                     a.status = -1;
                     a.password = '!deleted!'
                     return a.save();
-                } else console.log('Несущевствующий пользователь!');
+                } else logger.log(`This user does not exist.`, 'WARN');
+
             }).then(() => res.redirect('/admin/users/'));
     },
 
@@ -145,15 +145,15 @@ module.exports = {
                     switch (a.status) {
                         case 0:
                             a.status = 1;
-                            console.log('Unblock user', a.login);
+                            logger.log(`Unblock user - ${a.login}`);
                             break;
                         case 1:
                             a.status = 0;
-                            console.log('Block user', a.login);
+                            logger.log(`Block user - ${a.login}`);
                             break;
                     }
                     return a.save();
-                } else console.log('Несущевствующий пользователь!');
+                } else logger.log(`This user does not exist.`, 'WARN');
             }).then(() => res.redirect('/admin/users/' + req.params.login));
     }
 

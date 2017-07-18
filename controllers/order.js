@@ -7,6 +7,7 @@ var City = models.City;
 var Manager = models.Manager;
 var Exec = models.Exec;
 var common = require('./common');
+var logger = require('./log');
 
 function render(res, success) {
     Exec.find().sort({ name: 1 }).populate('manager').then(execs => {
@@ -62,7 +63,7 @@ module.exports = {
                 order.info.numberTT = req.body.numberTT;
                 order.info.themeTT = req.body.themeTT;
             }
-            console.log('Init order', order.id);
+            logger.log(`Init order ${order.id}`);
             return order.save();
         }).then(()=> {
             changeUsage(req.body.mainExec, req.body.subExec || null);
@@ -90,7 +91,7 @@ module.exports = {
                     o.answers.comment = null;
                 } else o.answers.comment = req.body.comment.trim();
             }
-            console.log('Editing order ', o.id);
+            logger.log(`Editing order ${o.id}`);
             return o.save();
         }).then(() => res.redirect('/'));
     },
@@ -112,7 +113,7 @@ module.exports = {
             if(req.body.comment.trim().length < 1) {
                 o.answers.comment = null;
             } else o.answers.comment = req.body.comment.trim();
-            console.log('Saving order ', o.id);
+            logger.log(`Editing order ${o.id}`);
             return o.save();
         }).then(() => res.redirect('/'));
     },
@@ -184,6 +185,7 @@ module.exports = {
     delete: function (req, res) {
         Order.findOne({'id' : req.params.id}).populate('author').then( o => {
             if(o.stage == 0 && (res.locals.__user.role == 2 || res.locals.__user.role == 0)) {
+                logger.log(`Delete order ${o.id}`);
                 return o.remove();
             }
         }).then(() => res.status(200).send('Ok'))

@@ -2,6 +2,7 @@
 
 var conf = require('../conf');
 var mongoose = require('mongoose');
+var logger = require('./log');
 
 mongoose.Promise = global.Promise;
 var options = {
@@ -16,7 +17,7 @@ var uri = 'mongodb://' + url + '/' + name;
 mongoose.connect(uri, options);
 
 mongoose.connection.on('connected', function() {
-    console.log('Connected to DB.');
+    logger.log('Connected to DB.');
 });
 
 module.exports = mongoose;

@@ -3,7 +3,7 @@
 var models = require('../models');
 var Exec = models.Exec;
 var Manager = models.Manager;
-
+var logger = require('./log');
 
 module.exports = {
     getAll : function (req, res) {
@@ -27,6 +27,7 @@ module.exports = {
                             });
                             m.usage = true;
                             m.save();
+                            logger.log(`Add executor ${exec.name} - ${exec.manager.name}`);
                             return exec.save();
                         }
                     })
@@ -44,6 +45,7 @@ module.exports = {
                                 e.name = req.body.newName;
                                 e.manager = m;
                                 m.usage = true;
+                                logger.log(`Edit executor ${req.body.newName} ${e.manager.name}`);
                                 m.save();
                                 return e.save();
                             }
@@ -56,7 +58,10 @@ module.exports = {
     delete: function (req, res) {
         Exec.findOne({id: req.body.id}).then( e => {
             if(e) {
-                if(e.usage == false) return e.remove();
+                if(e.usage == false) {
+                    logger.log(`Delete executor ${e.name} - ${e.manager.name}`);
+                    return e.remove();
+                }
             }
         }).then(() => res.status(200).send('Ok'))
     }
