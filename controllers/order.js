@@ -132,7 +132,7 @@ module.exports = {
                 return {
                     stage: item.stage,
                     type: item.type,
-                    date: item.info.dateInit,
+                    date: item.info.dateEvent,
                     city: item.author.city,
                     exec: item.nameExec,
                     manager: ms,
@@ -152,7 +152,11 @@ module.exports = {
                 break;
             case 'my':
                 var filter = {};
-                if( res.locals.__user.dep != null) {
+                if(res.locals.__user.role == 0) {
+                    res.redirect('/orders');
+                    return;
+                }
+                if( res.locals.__user.city != null) {
                     filter = {'author' : res.locals.__user._id};
                 } else filter = {'answers.collector': res.locals.__user._id};
                     Order.find(filter).deepPopulate('author.city').sort({_id:-1}).then( o => {
