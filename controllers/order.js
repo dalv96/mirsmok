@@ -93,7 +93,7 @@ module.exports = {
             }
             logger.log(`Editing order ${o.id}`);
             return o.save();
-        }).then(() => res.redirect('/'));
+        }).then(() => res.redirect(req.originalUrl));
     },
 
     collect: function (req, res) {

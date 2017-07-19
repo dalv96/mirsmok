@@ -9,6 +9,7 @@ const router = require('./controllers/router');
 const app = express();
 const logger = require('./controllers/log');
 const morgan = require('morgan');
+const common = require('./controllers/common');
 
 app.use('/public', express.static( __dirname + '/public'));
 app.use(favicon(__dirname + '/public/favicon.ico'));
@@ -52,5 +53,6 @@ app.use(session({
 router(app);
 
 app.listen(conf.get("server:port"), function() {
+    console.log(`\n  ################## RELOAD SERVER - ${common.dateToExtStr()} ################### \n`);
     logger.log(`Server listening on port ${conf.get("server:port")}`);
 });

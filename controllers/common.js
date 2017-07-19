@@ -11,7 +11,7 @@ module.exports = {
         }
         return  year + '-' + month + '-' + day;
     },
-    dateToExtStr: function (value) {
+    dateToExtStr: function (value = new Date()) {
         var hour = value.getHours();
         if(hour < 10) {
             hour = '0' + hour;
