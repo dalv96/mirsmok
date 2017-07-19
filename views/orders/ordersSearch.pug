@@ -29,7 +29,10 @@ append content
             tbody
                 each order in orders
                     if(order.answers != null)
-                        tr(onclick="location = '/orders/" + order.id + "'" class=(order.answers.values[0] == -1)?'order_not_answers':'').item
+                        -var cls = '';
+                        -if(order.stage == 1) cls+=' order_success ';
+                        -if(order.answers.values[0] == -1) cls='order_not_answers';
+                        tr(onclick="location = '/orders/" + order.id + "'" class=cls ).item
                             td №#{order.id}
                             td= dateToStr(order.info.dateInit)
                             td= dateToStr(order.info.dateEvent)

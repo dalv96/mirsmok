@@ -53,9 +53,16 @@ tr {
 .invis {
     visibility: hidden;
 }
+.order_success {
+    background-color: #CBF7AF;
+}
+.order_success:hover td {
+    background-color: #CBF7dF;
+}
+
 .order_not_answers {
     background-color: #FFE4E1;
 }
-.order_not_answers:hover {
+.order_not_answers:hover td{
     background-color: #FFD4E1;
 }

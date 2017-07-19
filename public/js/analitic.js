@@ -154,7 +154,7 @@ function dateParse(orders, downTime = new Date(2016, 0, 1), upTime = new Date(20
     if(orders) {
         for (var i = 0; i < orders.length; i++) {
             orders[i].date = new Date(orders[i].date);
-            if(orders[i].date > downTime && orders[i].date < upTime) {
+            if(orders[i].date >= downTime && orders[i].date <= upTime) {
                 ret.push(orders[i]);
             }
         }
