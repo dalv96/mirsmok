@@ -31,7 +31,13 @@ morgan.token('date', function() {
     return p;
 });
 
-app.use(morgan('[HTTP] :date[web] :method :url :status :res[header] - :response-time ms'));
+morgan.token('user', function(req, res) {
+    if(res.locals.__user)
+        return res.locals.__user.login;
+    else return 'guest'
+});
+
+app.use(morgan('[HTTP] :date[web] <:user> :method :url :status :res[header] - :response-time ms'));
 
 app.use(session({
     resave: false,
