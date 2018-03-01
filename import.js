@@ -8,10 +8,10 @@ var imprt = async () => {
 
     var robots = {
         'г. Симферополь': await Account.findOne({login: 'robot_1'}),
-        'г. Феодосия': await Account.findOne({login: 'robot_2'}),
-        'г. Севастополь': await Account.findOne({login: 'robot_3'}),
-        'г. Ялта': await Account.findOne({login: 'robot_4'}),
-        'г. Евпатория': await Account.findOne({login: 'robot_5'})
+        'г. Евпатория': await Account.findOne({login: 'robot_2'}),
+        'г. Феодосия': await Account.findOne({login: 'robot_3'}),
+        'г. Севастополь': await Account.findOne({login: 'robot_4'}),
+        'г. Ялта': await Account.findOne({login: 'robot_5'})
     };
 
     var id = await Order.getNext();

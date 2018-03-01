@@ -74,10 +74,10 @@ module.exports = {
     editOrder: function (req, res) {
         var robots = {
             'ГУС Симферополь': 'robot_1',
-            'ГУС Феодосия': 'robot_2',
-            'ГУС Севастополь': 'robot_3',
-            'ГУС Ялта': 'robot_4',
-            'ГУС Евпатория': 'robot_5'
+            'ГУС Евпатория': 'robot_2',
+            'ГУС Феодосия': 'robot_3',
+            'ГУС Севастополь': 'robot_4',
+            'ГУС Ялта': 'robot_5'
         };
 
         Order.findOne({ id: req.params.id }).then( o => {
