@@ -72,7 +72,22 @@ module.exports = {
     },
 
     editOrder: function (req, res) {
+        var robots = {
+            'ГУС Симферополь': 'robot_1',
+            'ГУС Феодосия': 'robot_2',
+            'ГУС Севастополь': 'robot_3',
+            'ГУС Ялта': 'robot_4',
+            'ГУС Евпатория': 'robot_5'
+        };
+
         Order.findOne({ id: req.params.id }).then( o => {
+            if(!o.author) {
+                Account.findOne({login: robots[req.body.author]}).then( acc => {
+                    o.author = acc;
+                    return o.save();
+                })
+            }
+
             if(res.locals.__user.role == 2) {
                 o.info.dateEvent = req.body.dateEvent;
                 o.info.nameAbon = req.body.nameAbon;
@@ -122,7 +137,7 @@ module.exports = {
         var execs = Exec.find();
         var cities = City.find();
         var managers = Manager.find();
-        var orders = Order.find().populate('author nameExec');
+        var orders = Order.find({author: {$ne: null}, nameExec: {$ne: []}}).populate('author nameExec');
 
         Promise.all([execs, cities, managers, orders]).then( val => {
             var ret = val[3].map( item => {
@@ -181,7 +196,9 @@ module.exports = {
                     editFlag = 1;
                 }
                 if( res.locals.__user.role == 3 && o.stage == 1) editFlag = 2;
-                res.render('orders/order', {order: o, date: d, edit: editFlag});
+                Exec.find().sort({ name: 1 }).populate('manager').then(execs => {
+                    res.render('orders/order', {order: o, date: d, edit: editFlag, execs: execs});
+                })
             } else res.render('404');
         })
     },

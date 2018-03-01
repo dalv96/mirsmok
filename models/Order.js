@@ -18,15 +18,13 @@ var Order = mongoose.Schema({
     },
     author: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Account',
-        required: true
+        ref: 'Account'
     },
     nameExec: {
         type: [{
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Exec'
-        }],
-        required: true
+        }]
     },
     info: {
         dateInit: {

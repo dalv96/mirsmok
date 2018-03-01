@@ -36,7 +36,10 @@ append content
                         td №#{order.id}
                         td= dateToStr(order.info.dateInit)
                         td= dateToStr(order.info.dateEvent)
-                        td #{order.author.fullName} (#{order.author.city.name})
+                        if(order.author)
+                            td #{order.author.fullName} (#{order.author.city.name})
+                        else
+                            td Автоматический экспорт (Неопределён)
                         if(order.type == 0)
                             td Инсталляция
                         else

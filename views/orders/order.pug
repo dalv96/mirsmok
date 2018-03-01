@@ -45,14 +45,48 @@ append content
                         .form-group
                             label.control-label.col-sm-3 Ф.И.О. автора
                             .col-sm-6
-                                input.form-control(type='text' value=order.author.fullName disabled)
-                    each exec in order.nameExec
+                                if(order.author)
+                                    input.form-control(type='text' value=order.author.fullName disabled)
+                                else
+                                    select.form-control(type='text' name="author" value='Автоматический импорт')
+                                        option
+                                        option(value='ГУС Симферополь') ГУС Симферополь
+                                        option(value='ГУС Севастополь') ГУС Севастополь
+                                        option(value='ГУС Евпатория') ГУС Евпатория
+                                        option(value='ГУС Ялта') ГУС Ялта
+                                        option(value='ГУС Феодосия') ГУС Феодосия
+                    if(order.nameExec.length > 0)                
+                        each exec in order.nameExec
+                            li.list-group-item
+                                .form-group
+                                    label.control-label.col-sm-3 Ф.И.О. исполнителя
+                                    .col-sm-6
+                                        input.form-control(type='text' value=exec.name disabled)
+                    else
                         li.list-group-item
                             .form-group
-                                label.control-label.col-sm-3 Ф.И.О. исполнителя
+                                label.control-label.col-sm-3 Ф.И.О иполнителей
                                 .col-sm-6
-                                    input.form-control(type='text' value=exec.name disabled)
-
+                                    if(order.author)
+                                        select.form-control.inpt(name='mainExec' required)
+                                            option
+                                            each exec in execs
+                                                if(exec.manager.city == order.author.city.toString())
+                                                    option(value=exec._id)= exec.name
+                                    else
+                                        label Сначала выберите нужный ГУС и сохраните
+                        li.list-group-item
+                            .form-group
+                                label.control-label.col-sm-3
+                                .col-sm-6
+                                    if(order.author)
+                                        select.form-control.inpt(name='subExec' required)
+                                            option
+                                            each exec in execs
+                                                if(exec.manager.city == order.author.city.toString())
+                                                    option(value=exec._id)= exec.name
+                                    else
+                                        label Сначала выберите нужный ГУС и сохраните
 
                     if(order.type == '1')
                         li.list-group-item.repairs
