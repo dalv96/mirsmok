@@ -1,5 +1,5 @@
-const installs = require('./installs_01-03-2018');
-const remonts = require('./remonts_01-03-2018');
+const installs = require('./import/installs_01-03-2018');
+const remonts = require('./import/remonts_01-03-2018');
 
 var Order = require('./models/Order');
 var Account = require('./models/Account');
