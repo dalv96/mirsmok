@@ -15,6 +15,7 @@ var imprt = async () => {
     };
 
     var id = await Order.getNext();
+    console.log(`Found installs #${installs.length}`);
 
     installs.forEach( async (item) => {
         var auth = robots[item['Ф.И.О. автора']];
@@ -38,6 +39,7 @@ var imprt = async () => {
                     nameAbon: item['Ф.И.О. абонента'],
                     phone: item['Номер телефона абонента'],
                     adress: item['Адрес'],
+                    personalAcc: item['Лицевой счет']
                 }
             })
             id++;

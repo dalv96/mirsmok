@@ -160,6 +160,11 @@ module.exports = {
 
     search: function (req, res) {
         switch (req.query.filter) {
+            case 'unkn':
+                Order.find({$or: [{'author': null}, {nameExec: []}]}).deepPopulate('author.city').sort({_id:-1}).then( o => {
+                    res.render('orders/ordersSearch', {orders: o});
+                })
+                break;
             case 'comment':
                 Order.find({'answers.comment' : {$ne: null }}).deepPopulate('author.city').sort({_id:-1}).then( o => {
                     res.render('orders/ordersSearch', {orders: o});
