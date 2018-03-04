@@ -17,6 +17,7 @@
     "express": "^4.15.2",
     "express-session": "^1.15.1",
     "forever": "^0.15.3",
+    "ftp-client": "^0.2.2",
     "helmet": "^3.5.0",
     "log4js": "^1.1.1",
     "mongodb": "^2.2.25",
