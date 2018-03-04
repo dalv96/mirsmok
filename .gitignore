@@ -6,7 +6,7 @@ npm-debug.log*
 conf/secure.json
 
 import/*
-
+.DS_Store
 # Runtime data
 pids
 *.pid
