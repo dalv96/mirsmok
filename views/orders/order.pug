@@ -61,7 +61,7 @@ append content
                                 .form-group
                                     label.control-label.col-sm-3 Ф.И.О. исполнителя
                                     .col-sm-6
-                                        input.form-control(type='text' value=exec.name disabled=(edit==2))
+                                        input.form-control(type='text' value=exec.name disabled)
                     else
                         li.list-group-item
                             .form-group
@@ -80,7 +80,7 @@ append content
                                 label.control-label.col-sm-3
                                 .col-sm-6
                                     if(order.author)
-                                        select.form-control.inpt(name='subExec' required disabled=(edit==2))
+                                        select.form-control.inpt(name='subExec' disabled=(edit==2))
                                             option
                                             each exec in execs
                                                 if(exec.manager.city == order.author.city.toString())

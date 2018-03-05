@@ -93,6 +93,8 @@ module.exports = {
                 o.info.nameAbon = req.body.nameAbon;
                 o.info.adress = req.body.adress;
                 o.info.phone = req.body.phone;
+                o.nameExec = [req.body.mainExec, req.body.subExec || null];
+                console.log(req.body.mainExec);
                 if(o.type == 0) {
                     o.info.numberTT = req.body.numberTT;
                     o.info.themeTT = req.body.themeTT;
