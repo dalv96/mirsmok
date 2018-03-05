@@ -115,7 +115,9 @@ module.exports = {
         Order.findOne({stage:0, id: req.params.id }).populate('author nameExec').then( o => {
             if (o) {
                 var d = common.dateToStr(o.info.dateEvent);
-                res.render('orders/order', {order: o, date: d, edit:2});
+                Exec.find().sort({ name: 1 }).populate('manager').then(execs => {
+                    res.render('orders/order', {order: o, date: d, edit:2, execs: execs});
+                })
             } else res.render('404');
         })
     },
