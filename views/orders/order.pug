@@ -57,11 +57,18 @@ append content
                                         option(value='ГУС Феодосия') ГУС Феодосия
                     if(order.nameExec.length > 0)                
                         each exec in order.nameExec
-                            li.list-group-item
-                                .form-group
-                                    label.control-label.col-sm-3 Ф.И.О. исполнителя
-                                    .col-sm-6
-                                        input.form-control(type='text' value=exec.name disabled)
+                            if(exec)
+                                li.list-group-item
+                                    .form-group
+                                        label.control-label.col-sm-3 Ф.И.О. исполнителя
+                                        .col-sm-6
+                                            input.form-control(type='text' value=exec.name disabled)
+                            else
+                                li.list-group-item
+                                    .form-group
+                                        label.control-label.col-sm-3 Ф.И.О. исполнителя
+                                        .col-sm-6
+                                            input.form-control(type='text' value='' disabled)
                     else
                         li.list-group-item
                             .form-group
