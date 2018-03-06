@@ -10,7 +10,7 @@ try {
     console.log('Cant find installs file');
 }
 try {
-    var remonts = require(`./import/log_remonts_${yesterday}`);
+    remonts = require(`./import/log_remonts_${yesterday}`);
 } catch(err) {
     console.log('Cant find remonts file');
 }
@@ -43,10 +43,11 @@ var imprt = async () => {
         popo.push(it);
     })
 
+
     popo.forEach( async (item) => {
         var auth = robots[item['Ф.И.О. автора']];
         var test = await Order.findOne({
-            type: 0,
+            type: (item.type == 'installs')?0:1,
             'info.nameAbon': item['Ф.И.О. абонента'],
             'info.phone': item['Номер телефона абонента'],
             'info.adress': item['Адрес']
@@ -71,7 +72,7 @@ var imprt = async () => {
             if(item.type == 'remonts')
                 var order = new Order({
                     id: id,
-                    type: 0,
+                    type: 1,
                     stage: 0,
                     author: auth,
                     info: {
