@@ -125,3 +125,7 @@ tr {
 {
     margin-bottom: 10em;
 }
+.pagination
+{
+    cursor: pointer;
+}

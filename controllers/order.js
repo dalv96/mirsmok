@@ -208,14 +208,15 @@ module.exports = {
         var orders = await Order.find(filter).deepPopulate('author.city').sort({_id:-1});
 
         var dlina = orders.length,
-            pages = Math.ceil(dlina/10),
+            perPage = 25,
+            pages = Math.ceil(dlina/perPage),
             nowPage = query.page || 1;
 
         res.locals.dlina = dlina;
         res.locals.pages = pages;
         res.locals.nowPage = nowPage;
         if(nowPage > pages) nowPage = pages;
-        orders = orders.slice((nowPage-1)*10, nowPage*10);
+        orders = orders.slice((nowPage-1)*perPage, nowPage*perPage);
 
         var execs = await Exec.find();
         var cities = await City.find();
