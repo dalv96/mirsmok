@@ -31,7 +31,6 @@ append content
         .qwerty    
             h4 Средние значения оценок клиентов по ГУС-ам
             .row
-                //- p.all Всего заявок : #{orders.length}
                 .typeSelect
                     label Тип работ :
                     select.form-control(onchange='changeMainType(this.value)')
@@ -73,7 +72,7 @@ append content
                 .pieChart 
                     br
                     canvas(id='pieChart' width="350" height="350")    
-                button.btn.btn-success.link(onclick='location="/orders?filter=comment"') Показать заявки с коментариями
+                //- button.btn.btn-success.link(onclick='location="/orders?filter=comment"') Показать заявки с коментариями
                 
             h4 Статистика по бригадирам
             .row

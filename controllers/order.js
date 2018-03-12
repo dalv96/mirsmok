@@ -151,18 +151,23 @@ module.exports = {
         }).then(() => res.redirect('/'));
     },
 
-    getAnaliticPage: function (req, res) {
-        var execs = Exec.find();
-        var cities = City.find();
-        var managers = Manager.find();
-        var orders = Order.find({author: {$ne: null}, nameExec: {$ne: []}}).populate('author nameExec');
+    getAnaliticPage: async (req, res) => {
+        var execs = await Exec.find();
+        var cities = await City.find();
+        var managers = await Manager.find();
+        var orders = await Order.find({author: {$ne: null}}).populate('author nameExec');
 
-        Promise.all([execs, cities, managers, orders]).then( val => {
-            var ret = val[3].map( item => {
-                var ms = [item.nameExec[0].manager];
+        var ret = [];
+        orders.forEach( item => {
+            if(item.nameExec.length > 0) {
+                var ms = [];
+
+                if(item.nameExec[0])
+                    ms.push(item.nameExec[0].manager)
                 if(item.nameExec[1])
                     ms.push(item.nameExec[1].manager);
-                return {
+
+                ret.push({
                     stage: item.stage,
                     type: item.type,
                     date: item.info.dateEvent,
@@ -170,10 +175,16 @@ module.exports = {
                     exec: item.nameExec,
                     manager: ms,
                     answers: item.answers.values
-                }
-            });
-            res.render('analitic', {orders: ret, execs: val[0], cities: val[1], managers: val[2]});
-        })
+                })
+            }
+        });
+
+        res.render('analitic', {
+            orders: ret,
+            execs: execs,
+            cities: cities,
+            managers: managers
+        });
     },
 
     search: async (req, res) => {
