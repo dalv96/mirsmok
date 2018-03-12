@@ -40,7 +40,7 @@ module.exports = function(app) {
     app.get('/profile', account.getProfile);
     app.post('/profile', account.editProfile);
     app.post('/profile/pass', account.editProfilePass);
-    app.get('/orders', order.search);
+    app.get('/search', order.search);
     app.get('/orders/:id', order.getContent);
     app.post('/orders/:id', order.editOrder);
     app.delete('/orders/:id',  order.delete);

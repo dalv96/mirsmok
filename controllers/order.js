@@ -94,7 +94,6 @@ module.exports = {
                 o.info.adress = req.body.adress;
                 o.info.phone = req.body.phone;
                 o.nameExec = [req.body.mainExec, req.body.subExec || null];
-                console.log(req.body.mainExec);
                 if(o.type == 0) {
                     o.info.numberTT = req.body.numberTT;
                     o.info.themeTT = req.body.themeTT;
@@ -162,38 +161,66 @@ module.exports = {
         })
     },
 
-    search: function (req, res) {
-        switch (req.query.filter) {
-            case 'unkn':
-                Order.find({$or: [{'author': null}, {nameExec: []}]}).deepPopulate('author.city').sort({_id:-1}).then( o => {
-                    res.render('orders/ordersSearch', {orders: o});
-                })
-                break;
-            case 'comment':
-                Order.find({'answers.comment' : {$ne: null }}).deepPopulate('author.city').sort({_id:-1}).then( o => {
-                    res.render('orders/ordersSearch', {orders: o});
-                })
-                break;
-            case 'my':
-                var filter = {};
-                if(res.locals.__user.role == 0) {
-                    res.redirect('/orders');
-                    return;
-                }
-                if( res.locals.__user.city != null) {
-                    filter = {'author' : res.locals.__user._id};
-                } else filter = {'answers.collector': res.locals.__user._id};
-                    Order.find(filter).deepPopulate('author.city').sort({_id:-1}).then( o => {
-                        res.render('orders/ordersSearch', {orders: o});
-                    })
-                break;
-            default:
-                Order.find().deepPopulate('author.city').sort({_id:-1}).then( o => {
-                    res.render('orders/ordersSearch', {orders: o});
-                })
-                break;
+    search: async (req, res) => {
+        var query = req.query;
+        res.locals.queries = query;
+        var filter = {};
+
+        if (query.id != '' && !isNaN(query.id)) {
+            filter.id = query.id
         }
 
+        if (query.type && query.type != 'none') {
+            if (query.type == 'install') {
+                filter.type = 0;
+            }
+            if (query.type == 'remonts') {
+                filter.type = 1;
+            }
+        }
+
+        if (query.gus && query.gus != 'none') {
+            if(query.gus == 'unknown') {
+                filter.author = null;
+            } else {
+                var acc = await Account.find({city: query.gus});
+                acc = acc.map( item => {
+                    return {
+                        author: item._id
+                    };
+                });
+                filter['$or'] = acc;
+            }
+        }
+
+        if (query.exec && query.exec != 'none') {
+            if(query.exec == 'unknown') {
+                filter.nameExec = [];
+            } else {
+                filter.nameExec = query.exec;
+            }
+        }
+
+        if (query.stage && query.stage != 'none') {
+            filter.stage = query.stage;
+        }
+
+        var orders = await Order.find(filter).deepPopulate('author.city').sort({_id:-1});
+
+        var dlina = orders.length,
+            pages = Math.ceil(dlina/10),
+            nowPage = query.page || 1;
+
+        res.locals.dlina = dlina;
+        res.locals.pages = pages;
+        res.locals.nowPage = nowPage;
+        if(nowPage > pages) nowPage = pages;
+        orders = orders.slice((nowPage-1)*10, nowPage*10);
+
+        var execs = await Exec.find();
+        var cities = await City.find();
+
+        res.render('search', {orders: orders, execs: execs, cities: cities});
     },
 
     getContent: function (req, res) {

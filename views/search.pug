@@ -1,0 +1,156 @@
+extend ./basic
+append head
+    link(rel='stylesheet' href='/public/css/order.css')
+    script(src='/public/js/order.js')
+append content
+    -function dateToStr(value) {
+    -    var year = value.getFullYear();
+    -    var month = value.getMonth() + 1;
+    -    if(month < 10) {
+    -        month = '0' + month;
+    -    }
+    -    var day = value.getDate();
+    -    if(day < 10) {
+    -        day = '0' + day;
+    -    }
+    -    return  day + '.' + month + '.' + year;
+    -}
+    .search-form
+        .search-form__row
+            .search-form__row-name ID
+            .search-form__row-field
+                input(type='text' id='search_id' value=queries.id placeholder="1234").form-control.search-field
+        .search-form__row
+            .search-form__row-name Тип проведенных работ
+            .search-form__row-field
+                select(id='search_type').form-control.search-field
+                    option(value='none' selected=(queries.type == 'none')) -
+                    option(value='install' selected=(queries.type == 'install')) Инсталляция
+                    option(value='remonts' selected=(queries.type == 'remonts')) Ремонт
+        .search-form__row
+            .search-form__row-name Ответсвеный ГУС
+            .search-form__row-field
+                select(id='search_gus').form-control.search-field
+                    option(value='none' selected=(queries.gus == 'none')) -
+                    option(value='unknown' selected=(queries.gus == 'unknown')) Не указан
+                    for city in cities
+                        option(value=city._id selected=(queries.gus == ''+city._id))= city.name
+        .search-form__row
+            .search-form__row-name Исполнитель
+            .search-form__row-field
+                select(id='search_exec').form-control.search-field
+                    option(value='none' selected=(queries.exec == 'none')) -
+                    option(value='unknown' selected=(queries.exec == 'unknown')) Не указан
+                    for exec in execs
+                        option(value=exec._id selected=(queries.exec == ''+exec._id))= exec.name
+        //- .search-form__row
+        //-     .search-form__row-name Ф.И.О. клиента
+        //-     .search-form__row-field
+        //-         input(type='text' id='search_client' value=queries.client placeholder="Фамилия Имя Отчество").form-control.search-field
+        //- .search-form__row
+        //-     .search-form__row-name Лицевой счет клиента
+        //-     .search-form__row-field
+        //-         input(type='text' id='search_client' value=queries.client placeholder="Фамилия Имя Отчество").form-control.search-field
+        .search-form__row
+            .search-form__row-name Статус
+            .search-form__row-field
+                select(id='search_stage').form-control.search-field
+                    option(value='none' selected=(queries.stage == 'none')) Все
+                    option(value='1' selected=(queries.stage == '1')) Только проработанные
+                    option(value='0' selected=(queries.stage == '0')) Только не проработанные
+
+        .search-form__row
+            .search-form__find
+                button(type="button" onclick='search()').btn.btn-primary Поиск
+            
+    p.found Найдено заявок - #{dlina} :
+    
+    .table-responsive.container-fluid
+        div(aria-label="Page navigation example")
+            ul.pagination
+                li.page-item
+                    a(class="page-link" onclick='return setAttr("page","1")' aria-label="Previous")
+                        span(aria-hidden="true") Начало
+                        span(class="sr-only") Previous 
+                -var prev = (nowPage == 1)?'page-item disabled':'page-item';
+                li(class=prev)
+                    -var previosPage = nowPage - 1;
+                    a(class="page-link" onclick='return changePage("'+prev+'",' + previosPage +')' aria-label="Previous")
+                        span(aria-hidden="true") &laquo; Пред.
+                        span(class="sr-only") Previous 
+                -nowPage = +nowPage;
+                -var end = pages;
+                -var start = 1;
+                
+                if(pages <= 6)
+                    -start = 1;
+                    -end = pages;
+                else
+                    if(nowPage <= 3)
+                        -start = 1;
+                        -end = 6
+                    else
+                        -start = nowPage - 2;
+                        -end = ((nowPage + 3) <= pages)?(nowPage + 3):pages;
+                        
+                -for(var i=start; i<=end; i++)
+                    if(nowPage == i)
+                        li(class="page-item active")
+                            a(class="page-link" onclick='return setAttr("page","' + i + '")')= i
+                    else
+                        li(class="page-item")
+                            a(class="page-link" onclick='return setAttr("page","' + i + '")')= i
+                
+                -var next = (nowPage == pages)?'page-item disabled':'page-item';
+                li(class=next)
+                    -var nextPage = nowPage+1;
+                    a(class="page-link" onclick='return changePage("' + next + '",' + nextPage + ')' aria-label="Next")
+                        span(aria-hidden="true") След. &raquo;
+                        span(class="sr-only") Next
+                li.page-item
+                    a(class="page-link" onclick='return setAttr("page","' + pages + '")' aria-label="Previous")
+                        span(aria-hidden="true") Конец
+                        span(class="sr-only") Previous 
+        table.table.table-hover#myTable
+            thead
+                tr
+                    th Номер
+                    th Дата инициации
+                    th Дата выезда
+                    th Инициатор
+                    th Тип работ
+                    th Ф.И.О. клиента
+            tbody
+                each order in orders
+                    if(order.answers != null)
+                        -var cls = '';
+                        -if(order.stage == 1) cls+=' order_success ';
+                        -if(order.answers.values[0] == -1) cls='order_not_answers';
+                        tr(onclick="location = '/orders/" + order.id + "'" class=cls ).item
+                            td №#{order.id}
+                            td= dateToStr(order.info.dateInit)
+                            td= dateToStr(order.info.dateEvent)
+                            if(order.author)
+                                td #{order.author.fullName} (#{order.author.city.name})
+                            else
+                                td Автоимпорт (Неопределён)
+                            if(order.type == 0)
+                                td Инсталляция
+                            else
+                                td Ремонт
+                            td.tabname= order.info.nameAbon
+                    else
+                        tr(onclick="location = '/orders/" + order.id + "'").item
+                            td №#{order.id}
+                            td= dateToStr(order.info.dateInit)
+                            td= dateToStr(order.info.dateEvent)
+                            if(order.author)
+                                td #{order.author.fullName} (#{order.author.city.name})
+                            else
+                                td Автоимпорт (Неопределён)
+                            if(order.type == 0)
+                                td Инсталяция
+                            else
+                                td Ремонт
+                            td.tabname= order.info.nameAbon
+    .empty-elemnt

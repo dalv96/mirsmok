@@ -5,6 +5,33 @@ window.onload = function () {
         $('#dateWork').datepicker();
     }
 }
+
+function setAttr(prmName,val){
+    var res = '';
+	var d = location.href.split("#")[0].split("?");
+	var base = d[0];
+	var query = d[1];
+	if(query) {
+		var params = query.split("&");
+		for(var i = 0; i < params.length; i++) {
+			var keyval = params[i].split("=");
+			if(keyval[0] != prmName) {
+				res += params[i] + '&';
+			}
+		}
+	}
+	res += prmName + '=' + val;
+	window.location.href = base + '?' + res;
+	return false;
+}
+
+function changePage(disabled, val){
+    if(disabled != 'page-item disabled')
+        setAttr('page', val)
+}
+
+
+
 function changeType(f) {
     if(f==1) {
         $('.repairs_hide').addClass('repairs').removeClass('repairs_hide');
@@ -33,4 +60,14 @@ function change(id, el) {
     } else $('#a'+id).attr('min', 0).animate({
         opacity: 1
     }, 200).val(0).css('visibility', 'visible ');
+}
+
+function search() {
+    var id = $('#search_id').val(),
+        type = $('#search_type').val(),
+        gus = $('#search_gus').val(),
+        exec = $('#search_exec').val(),
+        stage = $('#search_stage').val();
+
+    window.location.search = `id=${id}&type=${type}&gus=${gus}&exec=${exec}&stage=${stage}`;
 }

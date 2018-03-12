@@ -66,3 +66,62 @@ tr {
 .order_not_answers:hover td{
     background-color: #FFD4E1;
 }
+
+.search-form
+{
+    font-family: sans-serif;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    border-radius: 0.7em;
+    margin: 20px auto;
+    padding: 1em 1em 1em 1em;
+    width: 700px;
+}
+
+.search-form__row
+{
+    display: flex;
+    line-height: 35px;
+    margin-bottom: 8px;
+}
+
+.search-form__row-name
+{
+    margin-left: 1em;
+    width: 300px;
+    margin-right: 1em;
+}
+
+.search-form__row .btn
+{
+    margin-left: 1em;
+    width: 650px;
+}
+
+.search_title
+{
+    margin-left: 1em;
+}
+
+.search-field
+{
+    width: 335px;
+}
+
+.tabname
+{
+    width: 200px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.found
+{
+    margin-left: 2em;
+    font-size: 14pt;
+}
+
+.empty-elemnt
+{
+    margin-bottom: 10em;
+}
