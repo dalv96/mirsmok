@@ -35,10 +35,25 @@ module.exports = {
         })
     },
 
-    getOrdersPage: function (req, res) {
-        Order.find({ stage: 0 }).populate('author').deepPopulate('author.city').sort({ id: -1 }).then( o => {
-            res.render('orders/orders', {orders: o});
-        })
+    getOrdersPage: async (req, res) => {
+        var query = req.query;
+
+        var orders = await Order.find({ stage: 0 })
+                        .deepPopulate('author.city')
+                        .sort({ id: -1 });
+
+        var dlina = orders.length,
+            perPage = 25,
+            pages = Math.ceil(dlina/perPage),
+            nowPage = query.page || 1;
+
+        res.locals.dlina = dlina;
+        res.locals.pages = pages;
+        res.locals.nowPage = nowPage;
+        if(nowPage > pages) nowPage = pages;
+        orders = orders.slice((nowPage-1)*perPage, nowPage*perPage);
+
+        res.render('orders/orders', {orders: orders});
     },
 
     init: function (req, res) {

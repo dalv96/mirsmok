@@ -63,9 +63,8 @@ append content
             .search-form__find
                 button(type="button" onclick='search()').btn.btn-primary Поиск
             
-    p.found Найдено заявок - #{dlina} :
-    
-    .table-responsive.container-fluid
+    p.found Найдено заявок - #{dlina}
+    .pagers
         div(aria-label="Page navigation example")
             ul.pagination
                 li.page-item
@@ -111,6 +110,7 @@ append content
                     a(class="page-link" onclick='return setAttr("page","' + pages + '")' aria-label="Previous")
                         span(aria-hidden="true") Конец
                         span(class="sr-only") Previous 
+    .table-responsive.container-fluid
         table.table.table-hover#myTable
             thead
                 tr

@@ -19,8 +19,54 @@ append content
         script.
             var notyf = new Notyf();
             notyf.confirm('Заявка была успешно сохранена!');
-    h3 Заявки для проработки
+    .pagers
+        div(aria-label="Page navigation example")
+            ul.pagination
+                li.page-item
+                    a(class="page-link" onclick='return setAttr("page","1")' aria-label="Previous")
+                        span(aria-hidden="true") Начало
+                        span(class="sr-only") Previous 
+                -var prev = (nowPage == 1)?'page-item disabled':'page-item';
+                li(class=prev)
+                    -var previosPage = nowPage - 1;
+                    a(class="page-link" onclick='return changePage("'+prev+'",' + previosPage +')' aria-label="Previous")
+                        span(aria-hidden="true") &laquo; Пред.
+                        span(class="sr-only") Previous 
+                -nowPage = +nowPage;
+                -var end = pages;
+                -var start = 1;
+                
+                if(pages <= 6)
+                    -start = 1;
+                    -end = pages;
+                else
+                    if(nowPage <= 3)
+                        -start = 1;
+                        -end = 6
+                    else
+                        -start = nowPage - 2;
+                        -end = ((nowPage + 3) <= pages)?(nowPage + 3):pages;
+                        
+                -for(var i=start; i<=end; i++)
+                    if(nowPage == i)
+                        li(class="page-item active")
+                            a(class="page-link" onclick='return setAttr("page","' + i + '")')= i
+                    else
+                        li(class="page-item")
+                            a(class="page-link" onclick='return setAttr("page","' + i + '")')= i
+                
+                -var next = (nowPage == pages)?'page-item disabled':'page-item';
+                li(class=next)
+                    -var nextPage = nowPage+1;
+                    a(class="page-link" onclick='return changePage("' + next + '",' + nextPage + ')' aria-label="Next")
+                        span(aria-hidden="true") След. &raquo;
+                        span(class="sr-only") Next
+                li.page-item
+                    a(class="page-link" onclick='return setAttr("page","' + pages + '")' aria-label="Previous")
+                        span(aria-hidden="true") Конец
+                        span(class="sr-only") Previous
     .table-responsive.container-fluid
+        h3 Заявки для проработки
         table.table.table-hover#myTable
             thead
                 tr
@@ -45,3 +91,4 @@ append content
                         else
                             td Ремонт
                         td= order.info.nameAbon
+    .empty-elemnt

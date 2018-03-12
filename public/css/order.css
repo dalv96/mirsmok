@@ -117,15 +117,29 @@ tr {
 
 .found
 {
-    margin-left: 2em;
+    position: fixed;
     font-size: 14pt;
+    left: 3em;
+    bottom: 20px;
+    z-index: 100
 }
 
 .empty-elemnt
 {
-    margin-bottom: 10em;
+    margin-bottom: 5em;
 }
 .pagination
 {
     cursor: pointer;
+}
+
+.pagers
+{
+    background-color: white;
+    text-align: center;
+    border-top: 1px solid #ddd;
+    z-index: 99;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
 }
