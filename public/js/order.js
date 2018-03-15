@@ -2,7 +2,7 @@ window.onload = function () {
     var i = document.createElement("input");
     i.setAttribute("type", "date");
     if(i.type != 'date') {
-        $('#dateWork').datepicker();
+        // $('.search-date').datepicker();
     }
 }
 
@@ -67,7 +67,9 @@ function search() {
         type = $('#search_type').val(),
         gus = $('#search_gus').val(),
         exec = $('#search_exec').val(),
-        stage = $('#search_stage').val();
+        stage = $('#search_stage').val(),
+        start = $('#search_start').val(),
+        end = $('#search_end').val();
 
-    window.location.search = `id=${id}&type=${type}&gus=${gus}&exec=${exec}&stage=${stage}`;
+    window.location.search = `id=${id}&type=${type}&gus=${gus}&exec=${exec}&stage=${stage}&start=${start}&end=${end}`;
 }

@@ -1,6 +1,8 @@
 extend ./basic
 append head
     link(rel='stylesheet' href='/public/css/order.css')
+    link(rel='stylesheet' href='/public/css/jquery-ui.css')
+    script(src='/public/js/jquery-ui.min.js')
     script(src='/public/js/order.js')
 append content
     -function dateToStr(value) {
@@ -15,11 +17,20 @@ append content
     -    }
     -    return  day + '.' + month + '.' + year;
     -}
+    
     .search-form
         .search-form__row
-            .search-form__row-name ID
-            .search-form__row-field
-                input(type='text' id='search_id' value=queries.id placeholder="1234").form-control.search-field
+            .search-form__row-first
+                .search-form__cell
+                    span ID
+                    input(type='text' id='search_id' value=queries.id placeholder="1234").form-control.search-id
+                .search-form__cell
+                    span Дата выезда
+                    span от:
+                    input.form-control(type='text' id='search_start'  placeholder='дд.мм.гггг').search-date
+                    span до:
+                    input.form-control(type='text' id='search_end' placeholder='дд.мм.гггг').search-date
+                    
         .search-form__row
             .search-form__row-name Тип проведенных работ
             .search-form__row-field
@@ -64,6 +75,8 @@ append content
                 button(type="button" onclick='search()').btn.btn-primary Поиск
             
     p.found Найдено заявок - #{dlina}
+    -url = url.slice(7);
+    //- a(href='/export'+url).export Экспортировать в Excel 
     .pagers
         div(aria-label="Page navigation example")
             ul.pagination

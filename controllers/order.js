@@ -43,7 +43,7 @@ module.exports = {
                         .sort({ id: -1 });
 
         var dlina = orders.length,
-            perPage = 25,
+            perPage = 500,
             pages = Math.ceil(dlina/perPage),
             nowPage = query.page || 1;
 
@@ -187,9 +187,10 @@ module.exports = {
         });
     },
 
-    search: async (req, res) => {
+    export: async (req, res) => {
         var query = req.query;
         res.locals.queries = query;
+        res.locals.url = req.url;
         var filter = {};
 
         if (query.id != '' && !isNaN(query.id)) {
@@ -233,8 +234,66 @@ module.exports = {
 
         var orders = await Order.find(filter).deepPopulate('author.city').sort({_id:-1});
 
+        res.send(orders);
+    },
+
+    search: async (req, res) => {
+        var query = req.query;
+        res.locals.queries = query;
+        res.locals.url = req.url;
+        var filter = {};
+
+        if (query.id != '' && !isNaN(query.id)) {
+            filter.id = query.id
+        }
+
+        if (query.type && query.type != 'none') {
+            if (query.type == 'install') {
+                filter.type = 0;
+            }
+            if (query.type == 'remonts') {
+                filter.type = 1;
+            }
+        }
+
+        if (query.gus && query.gus != 'none') {
+            if(query.gus == 'unknown') {
+                filter.author = null;
+            } else {
+                var acc = await Account.find({city: query.gus});
+                acc = acc.map( item => {
+                    return {
+                        author: item._id
+                    };
+                });
+                filter['$or'] = acc;
+            }
+        }
+
+        if (query.exec && query.exec != 'none') {
+            if(query.exec == 'unknown') {
+                filter.nameExec = [];
+            } else {
+                filter.nameExec = query.exec;
+            }
+        }
+
+        if (query.stage && query.stage != 'none') {
+            filter.stage = query.stage;
+        }
+
+        // if (!query.start) query.start = new Date(1996, 7, 28);
+        // else query.start = new Date(query.start);
+        //
+        // if (!query.end) query.end = new Date(2101, 7, 28);
+        // else query.end = new Date(query.end);
+
+        // filter['info.dateEvent'] = { $gte: new Date(query.start), $lte: new Date(query.end) }
+
+        var orders = await Order.find(filter).deepPopulate('author.city').sort({_id:-1});
+
         var dlina = orders.length,
-            perPage = 25,
+            perPage = 100,
             pages = Math.ceil(dlina/perPage),
             nowPage = query.page || 1;
 

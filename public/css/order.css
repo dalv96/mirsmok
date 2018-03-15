@@ -120,7 +120,7 @@ tr {
     position: fixed;
     font-size: 14pt;
     left: 3em;
-    bottom: 20px;
+    bottom: 30px;
     z-index: 100
 }
 
@@ -134,13 +134,58 @@ tr {
     cursor: pointer;
 }
 
+.export
+{
+    position: fixed;
+    left: 4em;
+    bottom: 16px;
+    z-index: 100
+}
+
+.search-id
+{
+    display: inline-block;
+    width: 80px;
+    margin-left: 2em;
+}
+
+.search-date
+{
+    display: inline-block;
+    width: 122px;
+    margin-right: 2em;
+}
+
+.search-form__row-first
+{
+    width: 100%;
+    margin-left: 1em;
+}
+
+.search-form__cell
+{
+    display: inline-block;
+    margin-right: 4em;
+}
+
+.search-form__cell:last-child
+{
+    margin: 0;
+}
+
+.search-form__cell span
+{
+    margin-right: 1em;
+}
+
 .pagers
 {
-    background-color: white;
+    background-color: #fff;
     text-align: center;
     border-top: 1px solid #ddd;
     z-index: 99;
     position: fixed;
     width: 100%;
+    min-width: 1000px;
     bottom: 0;
 }
