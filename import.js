@@ -1,5 +1,9 @@
 var { convertToImport } = require('./controllers/common');
 var yesterday = convertToImport(new Date());
+console.log();
+console.log();
+console.log(`###################### ${yesterday} ######################`);
+console.log();
 
 var installs = [],
     remonts = [];
@@ -32,17 +36,24 @@ var imprt = async () => {
     var id = await Order.getNext();
     console.log(`Found installs #${installs.length}`);
     console.log(`Found remonts #${remonts.length}`);
-
+    var checkDub = [];
     var popo = [];
+
     installs.forEach( it => {
         it.type = 'install';
-        popo.push(it);
-    })
-    remonts.forEach( it => {
-        it.type = 'remonts';
-        popo.push(it);
+        if(checkDub.indexOf(`${it['Ф.И.О. абонента']} ${it['Адрес']}`) < 0 ) {
+            popo.push(it);
+            checkDub.push(`${it['Ф.И.О. абонента']} ${it['Адрес']}`);
+        } else console.log('Found dublicate');
     })
 
+    remonts.forEach( it => {
+        it.type = 'remonts';
+        if(checkDub.indexOf(`${it['Ф.И.О. абонента']} ${it['Адрес']}`) < 0 ) {
+            popo.push(it);
+            checkDub.push(`${it['Ф.И.О. абонента']} ${it['Адрес']}`);
+        } else console.log('Found dublicate');
+    })
 
     popo.forEach( async (item) => {
         var auth = robots[item['Ф.И.О. автора']];
@@ -86,7 +97,7 @@ var imprt = async () => {
                     }
                 })
             id++;
-            console.log(`Import order #${id}`);
+            console.log(`Import order ${item.type} #${id}`);
             return order.save();
         }
     })
