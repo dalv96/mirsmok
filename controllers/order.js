@@ -438,7 +438,7 @@ module.exports = {
             row++;
         })
 
-        wb.write('Table.xlsx', res);
+        wb.write('Export-SMOK.xlsx', res);
     },
 
     search: async (req, res) => {
