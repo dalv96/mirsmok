@@ -41,10 +41,10 @@ module.exports = {
 
         var orders = await Order.find({ stage: 0 })
                         .deepPopulate('author.city')
-                        .sort({ id: -1 });
+                        .sort({ 'info.dateInit': 1 });
 
         var dlina = orders.length,
-            perPage = 500,
+            perPage = 1000,
             pages = Math.ceil(dlina/perPage),
             nowPage = query.page || 1;
 
@@ -529,7 +529,7 @@ module.exports = {
         if(nowPage > pages) nowPage = pages;
         orders = orders.slice((nowPage-1)*perPage, nowPage*perPage);
 
-        var execs = await Exec.find();
+        var execs = await Exec.find().sort({'name': 1});
         var cities = await City.find();
 
         res.render('search', {orders: orders, execs: execs, cities: cities});
