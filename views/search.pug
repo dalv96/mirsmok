@@ -5,19 +5,27 @@ append head
     script(src='/public/js/jquery-ui.min.js')
     script(src='/public/js/order.js')
 append content
+    -var sssss = true;
     -function dateToStr(value) {
-    -    var year = value.getFullYear();
-    -    var month = value.getMonth() + 1;
-    -    if(month < 10) {
-    -        month = '0' + month;
-    -    }
-    -    var day = value.getDate();
-    -    if(day < 10) {
-    -        day = '0' + day;
-    -    }
-    -    return  day + '.' + month + '.' + year;
+        - try {
+            - var year = value.getFullYear();
+            -    var month = value.getMonth() + 1;
+            -    if(month < 10) {
+            -        month = '0' + month;
+            -    }
+            -    var day = value.getDate();
+            -    if(day < 10) {
+            -        day = '0' + day;
+            -    }
+            -    sssss = true;
+            -    return  day + '.' + month + '.' + year;
+        -} catch (err) {
+        -
+        -    sssss = false;
+        -    return value;
+        -}
     -}
-    
+
     .search-form
         .search-form__row
             .search-form__row-first
@@ -27,10 +35,12 @@ append content
                 .search-form__cell
                     span Дата выезда
                     span от:
-                    input.form-control(type='text' id='search_start'  placeholder='дд.мм.гггг').search-date
+                    input.form-control(type='text' id='search_start' value=(queries.start)?dateToStr(queries.start):'' placeholder='дд.мм.гггг').search-date
                     span до:
-                    input.form-control(type='text' id='search_end' placeholder='дд.мм.гггг').search-date
+                    input.form-control(type='text' id='search_end' value=(queries.end)?dateToStr(queries.end):'' placeholder='дд.мм.гггг').search-date
                     
+        if(!sssss)
+            script(src='/public/js/super.js')
         .search-form__row
             .search-form__row-name Тип проведенных работ
             .search-form__row-field
@@ -76,7 +86,7 @@ append content
             
     p.found Найдено заявок - #{dlina}
     -url = url.slice(7);
-    //- a(href='/export'+url).export Экспортировать в Excel 
+    a(href='/export'+url).export Экспортировать в Excel 
     .pagers
         div(aria-label="Page navigation example")
             ul.pagination

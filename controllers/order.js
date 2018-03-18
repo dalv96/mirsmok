@@ -8,6 +8,7 @@ var Manager = models.Manager;
 var Exec = models.Exec;
 var common = require('./common');
 var logger = require('./log');
+var xl = require('excel4node');
 
 function render(res, success) {
     Exec.find().sort({ name: 1 }).populate('manager').then(execs => {
@@ -232,15 +233,222 @@ module.exports = {
             filter.stage = query.stage;
         }
 
-        var orders = await Order.find(filter).deepPopulate('author.city').sort({_id:-1});
+        if (query.start) {
+            let dateParts = query.start.split(".");
+            query.start = new Date(dateParts[2], (dateParts[1] - 1), dateParts[0]);
+        }
 
-        res.send(orders);
+        if (query.end) {
+            let dateParts = query.end.split(".");
+            query.end = new Date(dateParts[2], (dateParts[1] - 1), dateParts[0]);
+        }
+
+        if(query.end == 'Invalid Date' || query.start == 'Invalid Date') {
+
+        } else {
+
+            if(query.start && query.end)
+                filter['info.dateEvent'] = { $gte: new Date(query.start), $lte: new Date(query.end) }
+
+            if(query.start && !query.end)
+                filter['info.dateEvent'] = { $gte: new Date(query.start) }
+
+            if(!query.start && query.end)
+                filter['info.dateEvent'] = { $gte: new Date(query.start) }
+
+        }
+
+
+        var orders = await Order.find(filter).deepPopulate('author.city nameExec').sort({_id:-1});
+
+        var wb = new xl.Workbook({
+          dateFormat: 'dd/mm/yyyy'
+        });
+
+        var ws = wb.addWorksheet('Таблица 1');
+
+        var style = wb.createStyle({
+            font: {
+                color: '#000000',
+                size: 11,
+                bold: true
+            },
+            alignment: {
+                 wrapText: true,
+                 horizontal: 'center'
+            }
+        });
+
+        var questionStyle = wb.createStyle({
+            font: {
+                color: '#000000',
+                size: 9,
+                bold: true
+            },
+            alignment: {
+                 wrapText: true,
+                 horizontal: 'center'
+            }
+        });
+
+        var align = wb.createStyle({
+            alignment: {
+                 horizontal: 'center'
+            }
+        });
+
+        var titles = [
+            {
+                text: 'ID',
+                width: 6,
+                style: style
+            },
+            {
+                text: 'Ф.И.О. инженера 1',
+                width: 18,
+                style: style
+            },
+            {
+                text: 'Ф.И.О. инженера 2',
+                width: 18,
+                style: style
+            },
+            {
+                text: 'Соответствует ли услуга договорным условиям (тарифному плану), и довольны ли Вы ее качеством?',
+                width: 15,
+                style: questionStyle
+            },
+            {
+                text: 'Продемонстрировал ли наш инженер использование ЛК?',
+                width: 15,
+                style: questionStyle
+            },
+            {
+                text: 'Оцените, пожалуйста, от 1 до 10 доброжелательность и корректность нашего специалиста',
+                width: 15,
+                style: questionStyle
+            },
+            {
+                text: 'Оцените, пожалуйста, от 1 до 10 внимательность нашего специалиста к пожеланиям',
+                width: 15,
+                style: questionStyle
+            },
+            {
+                text: 'Вид работ',
+                width: 13,
+                style: style
+            },
+            {
+                text: 'Дата выезда',
+                width: 12,
+                style: style
+            },
+            {
+                text: 'Адрес абонента',
+                width: 50,
+                style: style
+            },
+            {
+                text: 'ФИО абонента',
+                width: 40,
+                style: style
+            },
+            {
+                text: 'Лицевой счет',
+                width: 15,
+                style: style
+            },
+            {
+                text: 'Номер ТТ',
+                width: 15,
+                style: style
+            },
+            {
+                text: 'Тема ТТ',
+                width: 40,
+                style: style
+            }
+        ];
+
+        ws.row(1).setHeight(75);
+        ws.row(1).freeze();
+        ws.column(1).freeze();
+
+        titles.forEach( (item, i) => {
+            ws.cell(1, i+1).string(item.text).style(item.style);
+            ws.column(i+1).setWidth(item.width);
+        })
+        var row = 2;
+
+        orders.forEach( item => {
+            ws.cell(row, 1).number(item.id);
+
+            if(item.nameExec[0] != null) {
+                ws.cell(row, 2).string(item.nameExec[0].name);
+            } else ws.cell(row, 2).string('-');
+
+            if(item.nameExec[1] != null) {
+                ws.cell(row, 3).string(item.nameExec[1].name);
+            } else ws.cell(row, 3).string('-');
+
+            var tp = (item.type==0)?'Инсталляция':'Ремонт';
+
+            if(item.answers.values[0])
+                if(item.answers.values[0] == -1)
+                    ws.cell(row, 4).string('Нет ответа').style(align);
+                else
+                    ws.cell(row, 4).number(item.answers.values[0]).style(align);
+            else ws.cell(row, 4).string('-').style(align);
+            if(item.answers.values[1])
+                if(item.answers.values[1] == -1)
+                    ws.cell(row, 5).string('Нет ответа').style(align);
+                else
+                    ws.cell(row, 5).number(item.answers.values[1]).style(align);
+            else ws.cell(row, 5).string('-').style(align);
+            if(item.answers.values[2])
+                if(item.answers.values[2] == -1)
+                    ws.cell(row, 6).string('Нет ответа').style(align);
+                else
+                    ws.cell(row, 6).number(item.answers.values[2]).style(align);
+            else ws.cell(row, 6).string('-').style(align);
+            if(item.answers.values[3])
+                if(item.answers.values[3] == -1)
+                    ws.cell(row, 7).string('Нет ответа').style(align);
+                else
+                    ws.cell(row, 7).number(item.answers.values[3]).style(align);
+            else ws.cell(row, 7).string('-').style(align);
+
+            ws.cell(row, 8).string(tp).style(align);
+            ws.cell(row, 9).date(item.info.dateEvent).style(align);
+
+            ws.cell(row, 10).string(item.info.adress);
+            ws.cell(row, 11).string(item.info.nameAbon);
+
+            if(item.info.personalAcc) {
+                ws.cell(row, 12).string(item.info.personalAcc);
+            }
+
+            if(item.info.numberTT) {
+                ws.cell(row, 13).string(item.info.numberTT);
+            }
+
+            if(item.info.themeTT) {
+                ws.cell(row, 14).string(item.info.themeTT);
+            }
+            row++;
+        })
+
+        wb.write('Table.xlsx', res);
     },
 
     search: async (req, res) => {
         var query = req.query;
         res.locals.queries = query;
         res.locals.url = req.url;
+
+        var st = query.start,
+            end = query.end;
+
         var filter = {};
 
         if (query.id != '' && !isNaN(query.id)) {
@@ -282,13 +490,31 @@ module.exports = {
             filter.stage = query.stage;
         }
 
-        // if (!query.start) query.start = new Date(1996, 7, 28);
-        // else query.start = new Date(query.start);
-        //
-        // if (!query.end) query.end = new Date(2101, 7, 28);
-        // else query.end = new Date(query.end);
+        if (query.start) {
+            let dateParts = query.start.split(".");
+            query.start = new Date(dateParts[2], (dateParts[1] - 1), dateParts[0]);
+        }
 
-        // filter['info.dateEvent'] = { $gte: new Date(query.start), $lte: new Date(query.end) }
+        if (query.end) {
+            let dateParts = query.end.split(".");
+            query.end = new Date(dateParts[2], (dateParts[1] - 1), dateParts[0]);
+        }
+
+        if(query.end == 'Invalid Date' || query.start == 'Invalid Date') {
+            query.end = end
+            query.start = st;
+        } else {
+
+            if(query.start && query.end)
+                filter['info.dateEvent'] = { $gte: new Date(query.start), $lte: new Date(query.end) }
+
+            if(query.start && !query.end)
+                filter['info.dateEvent'] = { $gte: new Date(query.start) }
+
+            if(!query.start && query.end)
+                filter['info.dateEvent'] = { $gte: new Date(query.start) }
+
+        }
 
         var orders = await Order.find(filter).deepPopulate('author.city').sort({_id:-1});
 
