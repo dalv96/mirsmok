@@ -30,7 +30,13 @@ var imprt = async () => {
         'г. Феодосия': await Account.findOne({login: 'robot_3'}),
         'Феодосия': await Account.findOne({login: 'robot_3'}),
         'г. Севастополь': await Account.findOne({login: 'robot_4'}),
-        'г. Ялта': await Account.findOne({login: 'robot_5'})
+        'г. Ялта': await Account.findOne({login: 'robot_5'}),
+        'Стрельникова Яна Юрьевна': await Account.findOne({login: 'robot_2'}),
+        'Таразевич Юлия Александровна': await Account.findOne({login: 'robot_1'}),
+        'Котолупова Татьяна Игоревна': await Account.findOne({login: 'robot_1'}),
+        'Посох Ольга Анатольевна': await Account.findOne({login: 'robot_3'}),
+        'Лисицына Анастасия Сергеевна': await Account.findOne({login: 'robot_4'}),
+        'Черникова София Михайловна': await Account.findOne({login: 'robot_5'})
     };
 
     var id = await Order.getNext();
