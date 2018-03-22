@@ -105,11 +105,16 @@ module.exports = {
             }
 
             if(res.locals.__user.role == 2) {
-                o.info.dateEvent = req.body.dateEvent;
-                o.info.nameAbon = req.body.nameAbon;
-                o.info.adress = req.body.adress;
-                o.info.phone = req.body.phone;
-                o.nameExec = [req.body.mainExec, req.body.subExec || null];
+                if(req.body.dateEvent)
+                    o.info.dateEvent = req.body.dateEvent;
+                if(req.body.nameAbon)
+                    o.info.nameAbon = req.body.nameAbon;
+                if(req.body.adress)
+                    o.info.adress = req.body.adress;
+                if(req.body.phone)
+                    o.info.phone = req.body.phone;
+                if(req.body.mainExec)
+                    o.nameExec = [req.body.mainExec, req.body.subExec || null];
                 if(o.type == 0) {
                     o.info.numberTT = req.body.numberTT;
                     o.info.themeTT = req.body.themeTT;
