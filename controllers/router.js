@@ -29,7 +29,7 @@ module.exports = function(app) {
                 res.redirect('/analitic');
                 break;
             case 2:
-                res.redirect('/init');
+                res.redirect('/my-orders');
                 break;
             case 3:
                 res.redirect('/collector/orders')
@@ -43,7 +43,7 @@ module.exports = function(app) {
     app.get('/search', order.search);
     app.get('/export', order.export);
 
-    app.get('/orders/:id', order.getContent);
+    app.get('/orders/:id', order.getOrder);
     app.post('/orders/:id', order.editOrder);
     app.delete('/orders/:id',  order.delete);
 
@@ -83,6 +83,8 @@ module.exports = function(app) {
 
     app.all('/init*', auth.isInit);
     app.get('/init', order.getInitPage);
+    app.get('/my-orders', order.getMyOrders);
+
     app.post('/init', order.init);
 
     // ****************** СБОРЩИК ОТЗЫВОВ **********************

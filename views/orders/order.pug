@@ -3,150 +3,162 @@ append head
     link(rel='stylesheet' href='/public/css/order.css')
     script(src='/public/js/order.js')
 append content
-    .__block
-        h2 Отзыв клиента
-        if(order.stage == 0 && (__user.role == 2 || __user.role == 0))
-            span.delete
-                button.btn.btn-danger(onclick='deleteOrder('+ order.id + ')') Удалить заявку
+    .order-content
+        .order-header
+            .title-order Заявка ##{order.id}
+            if(order.stage == 0 && (__user.role == 2 || __user.role == 0))
+                span.delete
+                    button.btn.btn-danger(onclick='deleteOrder('+ order.id + ')') Удалить заявку
         hr
-        .form-horizontal
-            form(method='POST')
-                ul.list-group
-                    li.list-group-item
-                        .form-group
-                            label.control-label.col-sm-3 Тип проведенных работ
-                            .col-sm-6
-                                select.form-control(onChange='changeType(this.value)' required disabled)
-                                    if(order.type == 0)
-                                        option(value='0' selected) Инсталляция
-                                    else
-                                        option(value='1' selected) Ремонт
-                    li.list-group-item
-                        .form-group
-                            label.control-label.col-sm-3 Дата выезда
-                            .col-sm-2
-                                input.form-control(type='date' name='dateEvent' value=date required disabled=(edit==1)?false:true)
-                    li.list-group-item
-                        .form-group
-                            label.control-label.col-sm-3 Ф.И.О. абонента
-                            .col-sm-6
-                                input.form-control(type='text' name='nameAbon' value=order.info.nameAbon required disabled=(edit==1)?false:true)
-                    li.list-group-item
-                        .form-group
-                            label.control-label.col-sm-3 Номер телефона абонента
-                            .col-sm-3
-                                input.form-control(type='text' name='phone' value=order.info.phone required disabled=(edit==1)?false:true)
-                    li.list-group-item
-                        .form-group
-                            label.control-label.col-sm-3 Адрес
-                            .col-sm-6
-                                input.form-control(type='text' name='adress' value=order.info.adress required disabled=(edit==1)?false:true)
-                    li.list-group-item
-                        .form-group
-                            label.control-label.col-sm-3 Ф.И.О. автора
-                            .col-sm-6
-                                if(order.author)
-                                    input.form-control(type='text' value=order.author.fullName disabled)
-                                else
-                                    select.form-control(type='text' name="author" value='Автоматический импорт')
-                                        option
-                                        option(value='ГУС Симферополь') ГУС Симферополь
-                                        option(value='ГУС Севастополь') ГУС Севастополь
-                                        option(value='ГУС Евпатория') ГУС Евпатория
-                                        option(value='ГУС Ялта') ГУС Ялта
-                                        option(value='ГУС Феодосия') ГУС Феодосия
-                    if(order.nameExec.length > 0 && order.nameExec[0])                
-                        each exec in order.nameExec
-                            li.list-group-item
-                                .form-group
-                                    label.control-label.col-sm-3 Ф.И.О. исполнителя
-                                    .col-sm-6
-                                        input.form-control(type='text' value=exec.name disabled)
-                    else
-                        li.list-group-item
-                            .form-group
-                                label.control-label.col-sm-3 Ф.И.О иполнителей
-                                .col-sm-6
-                                    if(order.author)
-                                        select.form-control.inpt(name='mainExec' required disabled=(edit==2))
-                                            option
-                                            each exec in execs
-                                                if(exec.manager.city == order.author.city.toString())
-                                                    option(value=exec._id)= exec.name
-                                    else
-                                        label Сначала выберите нужный ГУС и сохраните
-                        li.list-group-item
-                            .form-group
-                                label.control-label.col-sm-3
-                                .col-sm-6
-                                    if(order.author)
-                                        select.form-control.inpt(name='subExec' disabled=(edit==2))
-                                            option
-                                            each exec in execs
-                                                if(exec.manager.city == order.author.city.toString())
-                                                    option(value=exec._id)= exec.name
-                                    else
-                                        label Сначала выберите нужный ГУС и сохраните
+        
+        form(method='POST').my-form
+            .order-part
+                .row
+                    .row-name
+                        label.control-label Тип проведенных работ
+                    .row-field
+                        select.form-control(onChange='changeType(this.value)' required disabled)
+                            if(order.type == 0)
+                                option(value='0' selected) Инсталляция
+                            else
+                                option(value='1' selected) Ремонт
+                .row
+                    .row-name
+                        label.control-label Дата выезда
+                    .row-field
+                        input.form-control(type='date' name='dateEvent' value=date required disabled)
+                .row
+                    .row-name
+                        label.control-label Ф.И.О. абонента
+                    .row-field
+                        input.form-control(type='text' name='nameAbon' value=order.info.nameAbon required disabled)
+                .row
+                    .row-name
+                        label.control-label Номер телефона абонента
+                    .row-field
+                        input.form-control(type='text' name='phone' value=order.info.phone required disabled)
+                .row
+                    .row-name
+                        label.control-label Адрес
+                    .row-field
+                        input.form-control(type='text' name='adress' value=order.info.adress required disabled)
+                .row
+                    .row-name
+                        label.control-label Ф.И.О. автора
+                    .row-field
+                        if(order.author)
+                            input.form-control(type='text' value=order.author.fullName+' ('+ order.author.city.name + ')' disabled)
+                        else
+                            select.form-control(type='text' name="author" value='Автоматический импорт' disabled=(user.role == 3))
+                                option
+                                option(value='ГУС Симферополь') ГУС Симферополь
+                                option(value='ГУС Севастополь') ГУС Севастополь
+                                option(value='ГУС Евпатория') ГУС Евпатория
+                                option(value='ГУС Ялта') ГУС Ялта
+                                option(value='ГУС Феодосия') ГУС Феодосия
+                if(order.nameExec.length > 0 && order.nameExec[0])                
+                    each exec,indx in order.nameExec
+                        .row
+                            .row-name
+                                label.control-label Ф.И.О. исполнителя №#{indx+1}
+                            .row-field
+                                input.form-control(type='text' value=exec.name disabled)
+                else
+                    .row
+                        .row-name
+                            label.control-label Ф.И.О иполнителей
+                        .row-field
+                            if(order.author)
+                                select.form-control.inpt(name='mainExec' required disabled=(user.role==3))
+                                    option
+                                    each exec in execs
+                                        if(exec.manager.city == order.author.city._id.toString())
+                                            option(value=exec._id)= exec.name
+                            else
+                                label Сначала выберите нужный ГУС и сохраните
+                    .row
+                        .row-name
+                            label.control-label
+                        .row-field
+                            if(order.author)
+                                select.form-control.inpt(name='subExec' disabled=(user.role==3))
+                                    option
+                                    each exec in execs
+                                        if(exec.manager.city == order.author.city._id.toString())
+                                            option(value=exec._id)= exec.name
+                            else
+                                label Сначала выберите нужный ГУС и сохраните
 
-                    if(order.type == '1')
-                        li.list-group-item.repairs
-                            .form-group
-                                label.control-label.col-sm-3 Номер ТТ
-                                .col-sm-6
-                                    input.form-control(type='text' name='numberTT' value=order.info.numberTT disabled=(edit==1)?false:true)
-                        li.list-group-item.repairs
-                            .form-group
-                                label.control-label.col-sm-3 Тема ТТ
-                                .col-sm-6
-                                    input.form-control(type='text' name='themeTT' value=order.info.themeTT disabled=(edit==1)?false:true)
-                    else                            
-                        li.list-group-item.install
-                            .form-group
-                                label.control-label.col-sm-3 Лицевой счет
-                                .col-sm-3
-                                    input.form-control(type='text' name='personalAcc' value=order.info.personalAcc disabled=(edit==1)?false:true)
-                                        
-                ul.list-group
-                    li.zapol.list-group-item
-                        .form-group
-                            label.control-label.col-sm-5 Соответствует ли услуга договорным условиям (тарифному плану), и довольны ли Вы ее качеством?
-                            .col-sm-1
+                if(order.type == '1')
+                    .row.repairs
+                        .row-name
+                            label.control-label Номер ТТ
+                        .row-field
+                            input.form-control(type='text' name='numberTT' value=order.info.numberTT disabled)
+                    .row.repairs
+                        .row-name
+                            label.control-label Тема ТТ
+                        .row-field
+                            input.form-control(type='text' name='themeTT' value=order.info.themeTT disabled)
+                else                            
+                    .row.install
+                        .row-name
+                            label.control-label Лицевой счет
+                        .row-field
+                            input.form-control(type='text' name='personalAcc' value=order.info.personalAcc disabled)
+                                    
+            if(order.nameExec.length > 0 && order.nameExec[0])
+                if(user.role == 3 || order.answers.values.length)
+                    .order-part
+                        .row
+                            .row-name
+                                label.control-label Соответствует ли услуга договорным условиям (тарифному плану), и довольны ли Вы ее качеством?
+                            .row-field
                                 .small
-                                    input.form-control(type='number' id='a1' name='answers' class=(order.answers.values[0] == -1)?'invis':'' min=(order.answers.values[0] == -1)?'-1':'0' max='10' value=order.answers.values[0]||'0' disabled=(edit==2)?false:true)
-                            .col-sm-offset-1.col-sm-2.cant
-                                input(type="checkbox" name='q1' id='q1' onchange=('change(1, this)') checked=(order.answers.values[0] == -1) disabled=(edit==2)?false:true)
-                                label(for='q1') Нет ответа
-                    li.list-group-item.zapol
-                        .form-group
-                            label.control-label.col-sm-5 Продемонстрировал ли наш инженер использование ЛК?
-                            .col-sm-1
+                                    input.form-control(type='number' id='a1' name='answers' class=(order.answers.values[0] == -1)?'invis':'' min=(order.answers.values[0] == -1)?'-1':'0' max='10' value=order.answers.values[0]||'0' disabled=(user.role != 3))
+                                .cant
+                                    input(type="checkbox" name='q1' id='q1' onchange=('change(1, this)') checked=(order.answers.values[0] == -1) disabled=(user.role != 3))
+                                    label(for='q1') Нет ответа
+                        .row
+                            .row-name
+                                label.control-label Продемонстрировал ли наш инженер использование ЛК?
+                            .row-field
                                 .small
-                                    input.form-control(type='number' id='a2' name='answers' class=(order.answers.values[1] == -1)?'invis':'' min=(order.answers.values[1] == -1)?'-1':'0' max='10' value=order.answers.values[1]||'0' disabled=(edit==2)?false:true)
-                            .col-sm-offset-1.col-sm-2.cant
-                                input(type="checkbox" name='q2' id='q2' onchange=('change(2, this)') checked=(order.answers.values[1] == -1) disabled=(edit==2)?false:true)
-                                label(for='q2') Нет ответа
-                    li.list-group-item.zapol
-                        .form-group
-                            label.control-label.col-sm-5 Оцените, пожалуйста, от 1 до 10 доброжелательность и корректность нашего специалиста
-                            .col-sm-1
+                                    input.form-control(type='number' id='a2' name='answers' class=(order.answers.values[1] == -1)?'invis':'' min=(order.answers.values[1] == -1)?'-1':'0' max='10' value=order.answers.values[1]||'0' disabled=(user.role != 3))
+                                .cant
+                                    input(type="checkbox" name='q2' id='q2' onchange=('change(2, this)') checked=(order.answers.values[1] == -1) disabled=(user.role != 3))
+                                    label(for='q2') Нет ответа
+                        .row
+                            .row-name
+                                label.control-label Оцените, пожалуйста, от 1 до 10 доброжелательность и корректность нашего специалиста
+                            .row-field
                                 .small
-                                    input.form-control(type='number' id='a3' name='answers' class=(order.answers.values[2] == -1)?'invis':'' min=(order.answers.values[2] == -1)?'-1':'0' max='10' value=order.answers.values[2]||'0' disabled=(edit==2)?false:true)
-                            .col-sm-offset-1.col-sm-2.cant
-                                input(type="checkbox" name='q3' id='q3' onchange=('change(3, this)') checked=(order.answers.values[2] == -1) disabled=(edit==2)?false:true)
-                                label(for='q3') Нет ответа
-                    li.list-group-item.install
-                        .form-group
-                            label.control-label.col-sm-5 Оцените, пожалуйста, от 1 до 10 внимательность нашего специалиста к пожеланиям
-                            .col-sm-1
+                                    input.form-control(type='number' id='a3' name='answers' class=(order.answers.values[2] == -1)?'invis':'' min=(order.answers.values[2] == -1)?'-1':'0' max='10' value=order.answers.values[2]||'0' disabled=(user.role != 3))
+                                .cant
+                                    input(type="checkbox" name='q3' id='q3' onchange=('change(3, this)') checked=(order.answers.values[2] == -1) disabled=(user.role != 3))
+                                    label(for='q3') Нет ответа
+                        .row
+                            .row-name
+                                label.control-label Оцените, пожалуйста, от 1 до 10 внимательность нашего специалиста к пожеланиям
+                            .row-field
                                 .small
-                                    input.form-control(type='number' id='a4' name='answers' class=(order.answers.values[3] == -1)?'invis':'' min=(order.answers.values[3] == -1)?'-1':'0' max='10' value=order.answers.values[3]||'0' disabled=(edit==2)?false:true)
-                            .col-sm-offset-1.col-sm-2.cant
-                                input(type="checkbox" name='q4' id='q4' onchange=('change(4, this)') checked=(order.answers.values[3] == -1) disabled=(edit==2)?false:true)
-                                label(for='q4') Нет ответа
-                    li.list-group-item.zapol
-                        .form-group
-                            label.control-label.col-sm-5 Комментарий клиента
-                            .col-sm-5
-                                textarea.form-control(rows=5 name='comment' disabled=(edit==2)?false:true)=order.answers.comment
-
-                button(type='submit').btn.btn-success.col-sm-offset-5.col-sm-3.subm Сохранить
+                                    input.form-control(type='number' id='a4' name='answers' class=(order.answers.values[3] == -1)?'invis':'' min=(order.answers.values[3] == -1)?'-1':'0' max='10' value=order.answers.values[3]||'0' disabled=(user.role != 3))
+                                .cant
+                                    input(type="checkbox" name='q4' id='q4' onchange=('change(4, this)') checked=(order.answers.values[3] == -1) disabled=(user.role != 3))
+                                    label(for='q4') Нет ответа
+                        .row
+                            .row-name
+                                label.control-label Комментарий клиента
+                            .row-field
+                                textarea.form-control(rows=5 name='comment' disabled=(user.role != 3))=order.answers.comment
+            else
+                if(user.role == 3)
+                    .order-part
+                        .row
+                            .order-alert Сперва нужно проставить исполнителей!
+            
+            if(user.role == 3 && order.nameExec[0])
+                button(type='submit').btn.btn-success.subm Сохранить
+            
+            if(user.role != 3 && !order.nameExec[0])
+                button(type='submit').btn.btn-success.subm Сохранить

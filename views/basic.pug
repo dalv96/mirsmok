@@ -16,8 +16,12 @@ html
                 if(__user)
                     nav
                         ul.menu
-                            li: a(href='/' tabindex='990') 
-                                span Главная страница
+                            if(__user.role != 0)
+                                li: a(href='/' tabindex='990')
+                                    span Мои заявки
+                            if(__user.role == 2)
+                                li: a(href='/init' tabindex='991')
+                                    span Создать заявку
                             if(__user.role == 0)
                                 li: a(href='/admin/users' tabindex='991') Пользователи
                                 li: a(href='/admin/exec' tabindex='992') Исполнители

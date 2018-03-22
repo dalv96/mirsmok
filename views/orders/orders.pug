@@ -66,30 +66,45 @@ append content
                     a(class="page-link" onclick='return setAttr("page","' + pages + '")' aria-label="Previous")
                         span(aria-hidden="true") Конец
                         span(class="sr-only") Previous
-    .table-responsive.container-fluid
-        h3 Заявки для проработки
+    .table-responsive.container-fluid.my-wrap
+        if(__user.role == 3)
+            h2 Непроработанные заявки
+        else
+            h2 Заявки без исполнителей
         table.table.table-hover#myTable
             thead
                 tr
                     th Номер
-                    th Дата инициации
-                    th Дата выезда
+                    th Инициация
+                    th Выезд
                     th Инициатор
-                    th Тип проведенных работ
+                    th Тип работ
                     th Ф.И.О. клиента
             tbody
                 each order in orders
-                    tr(onclick="location = '/collector/orders/" + order.id + "'").item
-                        td №#{order.id}
-                        td= dateToStr(order.info.dateInit)
-                        td= dateToStr(order.info.dateEvent)
+                    -var cls = '';
+                    -if(order.stage == 1) cls+=' order_success ';
+                    -if(order.answers != null)
+                    -if(order.answers.values[0] == -1 && order.answers.values[1] == -1 && order.answers.values[2] == -1 && order.answers.values[3] == -1) cls='order_not_answers';    
+                    tr(class=cls).item
+                        td 
+                            a(href="/orders/" + order.id) №#{order.id}
+                        td
+                            a(href="/orders/" + order.id)= dateToStr(order.info.dateInit)
+                        td
+                            a(href="/orders/" + order.id)= dateToStr(order.info.dateEvent)
                         if(order.author)
-                            td #{order.author.fullName} (#{order.author.city.name})
+                            td 
+                                a(href="/orders/" + order.id) #{order.author.fullName} (#{order.author.city.name})
                         else
-                            td Автоимпорт (Неопределён)
+                            td
+                                a(href="/orders/" + order.id) Автоимпорт (Неопределён)
                         if(order.type == 0)
-                            td Инсталляция
+                            td
+                                a(href="/orders/" + order.id) Инсталляция
                         else
-                            td Ремонт
-                        td= order.info.nameAbon
+                            td
+                                a(href="/orders/" + order.id) Ремонт
+                        td.tabname
+                            a(href="/orders/" + order.id)= order.info.nameAbon
     .empty-elemnt

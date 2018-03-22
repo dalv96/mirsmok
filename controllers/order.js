@@ -36,6 +36,34 @@ module.exports = {
         })
     },
 
+    getMyOrders: async (req, res) => {
+        var query = req.query;
+
+        var acc = await Account.find({city: res.locals.__user.city});
+        acc = acc.map( item => {
+            return {
+                author: item._id
+            };
+        });
+
+        var orders = await Order.find({$or: acc, nameExec: []})
+                        .deepPopulate('author.city')
+                        .sort({ 'info.dateInit': 1 });
+
+        var dlina = orders.length,
+            perPage = 1000,
+            pages = Math.ceil(dlina/perPage),
+            nowPage = query.page || 1;
+
+        res.locals.dlina = dlina;
+        res.locals.pages = pages;
+        res.locals.nowPage = nowPage;
+        if(nowPage > pages) nowPage = pages;
+        orders = orders.slice((nowPage-1)*perPage, nowPage*perPage);
+
+        res.render('orders/orders', {orders: orders});
+    },
+
     getOrdersPage: async (req, res) => {
         var query = req.query;
 
@@ -104,7 +132,7 @@ module.exports = {
                 })
             }
 
-            if(res.locals.__user.role == 2) {
+            if(res.locals.__user.role != 3) {
                 if(req.body.dateEvent)
                     o.info.dateEvent = req.body.dateEvent;
                 if(req.body.nameAbon)
@@ -122,7 +150,9 @@ module.exports = {
                 if(o.type == 1)
                     o.info.personalAcc = req.body.personalAcc;
             }
+
             if(res.locals.__user.role == 3) {
+                o.stage = 1;
                 o.answers.values = req.body.answers;
                 if(req.body.comment.trim().length < 1) {
                     o.answers.comment = null;
@@ -540,20 +570,18 @@ module.exports = {
         res.render('search', {orders: orders, execs: execs, cities: cities});
     },
 
-    getContent: function (req, res) {
-        Order.findOne({'id' : req.params.id}).populate('author nameExec').then( o => {
-            if (o) {
-                var d = common.dateToStr(o.info.dateEvent);
-                var editFlag;
-                if(res.locals.__user.role == 2 && o.stage == 0) {
-                    editFlag = 1;
-                }
-                if( res.locals.__user.role == 3 && o.stage == 1) editFlag = 2;
-                Exec.find().sort({ name: 1 }).populate('manager').then(execs => {
-                    res.render('orders/order', {order: o, date: d, edit: editFlag, execs: execs});
-                })
-            } else res.render('404');
-        })
+    getOrder: async (req, res) => {
+        var order = await Order.findOne({'id' : req.params.id}).deepPopulate('author author.city nameExec');
+
+        if (order) {
+            var execs = await Exec.find().sort({ name: 1 }).populate('manager');
+
+            var d = common.dateToStr(order.info.dateEvent);
+
+            res.render('orders/order', {order: order, date: d, execs: execs, user: res.locals.__user});
+
+        } else res.render('404');
+
     },
 
     delete: function (req, res) {

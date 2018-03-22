@@ -5,11 +5,12 @@ nav {
     left: 0;
     z-index: 9999;
     background: #1a7abe;
-    min-width: 600px;
+    min-width: 1000px;
 }
 body {
     margin-top: 5em;
     z-index: 0;
+    min-width: 1000px;
 }
 nav ul {
     display: flex;
@@ -19,6 +20,8 @@ nav ul {
 }
 
 nav a {
+    white-space: nowrap;
+    text-overflow: ellipsis;
     color: white;
     text-decoration: none;
     padding: 15px;
