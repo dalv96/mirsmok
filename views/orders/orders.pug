@@ -2,6 +2,8 @@ extend ../basic
 append head
     link(rel='stylesheet' href='/public/css/order.css')
     script(src='/public/js/order.js')
+    block title
+        title СМОК | Мои заявки
 append content
     -function dateToStr(value) {
     -    var year = value.getFullYear();

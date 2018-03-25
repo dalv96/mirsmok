@@ -1,7 +1,10 @@
 extend ../basic
+
 append head
     link(rel='stylesheet' href='/public/css/order.css')
     script(src='/public/js/order.js')
+    block title
+        title СМОК | Заявка ##{order.id}
 append content
     .order-content
         .order-header
