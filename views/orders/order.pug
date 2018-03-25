@@ -8,10 +8,12 @@ append head
 append content
     .order-content
         .order-header
-            .title-order Заявка ##{order.id}
-            if(order.stage == 0 && (__user.role == 2 || __user.role == 0))
-                span.delete
-                    button.btn.btn-danger(onclick='deleteOrder('+ order.id + ')') Удалить заявку
+            .header-cell
+                .title-order Заявка ##{order.id}
+            .header-cell
+                if(order.stage == 0 && (__user.role == 2 || __user.role == 0))
+                    span.delete
+                        button.btn.btn-danger(onclick='deleteOrder('+ order.id + ')') Удалить заявку
         hr
         
         form(method='POST').my-form
