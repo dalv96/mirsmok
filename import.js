@@ -26,6 +26,9 @@ var imprt = async () => {
 
     var robots = {
         'г. Симферополь': await Account.findOne({login: 'robot_1'}),
+        'пгт. Грэсовский': await Account.findOne({login: 'robot_1'}),
+        'с. Мирное': await Account.findOne({login: 'robot_1'}),
+        'с. Перово': await Account.findOne({login: 'robot_1'}),
         'г. Евпатория': await Account.findOne({login: 'robot_2'}),
         'г. Феодосия': await Account.findOne({login: 'robot_3'}),
         'Феодосия': await Account.findOne({login: 'robot_3'}),
