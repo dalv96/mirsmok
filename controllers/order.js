@@ -10,6 +10,20 @@ var common = require('./common');
 var logger = require('./log');
 var xl = require('excel4node');
 
+
+var populateQuery = {
+    authorCity: {
+        path: 'author',
+        select: 'city fullName',
+        populate: {
+            path: 'city',
+            select: 'name'
+        },
+        options: {
+            lean: true
+        }
+    }
+}
 function render(res, success) {
     Exec.find().sort({ name: 1 }).populate('manager').then(execs => {
         res.render('orders/init', {execs: execs, success: success});
@@ -188,10 +202,10 @@ module.exports = {
     },
 
     getAnaliticPage: async (req, res) => {
-        var execs = await Exec.find();
-        var cities = await City.find();
-        var managers = await Manager.find();
-        var orders = await Order.find({author: {$ne: null}}).populate('author nameExec');
+        var execs = await Exec.find().lean();;
+        var cities = await City.find().lean();;
+        var managers = await Manager.find().lean();;
+        var orders = await Order.find({author: {$ne: null}}).populate('author nameExec').lean();
 
         var ret = [];
         orders.forEach( item => {
@@ -294,7 +308,7 @@ module.exports = {
         }
 
 
-        var orders = await Order.find(filter).deepPopulate('author.city nameExec').sort({_id:-1});
+        var orders = await Order.find(filter).populate('nameExec').lean().sort({_id:-1});
 
         var wb = new xl.Workbook({
           dateFormat: 'dd/mm/yyyy'
@@ -558,7 +572,7 @@ module.exports = {
 
         }
 
-        var orders = await Order.find(filter).deepPopulate('author.city').sort({_id:-1});
+        var orders = await Order.find(filter).populate(populateQuery.authorCity).lean().sort({_id:-1});
 
         var dlina = orders.length,
             perPage = 100,
@@ -571,14 +585,14 @@ module.exports = {
         if(nowPage > pages) nowPage = pages;
         orders = orders.slice((nowPage-1)*perPage, nowPage*perPage);
 
-        var execs = await Exec.find().sort({'name': 1});
-        var cities = await City.find();
+        var execs = await Exec.find().lean().sort({'name': 1});
+        var cities = await City.find().lean();
 
         res.render('search', {orders: orders, execs: execs, cities: cities});
     },
 
     getOrder: async (req, res) => {
-        var order = await Order.findOne({'id' : req.params.id}).deepPopulate('author author.city nameExec');
+        var order = await Order.findOne({'id' : req.params.id}).deepPopulate('author author.city nameExec answers.collector');
 
         if (order) {
             var execs = await Exec.find().sort({ name: 1 }).populate('manager');
