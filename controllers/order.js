@@ -61,7 +61,8 @@ module.exports = {
         });
 
         var orders = await Order.find({$or: acc, nameExec: []})
-                        .deepPopulate('author.city')
+                        .populate(populateQuery.authorCity)
+                        .lean()
                         .sort({ 'info.dateInit': 1 });
 
         var dlina = orders.length,
@@ -82,7 +83,8 @@ module.exports = {
         var query = req.query;
 
         var orders = await Order.find({ stage: 0 })
-                        .deepPopulate('author.city')
+                        .populate(populateQuery.authorCity)
+                        .lean()
                         .sort({ 'info.dateInit': 1 });
 
         var dlina = orders.length,
@@ -168,6 +170,7 @@ module.exports = {
             if(res.locals.__user.role == 3) {
                 o.stage = 1;
                 o.answers.values = req.body.answers;
+                o.answers.collector = res.locals.__user._id;
                 if(req.body.comment.trim().length < 1) {
                     o.answers.comment = null;
                 } else o.answers.comment = req.body.comment.trim();
@@ -202,9 +205,9 @@ module.exports = {
     },
 
     getAnaliticPage: async (req, res) => {
-        var execs = await Exec.find().lean();;
-        var cities = await City.find().lean();;
-        var managers = await Manager.find().lean();;
+        var execs = await Exec.find().lean();
+        var cities = await City.find().lean();
+        var managers = await Manager.find().lean();
         var orders = await Order.find({author: {$ne: null}}).populate('author nameExec').lean();
 
         var ret = [];

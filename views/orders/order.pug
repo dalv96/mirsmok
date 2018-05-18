@@ -121,6 +121,12 @@ append content
                                     label.control-label Сборщик отзыва
                                 .row-field
                                     input.form-control(type='text' value=order.answers.collector.fullName disabled)
+                        else
+                            .row
+                                .row-name
+                                    label.control-label Сборщик отзыва
+                                .row-field
+                                    input.form-control(type='text' value='Информация о сборщике отсутсвует!' disabled)
                         .row
                             .row-name
                                 label.control-label Соответствует ли услуга договорным условиям (тарифному плану), и довольны ли Вы ее качеством?
