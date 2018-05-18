@@ -1,4 +1,6 @@
 var { convertToImport } = require('./controllers/common');
+var { getRange } = require('./controllers/common');
+
 var yesterday = convertToImport(new Date());
 // yesterday = '01-03-2018';
 
@@ -68,13 +70,16 @@ var imprt = async () => {
 
     popo.forEach( async (item) => {
         var auth = robots[item['Ф.И.О. автора']];
-
-        var test = await Order.findOne({
+        var range = getRange(item['Дата выезда']);
+        var test = await Order.find({
             'info.nameAbon': item['Ф.И.О. абонента'],
-            'info.dateEvent': new Date(item['Дата выезда'])
+            $and: [
+                { 'info.dateEvent': { $gte: range[0] } },
+                { 'info.dateEvent': { $lte: range[1] } }
+            ]
         });
 
-        if(!test) {
+        if(test.length == 0) {
             if(item.type == 'install')
                 var order = new Order({
                     id: id,

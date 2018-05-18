@@ -1,4 +1,16 @@
 module.exports = {
+    getRange: function (value) {
+        var date = value.split(' ');
+        date = date[0].split('-');
+
+        return [
+            new Date(date[0], date[1]-1, date[2]-1, 0, 0, 0, 0),
+            new Date(date[0], date[1]-1, date[2]+1, 0, 0, 0, 0)
+        ]
+
+    },
+
+
     dateToStr: function (value) {
         var year = value.getFullYear();
         var month = value.getMonth() + 1;
