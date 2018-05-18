@@ -115,11 +115,12 @@ append content
             if(order.nameExec.length > 0 && order.nameExec[0])
                 if(user.role == 3 || order.answers.values.length)
                     .order-part
-                        .row
-                            .row-name
-                                label.control-label Сборщик отзыва
-                            .row-field
-                                input.form-control(type='text' value=order.answers.collector.fullName disabled)
+                        if(order.answers.collector)
+                            .row
+                                .row-name
+                                    label.control-label Сборщик отзыва
+                                .row-field
+                                    input.form-control(type='text' value=order.answers.collector.fullName disabled)
                         .row
                             .row-name
                                 label.control-label Соответствует ли услуга договорным условиям (тарифному плану), и довольны ли Вы ее качеством?
