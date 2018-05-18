@@ -71,8 +71,7 @@ var imprt = async () => {
 
         var test = await Order.findOne({
             'info.nameAbon': item['Ф.И.О. абонента'],
-            'info.adress': item['Адрес'],
-            'info.dateEvent': item['Дата выезда']
+            'info.dateEvent': new Date(item['Дата выезда'])
         });
 
         if(!test) {
