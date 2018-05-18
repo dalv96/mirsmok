@@ -1,5 +1,7 @@
 var { convertToImport } = require('./controllers/common');
 var yesterday = convertToImport(new Date());
+// yesterday = '01-03-2018';
+
 console.log();
 console.log();
 console.log(`###################### ${yesterday} ######################`);
@@ -66,11 +68,11 @@ var imprt = async () => {
 
     popo.forEach( async (item) => {
         var auth = robots[item['Ф.И.О. автора']];
+
         var test = await Order.findOne({
-            type: (item.type == 'installs')?0:1,
             'info.nameAbon': item['Ф.И.О. абонента'],
-            'info.phone': item['Номер телефона абонента'],
-            'info.adress': item['Адрес']
+            'info.adress': item['Адрес'],
+            'info.dateEvent': item['Дата выезда']
         });
 
         if(!test) {
