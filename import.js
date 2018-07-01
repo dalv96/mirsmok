@@ -32,6 +32,7 @@ var imprt = async () => {
         'г. Симферополь': await Account.findOne({login: 'robot_1'}),
         'пгт. Грэсовский': await Account.findOne({login: 'robot_1'}),
         'с. Мирное': await Account.findOne({login: 'robot_1'}),
+        'с. Мирное (Симферопольский район)': await Account.findOne({login: 'robot_1'}),
         'с. Перово': await Account.findOne({login: 'robot_1'}),
         'г. Евпатория': await Account.findOne({login: 'robot_2'}),
         'г. Феодосия': await Account.findOne({login: 'robot_3'}),
@@ -70,6 +71,7 @@ var imprt = async () => {
 
     popo.forEach( async (item) => {
         var auth = robots[item['Ф.И.О. автора']];
+        if(!auth) console.log(item['Ф.И.О. автора']);
         var range = getRange(item['Дата выезда']);
         var test = await Order.find({
             'info.nameAbon': item['Ф.И.О. абонента'],
@@ -112,7 +114,7 @@ var imprt = async () => {
                     }
                 })
             id++;
-            console.log(`Import order ${item.type} #${id}`);
+            // console.log(`Import order ${item.type} #${id}`);
             return order.save();
         }
     })
