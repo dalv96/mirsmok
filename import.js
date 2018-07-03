@@ -36,6 +36,7 @@ var imprt = async () => {
         'с. Перово': await Account.findOne({login: 'robot_1'}),
         'г. Евпатория': await Account.findOne({login: 'robot_2'}),
         'г. Феодосия': await Account.findOne({login: 'robot_3'}),
+        'Глухов Максим Александрович': await Account.findOne({login: 'robot_3'}),
         'Феодосия': await Account.findOne({login: 'robot_3'}),
         'г. Севастополь': await Account.findOne({login: 'robot_4'}),
         'г. Ялта': await Account.findOne({login: 'robot_5'}),
