@@ -35,6 +35,8 @@ var imprt = async () => {
         'с. Мирное (Симферопольский район)': await Account.findOne({login: 'robot_1'}),
         'с. Перово': await Account.findOne({login: 'robot_1'}),
         'г. Евпатория': await Account.findOne({login: 'robot_2'}),
+        'Евпатория': await Account.findOne({login: 'robot_2'}),
+        'пгт. Черноморское': await Account.findOne({login: 'robot_2'}),
         'г. Феодосия': await Account.findOne({login: 'robot_3'}),
         'Глухов Максим Александрович': await Account.findOne({login: 'robot_3'}),
         'Феодосия': await Account.findOne({login: 'robot_3'}),
