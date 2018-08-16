@@ -8,7 +8,6 @@ client.connect(function () {
     client.download('/pub', './import', {
        overwrite: 'all'
    }, function (result) {
-       console.log(result);
        process.exit(0);
    });
 })

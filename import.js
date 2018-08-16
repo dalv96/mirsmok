@@ -30,6 +30,7 @@ var imprt = async () => {
 
     var robots = {
         'г. Симферополь': await Account.findOne({login: 'robot_1'}),
+        'пгт. Комсомольское (Симферополь)': await Account.findOne({login: 'robot_1'}),
         'пгт. Грэсовский': await Account.findOne({login: 'robot_1'}),
         'с. Мирное': await Account.findOne({login: 'robot_1'}),
         'с. Мирное (Симферопольский район)': await Account.findOne({login: 'robot_1'}),
@@ -44,6 +45,7 @@ var imprt = async () => {
         'г. Севастополь': await Account.findOne({login: 'robot_4'}),
         'пгт. Форос': await Account.findOne({login: 'robot_4'}),
         'г. Ялта': await Account.findOne({login: 'robot_5'}),
+        'Вотинцев Михаил Сергеевич': await Account.findOne({login: 'robot_1'}),
         'Стрельникова Яна Юрьевна': await Account.findOne({login: 'robot_2'}),
         'Таразевич Юлия Александровна': await Account.findOne({login: 'robot_1'}),
         'Котолупова Татьяна Игоревна': await Account.findOne({login: 'robot_1'}),
