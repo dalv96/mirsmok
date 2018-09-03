@@ -30,6 +30,7 @@ var imprt = async () => {
 
     var robots = {
         'г. Симферополь': await Account.findOne({login: 'robot_1'}),
+        'пгт. Аграрное': await Account.findOne({login: 'robot_1'}),
         'пгт. Комсомольское (Симферополь)': await Account.findOne({login: 'robot_1'}),
         'пгт. Грэсовский': await Account.findOne({login: 'robot_1'}),
         'с. Мирное': await Account.findOne({login: 'robot_1'}),
