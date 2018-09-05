@@ -411,6 +411,11 @@ module.exports = {
                 style: style
             },
             {
+                text: 'Телефон абонента',
+                width: 30,
+                style: style
+            },
+            {
                 text: 'Лицевой счет',
                 width: 15,
                 style: style
@@ -482,17 +487,19 @@ module.exports = {
 
             ws.cell(row, 11).string(item.info.adress);
             ws.cell(row, 12).string(item.info.nameAbon);
+            ws.cell(row, 13).string(item.info.phone);
+
 
             if(item.info.personalAcc) {
-                ws.cell(row, 13).string(item.info.personalAcc);
+                ws.cell(row, 14).string(item.info.personalAcc);
             }
 
             if(item.info.numberTT) {
-                ws.cell(row, 14).string(item.info.numberTT);
+                ws.cell(row, 15).string(item.info.numberTT);
             }
 
             if(item.info.themeTT) {
-                ws.cell(row, 15).string(item.info.themeTT);
+                ws.cell(row, 16).string(item.info.themeTT);
             }
             row++;
         })
