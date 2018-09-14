@@ -26,6 +26,7 @@ var Order = mongoose.Schema({
             ref: 'Exec'
         }]
     },
+    tip: String,
     info: {
         dateInit: {
             type: Date

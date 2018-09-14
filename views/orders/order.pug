@@ -61,6 +61,13 @@ append content
                                 option(value='ГУС Евпатория') ГУС Евпатория
                                 option(value='ГУС Ялта') ГУС Ялта
                                 option(value='ГУС Феодосия') ГУС Феодосия
+                if (order.tip)
+                    .row
+                        .row-name
+                            label.control-label Монтажник (данные из биллинга)
+                        .row-field
+                            input.form-control(type='text' name='tip' value=order.tip disabled)
+
                 if(order.nameExec.length > 0 && order.nameExec[0])                
                     each exec,indx in order.nameExec
                         .row

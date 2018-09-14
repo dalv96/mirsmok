@@ -103,6 +103,7 @@ var imprt = async () => {
                     type: 0,
                     stage: 0,
                     author: auth,
+                    tip: item['Монтажник'],
                     info: {
                         dateInit: new Date(),
                         dateEvent: item['Дата выезда'],
@@ -118,6 +119,7 @@ var imprt = async () => {
                     type: 1,
                     stage: 0,
                     author: auth,
+                    tip: item['Монтажник'],
                     info: {
                         dateInit: new Date(),
                         dateEvent: item['Дата выезда'],
