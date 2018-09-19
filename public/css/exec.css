@@ -5,7 +5,7 @@ body {
   .execs {
     margin-left: 20px;
   
-    width: 700px;
+    width: 750px;
   }
   
   .exec {
@@ -77,7 +77,6 @@ body {
   
     flex: 0 1 100px;
   }
-  
   
   .exec__action > * {
     cursor: pointer;
