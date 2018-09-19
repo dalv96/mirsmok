@@ -1,6 +1,8 @@
 extend ../basic
 append head
     link(rel='stylesheet' href='/public/css/exec.css')
+    link(rel='stylesheet' href='/public/css/exec-new.css')
+
     script(src='/public/js/exec.js')
 append content
     .__block
@@ -18,32 +20,30 @@ append content
                                 option(value = man.id )= man.name 
                     button(type='submit').btn.btn-default.col-xs-2.col-md-1 Добавить
         br
-        .table-exec
-            table.table.table-hover
-                tbody
-                    each exec in execs
-                        tr
-                            td.fullName(id='item'+exec.id)
-                                input.form-control.inpInvis(type='text' id='exec'+exec.id maxlength='30' value=exec.name)
-                                span.control-label(id='label'+exec.id)= exec.name
+        .execs
+            each exec in execs
+                .exec(id='exec'+exec.id)
+                    .exec__name
+                        .exec__text= exec.name
+                            if(exec.manager)
+                                |  (#{exec.manager.name})
+                        .exec__select
+                            input.form-control(type='text' id='name'+exec.id maxlength='30' value=exec.name)
+                            | Бригадир : 
+                            select.form-control(type='text' id='manager'+exec.id)
+                                option
+                                each man in managers
                                     if(exec.manager)
-                                        |  (#{exec.manager.name})
-                            td.fullName(id='itemMan'+exec.id)
-                                select.form-control.inpInvis(type='text' id='manager'+exec.id)
-                                    option
-                                    each man in managers
-                                        if(exec.manager)
-                                            option(value = man.id selected= (man.id == exec.manager.id ))= man.name 
-                                        else
-                                            option(value = man.id )= man.name 
-                            td.fn.vis(id='edit'+exec.id onclick='startEdit('+exec.id+')')
-                                img( width='15' height='15' src='/public/edit.svg' title='Редактировать' alt='Edit')
-                            td.fn.invis(id='save'+exec.id onclick='saveExec("' +exec.id+ '")')
-                                img( width='15' height='15' src='/public/save.svg' title='Сохранить' alt='Save')
-                            if(!exec.usage)
-                                td.fn.vis(id='rm'+exec.id onclick='deleteExec("'+exec.id+'")')
-                                    img( width='15' height='15' src='/public/delete.svg' title='Удалить' alt='Delete')
-                            else
-                                td.fn.invis
-                            td.fn.invis(id='cancel'+exec.id onclick='cancelEdit('+exec.id+')')
-                                img( width='15' height='15' src='/public/cancel.svg' title='Отменить' alt='Cancel')
+                                        option(value = man.id selected= (man.id == exec.manager.id ))= man.name 
+                                    else
+                                        option(value = man.id )= man.name 
+                    .exec__action
+                        .exec__edit(onclick='startEdit('+exec.id+')')
+                            img( width='15' height='15' src='/public/edit.svg' title='Редактировать' alt='Edit')
+                        if(!exec.usage)
+                            .exec__delete(onclick='deleteExec('+exec.id+')')
+                                img( width='15' height='15' src='/public/delete.svg' title='Удалить' alt='Delete')
+                        .exec__save(onclick='saveExec('+exec.id+')')
+                            img( width='15' height='15' src='/public/save.svg' title='Сохранить' alt='Save')
+                        .exec__cancel(onclick='cancelEdit('+exec.id+')')
+                            img( width='15' height='15' src='/public/cancel.svg' title='Отменить' alt='Cancel')

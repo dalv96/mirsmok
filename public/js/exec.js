@@ -1,50 +1,9 @@
 function startEdit(number) {
-    $("#label"+number).animate({
-        opacity:0
-    }, 200).addClass('invis');
-    $("#edit"+number).animate({
-        opacity:0
-    }, 200).addClass('invis').removeClass('vis');
-    $("#rm"+number).animate({
-        opacity:0
-    }, 200).addClass('invis').removeClass('vis')
-    $("#save"+number).animate({
-        opacity: 1
-    }, 200).addClass('visSave');
-    $("#cancel"+number).animate({
-        opacity: 1
-    }, 200).addClass('visSave');
-    $('#exec'+number).addClass('inpVis').removeClass('inpInvis').animate({
-        opacity: 1
-    }, 200);
-    $('#manager'+number).addClass('inpVis').removeClass('inpInvis').animate({
-        opacity: 1
-    }, 200);
-    $('#exec'+number).focus()
+    $("#exec"+number).addClass('exec_edited');
 }
 
 function cancelEdit(number) {
-    $("#label"+number).animate({
-        opacity:1
-    }, 200).removeClass('invis');
-    $("#edit"+number).animate({
-        opacity:1
-    }, 200, () => $("#edit"+number).attr('style', '').removeClass('invis').addClass('vis') )
-    $("#rm"+number).animate({
-        opacity:1
-    }, 200, () => $("#rm"+number).attr('style', '').removeClass('invis').addClass('vis'))
-    $("#save"+number).animate({
-        opacity: 0
-    }, 200).removeClass('visSave');
-    $("#cancel"+number).animate({
-        opacity: 0
-    }, 200).removeClass('visSave');
-    $('#manager'+number).animate({
-        opacity: 0
-    }, 200, () => $('#manager'+number).addClass('inpInvis').removeClass('inpVis'));
-    $('#exec'+number).animate({
-        opacity: 0
-    }, 200, () => $('#exec'+number).addClass('inpInvis').removeClass('inpVis'));
+    $("#exec"+number).removeClass('exec_edited');
 }
 
 function deleteExec(id) {
@@ -61,7 +20,7 @@ function deleteExec(id) {
 }
 
 function saveExec(id) {
-    var newName = $('#exec'+id).val();
+    var newName = $('#name'+id).val();
     var newMan = $('#manager'+id).val();
     $.ajax({
         type: "POST",

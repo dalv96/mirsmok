@@ -1,70 +1,105 @@
 body {
     min-width: 900px;
-}
-
-input {
-    transition: all 0.4s;
-}
-
-.inpInvis {
-    visibility: hidden;
-}
-
-.inpVis {
-    visibility: visible;
-    opacity: 0;
-}
-
-.invis {
-    opacity: 0;
-}
-
-.see {
-    opacity: 1;
-}
-
-table td {
-    border-top: 0px !important;
-}
-
-.fullName input {
-    width: 20em;
+  }
+  
+  .execs {
+    margin-left: 20px;
+  
+    width: 700px;
+  }
+  
+  .exec {
+    display: flex;
+  
+    margin: 30px 0;
+  }
+  
+  .exec .exec__select {
+    display: none;
+  }
+  
+  .exec .exec__text {
+    display: block;  
+  }
+  
+  .exec_edited .exec__select {
+    display: block;  
+  }
+  
+  .exec_edited .exec__text {
+    display: none;
+  }
+  
+  .exec .exec__edit {
+    display: block;
+  }
+  
+  .exec .exec__delete {
+    display: block;
+  }
+  
+  .exec .exec__cancel {
+    display: none;
+  }
+  
+  .exec .exec__save {
+    display: none;
+  }
+  
+  .exec_edited .exec__edit {
+    display: none;
+  }
+  
+  .exec_edited .exec__delete {
+    display: none;
+  }
+  .exec_edited .exec__cancel {
+    display: block;
+  }
+  
+  .exec_edited .exec__save {
+    display: block;
+  }
+  
+  .exec__select * {
+    height: 30px;
+    width: auto;
     display: inline-block;
-}
-
-.fullName span {
-    position: relative;
-    left: -19.07em;
-    z-index: 999;
-}
-
-.table-exec {
-    max-width: 900px;
-}
-
-.fn img{
-    margin-top: 8px;
-}
-
-img {
-    transition: all 0.2s;
-}
-
-.vis {
-    transition: all 0.3s;
-    opacity: 0;
+  }
+  
+  .exec__select input {
+    width: 300px;
+    margin-right: 30px;
+  }
+  
+  .exec__action {
+    display: flex;
+  
+    flex: 0 1 100px;
+  }
+  
+  
+  .exec__action > * {
     cursor: pointer;
-}
-
-.visSave {
-    opacity: 1;
-    cursor: pointer;
-}
-
-tr:hover > .vis {
-    opacity: 1;
-}
-
-.vis:hover img, .visSave:hover img {
+  }
+  
+  .exec__action > *:hover img {
     transform: scale(1.5);
-}
+  }
+  
+  .exec__edit img, .exec__delete img {
+    transition: 0.3s all;
+    opacity: 0;
+  }
+  
+  .exec:hover .exec__edit img, .exec:hover .exec__delete img {
+    opacity: 1;
+  }
+  
+  .exec__name {
+    flex: 1 1 auto;
+  }
+  
+  .exec__action > * {
+    margin: 0 20px;
+  }
