@@ -449,7 +449,10 @@ module.exports = {
 
         orders.forEach( item => {
             ws.cell(row, 1).number(item.id);
-            ws.cell(row, 2).string(item.tip);
+            if (item.tip)
+                ws.cell(row, 2).string(item.tip);
+            else ws.cell(row, 2).string('-');
+            
             if(item.nameExec[0] != null) {
                 ws.cell(row, 3).string(item.nameExec[0].name);
             } else ws.cell(row, 3).string('-');
