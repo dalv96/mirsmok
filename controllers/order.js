@@ -356,6 +356,11 @@ module.exports = {
                 style: style
             },
             {
+                text: 'Монтажник',
+                width: 18,
+                style: style
+            },
+            {
                 text: 'Ф.И.О. инженера 1',
                 width: 18,
                 style: style
@@ -444,62 +449,62 @@ module.exports = {
 
         orders.forEach( item => {
             ws.cell(row, 1).number(item.id);
-
+            ws.cell(row, 2).string(item.tip);
             if(item.nameExec[0] != null) {
-                ws.cell(row, 2).string(item.nameExec[0].name);
-            } else ws.cell(row, 2).string('-');
+                ws.cell(row, 3).string(item.nameExec[0].name);
+            } else ws.cell(row, 3).string('-');
 
             if(item.nameExec[1] != null) {
-                ws.cell(row, 3).string(item.nameExec[1].name);
-            } else ws.cell(row, 3).string('-');
+                ws.cell(row, 4).string(item.nameExec[1].name);
+            } else ws.cell(row, 4).string('-');
 
             var tp = (item.type==0)?'Инсталляция':'Ремонт';
 
             if(item.answers.values[0])
                 if(item.answers.values[0] == -1)
-                    ws.cell(row, 4).string('Нет ответа').style(align);
-                else
-                    ws.cell(row, 4).number(item.answers.values[0]).style(align);
-            else ws.cell(row, 4).string('-').style(align);
-            if(item.answers.values[1])
-                if(item.answers.values[1] == -1)
                     ws.cell(row, 5).string('Нет ответа').style(align);
                 else
-                    ws.cell(row, 5).number(item.answers.values[1]).style(align);
+                    ws.cell(row, 5).number(item.answers.values[0]).style(align);
             else ws.cell(row, 5).string('-').style(align);
-            if(item.answers.values[2])
-                if(item.answers.values[2] == -1)
+            if(item.answers.values[1])
+                if(item.answers.values[1] == -1)
                     ws.cell(row, 6).string('Нет ответа').style(align);
                 else
-                    ws.cell(row, 6).number(item.answers.values[2]).style(align);
+                    ws.cell(row, 6).number(item.answers.values[1]).style(align);
             else ws.cell(row, 6).string('-').style(align);
-            if(item.answers.values[3])
-                if(item.answers.values[3] == -1)
+            if(item.answers.values[2])
+                if(item.answers.values[2] == -1)
                     ws.cell(row, 7).string('Нет ответа').style(align);
                 else
-                    ws.cell(row, 7).number(item.answers.values[3]).style(align);
+                    ws.cell(row, 7).number(item.answers.values[2]).style(align);
             else ws.cell(row, 7).string('-').style(align);
+            if(item.answers.values[3])
+                if(item.answers.values[3] == -1)
+                    ws.cell(row, 8).string('Нет ответа').style(align);
+                else
+                    ws.cell(row, 8).number(item.answers.values[3]).style(align);
+            else ws.cell(row, 8).string('-').style(align);
 
-            ws.cell(row, 8).string(item.answers.comment || '');
+            ws.cell(row, 9).string(item.answers.comment || '');
 
-            ws.cell(row, 9).string(tp).style(align);
-            ws.cell(row, 10).date(item.info.dateEvent).style(align);
+            ws.cell(row, 10).string(tp).style(align);
+            ws.cell(row, 11).date(item.info.dateEvent).style(align);
 
-            ws.cell(row, 11).string(item.info.adress);
-            ws.cell(row, 12).string(item.info.nameAbon);
-            ws.cell(row, 13).string(item.info.phone);
+            ws.cell(row, 12).string(item.info.adress);
+            ws.cell(row, 13).string(item.info.nameAbon);
+            ws.cell(row, 14).string(item.info.phone);
 
 
             if(item.info.personalAcc) {
-                ws.cell(row, 14).string(item.info.personalAcc);
+                ws.cell(row, 15).string(item.info.personalAcc);
             }
 
             if(item.info.numberTT) {
-                ws.cell(row, 15).string(item.info.numberTT);
+                ws.cell(row, 16).string(item.info.numberTT);
             }
 
             if(item.info.themeTT) {
-                ws.cell(row, 16).string(item.info.themeTT);
+                ws.cell(row, 17).string(item.info.themeTT);
             }
             row++;
         })
