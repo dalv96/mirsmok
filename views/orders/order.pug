@@ -61,45 +61,53 @@ append content
                                 option(value='ГУС Евпатория') ГУС Евпатория
                                 option(value='ГУС Ялта') ГУС Ялта
                                 option(value='ГУС Феодосия') ГУС Феодосия
-                if (order.tip)
+                if (!order.nameExec[0] && order.tip)
                     .row
                         .row-name
-                            label.control-label Монтажник (данные из биллинга)
+                            label.control-label Информация из биллинга о исполнителе
                         .row-field
                             input.form-control(type='text' name='tip' value=order.tip disabled)
-
-                if(order.nameExec.length > 0 && order.nameExec[0])                
-                    each exec,indx in order.nameExec
-                        .row
-                            .row-name
-                                label.control-label Ф.И.О. исполнителя №#{indx+1}
-                            .row-field
-                                input.form-control(type='text' value=exec.name disabled)
-                else
+                
+                if (!order.author)
                     .row
                         .row-name
                             label.control-label Ф.И.О иполнителей
                         .row-field
-                            if(order.author)
+                            label Сначала выберите нужный ГУС и сохраните
+                else
+                    if (order.nameExec[0])                
+                        .row
+                            .row-name
+                                label.control-label Ф.И.О. исполнителя №1
+                            .row-field
+                                input.form-control(type='text' value=order.nameExec[0].name disabled)
+                    else
+                        .row
+                            .row-name
+                                label.control-label Ф.И.О. исполнителя №1
+                            .row-field
                                 select.form-control.inpt(name='mainExec' required disabled=(user.role==3))
                                     option
                                     each exec in execs
                                         if(exec.manager.city == order.author.city._id.toString())
                                             option(value=exec._id)= exec.name
-                            else
-                                label Сначала выберите нужный ГУС и сохраните
-                    .row
-                        .row-name
-                            label.control-label
-                        .row-field
-                            if(order.author)
-                                select.form-control.inpt(name='subExec' disabled=(user.role==3))
-                                    option
-                                    each exec in execs
-                                        if(exec.manager.city == order.author.city._id.toString())
-                                            option(value=exec._id)= exec.name
-                            else
-                                label Сначала выберите нужный ГУС и сохраните
+                    if (order.nameExec[1])                
+                        .row
+                            .row-name
+                                label.control-label Ф.И.О. исполнителя №2
+                            .row-field
+                                input.form-control(type='text' value=order.nameExec[1].name disabled)
+                    else
+                        if (user.role != 3)
+                            .row
+                                .row-name
+                                    label.control-label Ф.И.О. исполнителя №2
+                                .row-field
+                                    select.form-control.inpt(name='subExec' disabled=(user.role==3))
+                                        option
+                                        each exec in execs
+                                            if(exec.manager.city == order.author.city._id.toString())
+                                                option(value=exec._id)= exec.name
 
                 if(order.type == '1')
                     .row.repairs

@@ -25,6 +25,8 @@ try {
 
 var Order = require('./models/Order');
 var Account = require('./models/Account');
+var Exec = require('./models/Exec');
+
 
 var imprt = async () => {
 
@@ -85,8 +87,11 @@ var imprt = async () => {
     })
 
     popo.forEach( async (item) => {
-        var auth = robots[item['Ф.И.О. автора']];
+        var auth = robots[item['Ф.И.О. автора']];        
         if(!auth) console.log(item['Ф.И.О. автора']);
+
+        var exec = await Exec.findOne({name: item['Монтажник']});
+
         var range = getRange(item['Дата выезда']);
         var test = await Order.find({
             'info.nameAbon': item['Ф.И.О. абонента'],
@@ -95,43 +100,38 @@ var imprt = async () => {
                 { 'info.dateEvent': { $lte: range[1] } }
             ]
         });
-
+       
         if(test.length == 0) {
-            if(item.type == 'install')
-                var order = new Order({
-                    id: id,
-                    type: 0,
-                    stage: 0,
-                    author: auth,
-                    tip: item['Монтажник'],
-                    info: {
-                        dateInit: new Date(),
-                        dateEvent: item['Дата выезда'],
-                        nameAbon: item['Ф.И.О. абонента'],
-                        phone: item['Номер телефона абонента'],
-                        adress: item['Адрес'],
-                        personalAcc: item['Лицевой счет']
-                    }
-                })
-            if(item.type == 'remonts')
-                var order = new Order({
-                    id: id,
-                    type: 1,
-                    stage: 0,
-                    author: auth,
-                    tip: item['Монтажник'],
-                    info: {
-                        dateInit: new Date(),
-                        dateEvent: item['Дата выезда'],
-                        nameAbon: item['Ф.И.О. абонента'],
-                        phone: item['Номер телефона абонента'],
-                        adress: item['Адрес'],
-                        numberTT: item['Номер ТТ'],
-                        themeTT: item['Тема ТТ']
-                    }
-                })
+            var order = new Order({
+                id: id,
+                stage: 0,
+                author: auth,
+                tip: item['Монтажник'],
+                info: {
+                    dateInit: new Date(),
+                    dateEvent: item['Дата выезда'],
+                    nameAbon: item['Ф.И.О. абонента'],
+                    phone: item['Номер телефона абонента'],
+                    adress: item['Адрес']
+                }
+            })
+            
+            if (exec) {
+                order.nameExec = [exec];
+            }
+
+            if(item.type == 'install') {
+                order.personalAcc = item['Лицевой счет'];
+                order.type = 0;
+            }
+
+            if(item.type == 'remonts') {
+                order.type = 1;
+                order.numberTT = item['Номер ТТ'];
+                order.themeTT = item['Тема ТТ'];
+            }
+
             id++;
-            // console.log(`Import order ${item.type} #${id}`);
             return order.save();
         }
     })
