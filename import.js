@@ -90,8 +90,6 @@ var imprt = async () => {
         var auth = robots[item['Ф.И.О. автора']];        
         if(!auth) console.log(item['Ф.И.О. автора']);
 
-        var exec = await Exec.findOne({name: item['Монтажник']});
-
         var range = getRange(item['Дата выезда']);
         var test = await Order.find({
             'info.nameAbon': item['Ф.И.О. абонента'],
@@ -106,7 +104,6 @@ var imprt = async () => {
                 id: id,
                 stage: 0,
                 author: auth,
-                tip: item['Монтажник'],
                 info: {
                     dateInit: new Date(),
                     dateEvent: item['Дата выезда'],
@@ -116,19 +113,26 @@ var imprt = async () => {
                 }
             })
             
-            if (exec) {
-                order.nameExec = [exec];
-            }
 
             if(item.type == 'install') {
-                order.personalAcc = item['Лицевой счет'];
+                var exec = await Exec.findOne({name: item['Монтажник']});
+                if (exec) {
+                    order.nameExec = [exec];
+                }
+                order.info.personalAcc = item['Лицевой счет'];
+                order.tip = item['Монтажник'];
                 order.type = 0;
             }
 
             if(item.type == 'remonts') {
+                var exec = await Exec.findOne({name: item['Ф.И.О. исполнителя']});
+                if (exec) {
+                    order.nameExec = [exec];
+                }
                 order.type = 1;
-                order.numberTT = item['Номер ТТ'];
-                order.themeTT = item['Тема ТТ'];
+                order.tip = item['Ф.И.О. исполнителя'];
+                order.info.numberTT = item['Номер ТТ'];
+                order.info.themeTT = item['Тема ТТ'];
             }
 
             id++;
