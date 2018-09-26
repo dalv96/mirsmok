@@ -128,6 +128,9 @@ var imprt = async () => {
 
             if(item.type == 'remonts') {
                 exec = await Exec.findOne({name: item['Ф.И.О. исполнителя']});
+                if (exec) {
+                    order.nameExec = [exec];
+                }
                 order.type = 1;
                 order.tip = item['Ф.И.О. исполнителя'];
                 order.info.numberTT = item['Номер ТТ'];
@@ -139,60 +142,8 @@ var imprt = async () => {
             var done = await order.save();
         }
     }
-    // popo.forEach( async (item) => {
-    //     var auth = robots[item['Ф.И.О. автора']];        
-    //     if(!auth) console.log(item['Ф.И.О. автора']);
-
-    //     var range = getRange(item['Дата выезда']);
-    //     var test = await Order.find({
-    //         'info.nameAbon': item['Ф.И.О. абонента'],
-    //         $and: [
-    //             { 'info.dateEvent': { $gte: range[0] } },
-    //             { 'info.dateEvent': { $lte: range[1] } }
-    //         ]
-    //     });
-       
-    //     if(test.length == 0) {
-    //         var order = new Order({
-    //             id: id,
-    //             stage: 0,
-    //             author: auth,
-    //             info: {
-    //                 dateInit: new Date(),
-    //                 dateEvent: item['Дата выезда'],
-    //                 nameAbon: item['Ф.И.О. абонента'],
-    //                 phone: item['Номер телефона абонента'],
-    //                 adress: item['Адрес']
-    //             }
-    //         })
-            
-
-    //         if(item.type == 'install') {
-    //             var exec = await Exec.findOne({name: item['Монтажник']});
-    //             if (exec) {
-    //                 order.nameExec = [exec];
-    //             }
-    //             order.info.personalAcc = item['Лицевой счет'];
-    //             order.tip = item['Монтажник'];
-    //             order.type = 0;
-    //         }
-
-    //         if(item.type == 'remonts') {
-    //             var exec = await Exec.findOne({name: item['Ф.И.О. исполнителя']});
-    //             if (exec) {
-    //                 order.nameExec = [exec];
-    //             }
-    //             order.type = 1;
-    //             order.tip = item['Ф.И.О. исполнителя'];
-    //             order.info.numberTT = item['Номер ТТ'];
-    //             order.info.themeTT = item['Тема ТТ'];
-    //         }
-
-    //         id++;
-            
-    //         return order.save();
-    //     }
-    // })
 }
 
-imprt();
+imprt().then(() => {
+    process.exit(0);
+});
