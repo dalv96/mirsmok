@@ -131,7 +131,7 @@ module.exports = {
         })
     },
 
-    editOrder: function (req, res) {
+    editOrder: async (req, res) => {
         var robots = {
             'ГУС Симферополь': 'robot_1',
             'ГУС Евпатория': 'robot_2',
@@ -140,44 +140,48 @@ module.exports = {
             'ГУС Ялта': 'robot_5'
         };
 
-        Order.findOne({ id: req.params.id }).then( o => {
-            if(!o.author) {
-                Account.findOne({login: robots[req.body.author]}).then( acc => {
-                    o.author = acc;
-                    return o.save();
-                })
-            }
+        var o = await Order.findOne({ id: req.params.id });
 
-            if(res.locals.__user.role != 3) {
-                if(req.body.dateEvent)
-                    o.info.dateEvent = req.body.dateEvent;
-                if(req.body.nameAbon)
-                    o.info.nameAbon = req.body.nameAbon;
-                if(req.body.adress)
-                    o.info.adress = req.body.adress;
-                if(req.body.phone)
-                    o.info.phone = req.body.phone;
-                if(req.body.mainExec)
-                    o.nameExec = [req.body.mainExec, req.body.subExec || null];
-                if(o.type == 0) {
-                    o.info.numberTT = req.body.numberTT;
-                    o.info.themeTT = req.body.themeTT;
-                }
-                if(o.type == 1)
-                    o.info.personalAcc = req.body.personalAcc;
-            }
+        if(!o.author) {
+            Account.findOne({login: robots[req.body.author]}).then( acc => {
+                o.author = acc;
+                return o.save();
+            })
+        }
 
-            if(res.locals.__user.role == 3) {
-                o.stage = 1;
-                o.answers.values = req.body.answers;
-                o.answers.collector = res.locals.__user._id;
-                if(req.body.comment.trim().length < 1) {
-                    o.answers.comment = null;
-                } else o.answers.comment = req.body.comment.trim();
+        if(res.locals.__user.role != 3) {
+            if(req.body.dateEvent)
+                o.info.dateEvent = req.body.dateEvent;
+            if(req.body.nameAbon)
+                o.info.nameAbon = req.body.nameAbon;
+            if(req.body.adress)
+                o.info.adress = req.body.adress;
+            if(req.body.phone)
+                o.info.phone = req.body.phone;
+            if(req.body.mainExec)
+                o.nameExec = [req.body.mainExec, null || o.nameExec[1]];
+            if(req.body.subExec) {
+                o.nameExec = [req.body.mainExec || o.nameExec[0], req.body.subExec];
             }
-            logger.log(`Editing order ${o.id}`);
-            return o.save();
-        }).then(() => res.redirect(req.originalUrl));
+            if(o.type == 0) {
+                o.info.numberTT = req.body.numberTT;
+                o.info.themeTT = req.body.themeTT;
+            }
+            if(o.type == 1)
+                o.info.personalAcc = req.body.personalAcc;
+        }
+        
+        if(res.locals.__user.role == 3) {
+            o.stage = 1;
+            o.answers.values = req.body.answers;
+            o.answers.collector = res.locals.__user._id;
+            if(req.body.comment.trim().length < 1) {
+                o.answers.comment = null;
+            } else o.answers.comment = req.body.comment.trim();
+        }
+        logger.log(`Editing order ${o.id}`);
+        var done = await o.save();
+        res.redirect(req.originalUrl);
     },
 
     collect: function (req, res) {

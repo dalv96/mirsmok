@@ -91,7 +91,7 @@ append content
                                     each exec in execs
                                         if(exec.manager.city == order.author.city._id.toString())
                                             option(value=exec._id)= exec.name
-                    if (order.nameExec[1])                
+                    if (order.nameExec[1])              
                         .row
                             .row-name
                                 label.control-label Ф.И.О. исполнителя №2
@@ -189,8 +189,8 @@ append content
                         .row
                             .order-alert Сперва нужно проставить исполнителей!
             
-            if(user.role == 3 && order.nameExec[0])
+            if(user.role == 3)
                 button(type='submit').btn.btn-success.subm Сохранить
             
-            if(user.role != 3 && !order.nameExec[0])
+            if(user.role != 3 && (!order.nameExec[0] || !order.nameExec[1]))
                 button(type='submit').btn.btn-success.subm Сохранить
