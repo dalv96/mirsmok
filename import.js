@@ -29,39 +29,51 @@ var Exec = require('./models/Exec');
 
 
 var imprt = async () => {
-
+    var ar = {
+        'ГУС Симферополь': await Account.findOne({login: 'robot_1'}),
+        'ГУС Евпатория': await Account.findOne({login: 'robot_2'}),
+        'ГУС Феодосия': await Account.findOne({login: 'robot_3'}),
+        'ГУС Севастополь': await Account.findOne({login: 'robot_4'}),
+        'ГУС Ялта': await Account.findOne({login: 'robot_5'}),
+    }
     var robots = {
-        'г. Симферополь': await Account.findOne({login: 'robot_1'}),
-        'пгт. Аграрное': await Account.findOne({login: 'robot_1'}),
-        'пгт. Комсомольское (Симферополь)': await Account.findOne({login: 'robot_1'}),
-        'пгт. Грэсовский': await Account.findOne({login: 'robot_1'}),
-        'с. Мирное': await Account.findOne({login: 'robot_1'}),
-        'с. Маленькое': await Account.findOne({login: 'robot_1'}),
-        'с. Мирное (Симферопольский район)': await Account.findOne({login: 'robot_1'}),
-        'с. Перово (Симферопольский район)': await Account.findOne({login: 'robot_1'}),
-        'с. Перово': await Account.findOne({login: 'robot_1'}),
-        'г. Евпатория': await Account.findOne({login: 'robot_2'}),
-        'с.Прибрежное (Сакский район)': await Account.findOne({login: 'robot_2'}),
-        'Армянск': await Account.findOne({login: 'robot_2'}),
-        'г. Армянск': await Account.findOne({login: 'robot_2'}),
-        'г.Армянск': await Account.findOne({login: 'robot_2'}),
-        'Евпатория': await Account.findOne({login: 'robot_2'}),
-        'пгт. Черноморское': await Account.findOne({login: 'robot_2'}),
-        'г. Феодосия': await Account.findOne({login: 'robot_3'}),
-        'Советский': await Account.findOne({login: 'robot_3'}),
-        'Глухов Максим Александрович': await Account.findOne({login: 'robot_3'}),
-        'Феодосия': await Account.findOne({login: 'robot_3'}),
-        'г. Севастополь': await Account.findOne({login: 'robot_4'}),
-        'пгт. Форос': await Account.findOne({login: 'robot_4'}),
-        'г. Ялта': await Account.findOne({login: 'robot_5'}),
-        'г. Алупка': await Account.findOne({login: 'robot_5'}),
-        'Вотинцев Михаил Сергеевич': await Account.findOne({login: 'robot_1'}),
-        'Стрельникова Яна Юрьевна': await Account.findOne({login: 'robot_2'}),
-        'Таразевич Юлия Александровна': await Account.findOne({login: 'robot_1'}),
-        'Котолупова Татьяна Игоревна': await Account.findOne({login: 'robot_1'}),
-        'Посох Ольга Анатольевна': await Account.findOne({login: 'robot_3'}),
-        'Лисицына Анастасия Сергеевна': await Account.findOne({login: 'robot_4'}),
-        'Черникова София Михайловна': await Account.findOne({login: 'robot_5'})
+        'г. Симферополь': ar['ГУС Симферополь'],
+        'пгт. Аграрное': ar['ГУС Симферополь'],
+        'пгт. Комсомольское (Симферополь)': ar['ГУС Симферополь'],
+        'пгт. Грэсовский': ar['ГУС Симферополь'],
+        'с. Мирное': ar['ГУС Симферополь'],
+        'с. Маленькое': ar['ГУС Симферополь'],
+        'с. Мирное (Симферопольский район)': ar['ГУС Симферополь'],
+        'с. Перово (Симферопольский район)': ar['ГУС Симферополь'],
+        'с. Перово': ar['ГУС Симферополь'],
+        'Вотинцев Михаил Сергеевич': ar['ГУС Симферополь'],
+        'Таразевич Юлия Александровна': ar['ГУС Симферополь'],
+        'Котолупова Татьяна Игоревна': ar['ГУС Симферополь'],
+
+        'г. Евпатория': ar['ГУС Евпатория'],
+        'с.Прибрежное (Сакский район)': ar['ГУС Евпатория'],
+        'Армянск': ar['ГУС Евпатория'],
+        'г. Армянск': ar['ГУС Евпатория'],
+        'г.Армянск': ar['ГУС Евпатория'],
+        'Евпатория': ar['ГУС Евпатория'],
+        'Стрельникова Яна Юрьевна': ar['ГУС Евпатория'],
+        'пгт. Черноморское': ar['ГУС Евпатория'],
+        
+        'г. Феодосия': ar['ГУС Феодосия'],
+        'Советский': ar['ГУС Феодосия'],
+        'Глухов Максим Александрович': ar['ГУС Феодосия'],
+        'Феодосия': ar['ГУС Феодосия'],
+        'Посох Ольга Анатольевна': ar['ГУС Феодосия'],
+        'пгт. Приморский': ar['ГУС Феодосия'],
+
+        'г. Севастополь': ar['ГУС Севастополь'],
+        'пгт. Форос': ar['ГУС Севастополь'],
+        'Лисицына Анастасия Сергеевна': ar['ГУС Севастополь'],
+
+        'г. Ялта': ar['ГУС Ялта'],
+        'г. Алупка': ar['ГУС Ялта'],
+        'Черникова София Михайловна': ar['ГУС Ялта'],
+        'пгт. Ливадия': ar['ГУС Ялта']
     };
 
     var id = await Order.getNext();
