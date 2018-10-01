@@ -12,7 +12,7 @@ append content
             form(action='/admin/exec/add' method='POST')
                 .row
                     .col-xs-4.col-md-2
-                        input.form-control#addExec(type='text' name='name' maxlength='30' required)
+                        input.form-control#addExec(type='text' name='name' required)
                     .col-xs-4.col-md-2        
                         select.form-control(type='text' name='manager')
                             option
@@ -28,7 +28,7 @@ append content
                             if(exec.manager)
                                 |  (#{exec.manager.name})
                         .exec__select
-                            input.form-control(type='text' id='name'+exec.id maxlength='30' value=exec.name)
+                            input.form-control(type='text' id='name'+exec.id value=exec.name)
                             | Бригадир : 
                             select.form-control(type='text' id='manager'+exec.id)
                                 option
