@@ -153,8 +153,11 @@ var imprt = async () => {
             }
 
             id++;
-            
-            var done = await order.save();
+            try {
+                var done = await order.save();
+            } catch(err) {
+                console.log(order, err);
+            }
         }
     }
 }
