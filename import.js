@@ -1,7 +1,8 @@
 var { convertToImport } = require('./controllers/common');
 var { getRange } = require('./controllers/common');
 
-var yesterday = convertToImport(new Date());
+const today = new Date();
+var yesterday = convertToImport(today);
 // yesterday = '01-03-2018';
 
 console.log();
@@ -35,7 +36,8 @@ var imprt = async () => {
         'ГУС Феодосия': await Account.findOne({login: 'robot_3'}),
         'ГУС Севастополь': await Account.findOne({login: 'robot_4'}),
         'ГУС Ялта': await Account.findOne({login: 'robot_5'}),
-    }
+    };
+
     var robots = {
         'г. Симферополь': ar['ГУС Симферополь'],
         'пгт. Аграрное': ar['ГУС Симферополь'],
@@ -73,7 +75,6 @@ var imprt = async () => {
 
         'г. Ялта': ar['ГУС Ялта'],
         'пгт. Массандра': ar['ГУС Ялта'],
-
         'г. Алупка': ar['ГУС Ялта'],
         'Черникова София Михайловна': ar['ГУС Ялта'],
         'пгт. Ливадия': ar['ГУС Ялта']
@@ -122,7 +123,7 @@ var imprt = async () => {
                 stage: 0,
                 author: auth,
                 info: {
-                    dateInit: new Date(),
+                    dateInit: today,
                     dateEvent: item['Дата выезда'],
                     nameAbon: item['Ф.И.О. абонента'],
                     phone: item['Номер телефона абонента'],
