@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 var models = require('../models');
 var Order = models.Order;
@@ -6,6 +6,7 @@ var Account = models.Account;
 var City = models.City;
 var Manager = models.Manager;
 var Exec = models.Exec;
+var BlackList = models.BlackList;
 var common = require('./common');
 var logger = require('./log');
 var xl = require('excel4node');
@@ -23,44 +24,74 @@ var populateQuery = {
             lean: true
         }
     }
-}
+};
+
 function render(res, success) {
-    Exec.find().sort({ name: 1 }).populate('manager').then(execs => {
-        res.render('orders/init', {execs: execs, success: success});
-    })
+    Exec
+        .find()
+        .sort({ name: 1 })
+        .populate('manager')
+        .then(execs => {
+            res.render('orders/init', {execs: execs, success: success});
+        })
 }
 
 function changeUsage(main, sub) {
-    Exec.findOne({_id: main}).then(ex => {
-        ex.usage = true;
-        ex.save();
-    })
-    if(sub) {
-        Exec.findOne({_id: sub}).then(ex => {
+    Exec
+        .findOne({_id: main})
+        .then(ex => {
             ex.usage = true;
-            ex.save()
-        })
+            ex.save();
+        });
+
+    if (sub) {
+        Exec
+            .findOne({_id: sub})
+            .then(ex => {
+                ex.usage = true;
+                ex.save()
+            })
     }
 }
 
 module.exports = {
+
+    addToBlackList: async (req, res) => {
+        var phone = req.body.phone,
+            isExist = await BlackList.findOne({ phone: phone });
+
+        if (!isExist) {
+            new BlackList({
+                phone: phone
+            }).save();
+        }
+
+        await Order.updateMany({'info.phone': phone}, {$set: {inBlackList: true}});
+        res.sendStatus(200);
+    },
+
     getInitPage: function (req, res) {
-        Exec.find().sort({ name: 1 }).then(execs => {
-            render(res, false);
-        })
+        Exec
+            .find()
+            .sort({ name: 1 })
+            .then(execs => {
+                render(res, false);
+            })
     },
 
     getMyOrders: async (req, res) => {
         var query = req.query;
 
         var acc = await Account.find({city: res.locals.__user.city});
+
         acc = acc.map( item => {
             return {
                 author: item._id
             };
         });
 
-        var orders = await Order.find({$or: acc, nameExec: []})
+        var orders = await Order
+                        .find({$or: acc, nameExec: [], inBlackList: false})
                         .populate(populateQuery.authorCity)
                         .lean()
                         .sort({ 'info.dateInit': 1 });
@@ -82,7 +113,7 @@ module.exports = {
     getOrdersPage: async (req, res) => {
         var query = req.query;
 
-        var orders = await Order.find({ stage: 0 })
+        var orders = await Order.find({ stage: 0, inBlackList: false })
                         .populate(populateQuery.authorCity)
                         .lean()
                         .sort({ 'info.dateInit': 1 });
@@ -116,13 +147,15 @@ module.exports = {
                     phone: req.body.phone,
                     adress: req.body.adress,
                 }
-            })
-            if(req.body.type == 0) { //Инсталяция
+            });
+
+            if(req.body.type === 0) { //Инсталяция
                 order.info.personalAcc = req.body.personalAcc;
             } else { // Ремонты
                 order.info.numberTT = req.body.numberTT;
                 order.info.themeTT = req.body.themeTT;
             }
+
             logger.log(`Init order ${order.id}`);
             return order.save();
         }).then(()=> {
@@ -149,7 +182,7 @@ module.exports = {
             })
         }
 
-        if(res.locals.__user.role != 3) {
+        if(res.locals.__user.role !== 3) {
             if(req.body.dateEvent)
                 o.info.dateEvent = req.body.dateEvent;
             if(req.body.nameAbon)
@@ -163,15 +196,15 @@ module.exports = {
             if(req.body.subExec) {
                 o.nameExec = [req.body.mainExec || o.nameExec[0], req.body.subExec];
             }
-            if(o.type == 0) {
+            if(o.type === 0) {
                 o.info.numberTT = req.body.numberTT;
                 o.info.themeTT = req.body.themeTT;
             }
-            if(o.type == 1)
+            if(o.type === 1)
                 o.info.personalAcc = req.body.personalAcc;
         }
         
-        if(res.locals.__user.role == 3) {
+        if(res.locals.__user.role === 3) {
             o.stage = 1;
             o.answers.values = req.body.answers;
             o.answers.collector = res.locals.__user._id;
@@ -212,7 +245,7 @@ module.exports = {
         var execs = await Exec.find().lean();
         var cities = await City.find().lean();
         var managers = await Manager.find().lean();
-        var orders = await Order.find({author: {$ne: null}}).populate('author nameExec').lean();
+        var orders = await Order.find({author: {$ne: null}, inBlackList: false  }).populate('author nameExec').lean();
 
         var ret = [];
         orders.forEach( item => {
@@ -248,23 +281,23 @@ module.exports = {
         var query = req.query;
         res.locals.queries = query;
         res.locals.url = req.url;
-        var filter = {};
+        var filter = { inBlackList: false };
 
-        if (query.id != '' && !isNaN(query.id)) {
+        if (query.id !== '' && !isNaN(query.id)) {
             filter.id = query.id
         }
 
-        if (query.type && query.type != 'none') {
-            if (query.type == 'install') {
+        if (query.type && query.type !== 'none') {
+            if (query.type === 'install') {
                 filter.type = 0;
             }
-            if (query.type == 'remonts') {
+            if (query.type === 'remonts') {
                 filter.type = 1;
             }
         }
 
-        if (query.gus && query.gus != 'none') {
-            if(query.gus == 'unknown') {
+        if (query.gus && query.gus !== 'none') {
+            if(query.gus === 'unknown') {
                 filter.author = null;
             } else {
                 var acc = await Account.find({city: query.gus});
@@ -277,15 +310,15 @@ module.exports = {
             }
         }
 
-        if (query.exec && query.exec != 'none') {
-            if(query.exec == 'unknown') {
+        if (query.exec && query.exec !== 'none') {
+            if(query.exec === 'unknown') {
                 filter.nameExec = [];
             } else {
                 filter.nameExec = query.exec;
             }
         }
 
-        if (query.stage && query.stage != 'none') {
+        if (query.stage && query.stage !== 'none') {
             filter.stage = query.stage;
         }
 
@@ -299,7 +332,7 @@ module.exports = {
             query.end = new Date(dateParts[2], (dateParts[1] - 1), dateParts[0]);
         }
 
-        if(query.end == 'Invalid Date' || query.start == 'Invalid Date') {
+        if(query.end === 'Invalid Date' || query.start === 'Invalid Date') {
 
         } else {
 
@@ -448,7 +481,7 @@ module.exports = {
         titles.forEach( (item, i) => {
             ws.cell(1, i+1).string(item.text).style(item.style);
             ws.column(i+1).setWidth(item.width);
-        })
+        });
         var row = 2;
 
         orders.forEach( item => {
@@ -457,36 +490,36 @@ module.exports = {
                 ws.cell(row, 2).string(item.tip);
             else ws.cell(row, 2).string('-');
             
-            if(item.nameExec[0] != null) {
+            if(item.nameExec[0] !== null) {
                 ws.cell(row, 3).string(item.nameExec[0].name);
             } else ws.cell(row, 3).string('-');
 
-            if(item.nameExec[1] != null) {
+            if(item.nameExec[1] !== null) {
                 ws.cell(row, 4).string(item.nameExec[1].name);
             } else ws.cell(row, 4).string('-');
 
-            var tp = (item.type==0)?'Инсталляция':'Ремонт';
+            var tp = (item.type === 0)?'Инсталляция':'Ремонт';
 
             if(item.answers.values[0])
-                if(item.answers.values[0] == -1)
+                if(item.answers.values[0] === -1)
                     ws.cell(row, 5).string('Нет ответа').style(align);
                 else
                     ws.cell(row, 5).number(item.answers.values[0]).style(align);
             else ws.cell(row, 5).string('-').style(align);
             if(item.answers.values[1])
-                if(item.answers.values[1] == -1)
+                if(item.answers.values[1] === -1)
                     ws.cell(row, 6).string('Нет ответа').style(align);
                 else
                     ws.cell(row, 6).number(item.answers.values[1]).style(align);
             else ws.cell(row, 6).string('-').style(align);
             if(item.answers.values[2])
-                if(item.answers.values[2] == -1)
+                if(item.answers.values[2] === -1)
                     ws.cell(row, 7).string('Нет ответа').style(align);
                 else
                     ws.cell(row, 7).number(item.answers.values[2]).style(align);
             else ws.cell(row, 7).string('-').style(align);
             if(item.answers.values[3])
-                if(item.answers.values[3] == -1)
+                if(item.answers.values[3] === -1)
                     ws.cell(row, 8).string('Нет ответа').style(align);
                 else
                     ws.cell(row, 8).number(item.answers.values[3]).style(align);
@@ -514,7 +547,7 @@ module.exports = {
                 ws.cell(row, 17).string(item.info.themeTT);
             }
             row++;
-        })
+        });
 
         wb.write('Export-SMOK.xlsx', res);
     },
@@ -527,23 +560,23 @@ module.exports = {
         var st = query.start,
             end = query.end;
 
-        var filter = {};
+        var filter = { inBlackList: false };
 
-        if (query.id != '' && !isNaN(query.id)) {
+        if (query.id !== '' && !isNaN(query.id)) {
             filter.id = query.id
         }
 
-        if (query.type && query.type != 'none') {
-            if (query.type == 'install') {
+        if (query.type && query.type !== 'none') {
+            if (query.type === 'install') {
                 filter.type = 0;
             }
-            if (query.type == 'remonts') {
+            if (query.type === 'remonts') {
                 filter.type = 1;
             }
         }
 
-        if (query.gus && query.gus != 'none') {
-            if(query.gus == 'unknown') {
+        if (query.gus && query.gus !== 'none') {
+            if(query.gus === 'unknown') {
                 filter.author = null;
             } else {
                 var acc = await Account.find({city: query.gus});
@@ -556,15 +589,15 @@ module.exports = {
             }
         }
 
-        if (query.exec && query.exec != 'none') {
-            if(query.exec == 'unknown') {
+        if (query.exec && query.exec !== 'none') {
+            if(query.exec === 'unknown') {
                 filter.nameExec = [];
             } else {
                 filter.nameExec = query.exec;
             }
         }
 
-        if (query.stage && query.stage != 'none') {
+        if (query.stage && query.stage !== 'none') {
             filter.stage = query.stage;
         }
 
@@ -578,16 +611,16 @@ module.exports = {
             query.end = new Date(dateParts[2], (dateParts[1] - 1), dateParts[0]);
         }
 
-        if(query.end == 'Invalid Date' || query.start == 'Invalid Date') {
-            query.end = end
+        if(query.end === 'Invalid Date' || query.start === 'Invalid Date') {
+            query.end = end;
             query.start = st;
         } else {
 
             if(query.start && query.end)
-                filter['info.dateEvent'] = { $gte: new Date(query.start), $lte: new Date(query.end) }
+                filter['info.dateEvent'] = { $gte: new Date(query.start), $lte: new Date(query.end) };
 
             if(query.start && !query.end)
-                filter['info.dateEvent'] = { $gte: new Date(query.start) }
+                filter['info.dateEvent'] = { $gte: new Date(query.start) };
 
             if(!query.start && query.end)
                 filter['info.dateEvent'] = { $gte: new Date(query.start) }
@@ -614,7 +647,7 @@ module.exports = {
     },
 
     getOrder: async (req, res) => {
-        var order = await Order.findOne({'id' : req.params.id}).deepPopulate('author author.city nameExec answers.collector');
+        var order = await Order.findOne({'id' : req.params.id, inBlackList: false }).deepPopulate('author author.city nameExec answers.collector');
 
         if (order) {
             var execs = await Exec.find().sort({ name: 1 }).populate('manager');
@@ -629,7 +662,7 @@ module.exports = {
 
     delete: function (req, res) {
         Order.findOne({'id' : req.params.id}).populate('author').then( o => {
-            if(o.stage == 0 && (res.locals.__user.role == 2 || res.locals.__user.role == 0)) {
+            if(o.stage === 0 && (res.locals.__user.role === 2 || res.locals.__user.role === 0)) {
                 logger.log(`Delete order ${o.id}`);
                 return o.remove();
             }

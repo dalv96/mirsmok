@@ -1,39 +1,64 @@
 window.onload = function () {
     var i = document.createElement("input");
     i.setAttribute("type", "date");
-    if(i.type != 'date') {
+    if(i.type !== 'date') {
         // $('.search-date').datepicker();
     }
-}
+
+    var btnAddToBlackList = document.querySelector('.addToBlackList');
+
+    if (btnAddToBlackList) {
+        btnAddToBlackList.addEventListener('click', addToBlackList);
+        btnAddToBlackList.addEventListener('touch', addToBlackList);
+    }
+};
 
 function setAttr(prmName,val){
     var res = '';
-	var d = location.href.split("#")[0].split("?");
-	var base = d[0];
-	var query = d[1];
-	if(query) {
-		var params = query.split("&");
-		for(var i = 0; i < params.length; i++) {
-			var keyval = params[i].split("=");
-			if(keyval[0] != prmName) {
-				res += params[i] + '&';
-			}
-		}
-	}
-	res += prmName + '=' + val;
-	window.location.href = base + '?' + res;
-	return false;
+    var d = location.href.split("#")[0].split("?");
+    var base = d[0];
+    var query = d[1];
+    if(query) {
+        var params = query.split("&");
+        for(var i = 0; i < params.length; i++) {
+            var keyval = params[i].split("=");
+            if(keyval[0] !== prmName) {
+                res += params[i] + '&';
+            }
+        }
+    }
+    res += prmName + '=' + val;
+    window.location.href = base + '?' + res;
+    return false;
 }
 
 function changePage(disabled, val){
-    if(disabled != 'page-item disabled')
+    if(disabled !== 'page-item disabled')
         setAttr('page', val)
 }
 
 
+function addToBlackList(e) {
+    e.preventDefault();
+
+    var phone = this.getAttribute('data-phone');
+
+    phone && $.ajax({
+        type: 'POST',
+        url: '/collector/addToBlackList',
+        data: {
+            phone: phone
+        },
+        success: () => {
+            window.location = '/collector/orders';
+        }
+    });
+
+}
+
 
 function changeType(f) {
-    if(f==1) {
+    if(f === 1) {
         $('.repairs_hide').addClass('repairs').removeClass('repairs_hide');
         $('.install').addClass('install_hide').removeClass('install');
     } else {

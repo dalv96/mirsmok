@@ -36,7 +36,7 @@ module.exports = {
         Manager.findOne({id: req.body.id}).then( m => {
             if(m) {
                 return Manager.findOne({name: req.body.newName}).then(manager => {
-                    if(!manager || m.id == manager.id) {
+                    if(!manager || m.id === manager.id) {
                         logger.log(`Edit manager ${m.name} -> ${req.body.newName} `);
                         m.name = req.body.newName;
                         m.city = req.body.city;
@@ -49,7 +49,7 @@ module.exports = {
     delete: function (req, res) {
         Manager.findOne({id: req.body.id}).then( m => {
             if(m) {
-                if(m.usage == false) {
+                if(!m.usage) {
                     logger.log(`Delete manager ${m.name}`);
                     return m.remove();
                 }

@@ -19,6 +19,8 @@ html
                             if(__user.role != 0)
                                 li: a(href='/' tabindex='990')
                                     span Мои заявки
+                                li: a(href='/collector/blackList' tabindex='991')
+                                    span Черный список
                             if(__user.role == 2)
                                 li: a(href='/init' tabindex='991')
                                     span Создать заявку
