@@ -1,0 +1,60 @@
+.black-list {
+    width: 800px;
+    margin: 30px auto;
+}
+
+.black-list__head {
+    margin-bottom: 20px;
+}
+
+h3.black-list__title {
+    font-size: 24pt;
+}
+
+.black-list__score {
+    font-size: 14pt;
+    font-style: italic;
+}
+
+.black-list__item {
+    width: 60%;
+    padding: 12px 0;
+}
+
+.black-list__item:hover {
+    background: #f9f9f9;
+}
+
+.black-list__phone {
+    padding-left: 20px;
+    display: inline-block;
+    width: 300px;
+}
+
+.black-list__action {
+    display: inline-block;
+
+    margin-left: 30px;
+    cursor: pointer;
+}
+
+.black-list__delete {
+    color: darkred;
+}
+
+.black-list__cancel {
+    color: grey;
+    visibility: hidden;
+}
+
+.black-list__item_deleted .black-list__cancel {
+    visibility: visible;
+}
+
+.black-list__item_deleted .black-list__delete {
+    visibility: hidden;
+}
+
+.black-list__item_deleted .black-list__phone {
+    text-decoration: line-through;
+}

@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 var mongoose = require('../controllers/connect');
 
@@ -63,6 +63,10 @@ var Order = mongoose.Schema({
         },
         values: [Number],
         comment: String
+    },
+    inBlackList: {
+        type: Boolean,
+        default: false
     }
 });
 

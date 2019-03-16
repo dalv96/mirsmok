@@ -7,6 +7,7 @@ const order = require('./order');
 const executor = require('./executor');
 const manager = require('./manager');
 const city = require('./city');
+const blackList = require('./blackList');
 
 module.exports = function(app) {
 
@@ -32,7 +33,7 @@ module.exports = function(app) {
                 res.redirect('/my-orders');
                 break;
             case 3:
-                res.redirect('/collector/orders')
+                res.redirect('/collector/orders');
                 break;
         }
     });
@@ -90,9 +91,12 @@ module.exports = function(app) {
     // ****************** СБОРЩИК ОТЗЫВОВ **********************
 
     app.all('/collector/*', auth.isCollector);
-    app.get('/collector/orders', order.getOrdersPage)
+    app.get('/collector/orders', order.getOrdersPage);
     app.get('/collector/orders/:id', order.collect);
     app.post('/collector/orders/:id', order.saveOrder);
+    app.post('/collector/addToBlackList', order.addToBlackList);
+    app.get('/collector/blacklist', blackList.getAll);
+    app.post('/collector/blacklist/delete', blackList.deletePhone);
 
     app.all('*', function (req, res) {
         res.render('404')

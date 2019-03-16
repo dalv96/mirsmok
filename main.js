@@ -60,5 +60,5 @@ router(app);
 
 app.listen(conf.get("server:port"), function() {
     console.log(`\n  ################## RELOAD SERVER - ${common.dateToExtStr()} ################### \n`);
-    logger.log(`Server listening on port ${conf.get("server:port")}`);
+    logger.log(`Server started on http://0.0.0.0:${conf.get("server:port")}`);
 });

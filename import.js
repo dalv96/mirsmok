@@ -27,7 +27,7 @@ try {
 var Order = require('./models/Order');
 var Account = require('./models/Account');
 var Exec = require('./models/Exec');
-
+var BlackList = require('./models/BlackList');
 
 var imprt = async () => {
     var ar = {
@@ -83,6 +83,8 @@ var imprt = async () => {
     };
 
     var id = await Order.getNext();
+    var isBL = await BlackList.findOne({phone: item['Номер телефона абонента']});
+
     console.log(`Found installs #${installs.length}`);
     console.log(`Found remonts #${remonts.length}`);
     var checkDub = [];
@@ -94,7 +96,7 @@ var imprt = async () => {
             popo.push(it);
             checkDub.push(`${it['Ф.И.О. абонента']} ${it['Адрес']}`);
         } else console.log('Found dublicate');
-    })
+    });
 
     remonts.forEach( it => {
         it.type = 'remonts';
@@ -102,7 +104,7 @@ var imprt = async () => {
             popo.push(it);
             checkDub.push(`${it['Ф.И.О. абонента']} ${it['Адрес']}`);
         } else console.log('Found dublicate');
-    })
+    });
 
     for (let i = 0; i < popo.length; i++) {
         var item = popo[i];
@@ -119,7 +121,7 @@ var imprt = async () => {
             ]
         });
        
-        if(test.length == 0) {
+        if(test.length === 0) {
             var order = new Order({
                 id: id,
                 stage: 0,
@@ -130,11 +132,12 @@ var imprt = async () => {
                     nameAbon: item['Ф.И.О. абонента'],
                     phone: item['Номер телефона абонента'],
                     adress: item['Адрес']
-                }
-            })
+                },
+                inBlackList: !!isBL
+            });
             var exec;
 
-            if(item.type == 'install') {
+            if(item.type === 'install') {
                 exec = await Exec.findOne({name: item['Монтажник']});
                 if (exec) {
                     order.nameExec = [exec];
@@ -144,7 +147,7 @@ var imprt = async () => {
                 order.type = 0;
             }
 
-            if(item.type == 'remonts') {
+            if(item.type === 'remonts') {
                 exec = await Exec.findOne({name: item['Ф.И.О. исполнителя']});
                 if (exec) {
                     order.nameExec = [exec];
@@ -163,7 +166,7 @@ var imprt = async () => {
             }
         }
     }
-}
+};
 
 imprt().then(() => {
     process.exit(0);

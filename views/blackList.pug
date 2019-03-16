@@ -1,0 +1,18 @@
+extend ./basic
+
+append head
+    link(rel='stylesheet' href='/public/css/blackList.css')
+    script(src='/public/js/blackList.js')
+    block title
+        title СМОК | Список номеров, отказавшихся от звонков
+append content
+    .black-list
+        .black-list__head
+            h3.black-list__title Список номеров, отказавшихся от звонков
+            span.black-list__score Всего: #{blackList.length}
+        .black-list__body
+            each bl, idx in blackList
+                .black-list__item(id=idx)
+                    span.black-list__phone= bl.phone
+                    span.black-list__action.black-list__delete(data-phone=bl.phone data-idx=idx) Удалить
+                    span.black-list__action.black-list__cancel(data-phone=bl.phone data-idx=idx) Отмена

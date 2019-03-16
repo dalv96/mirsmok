@@ -11,7 +11,7 @@ append content
             .header-cell
                 .title-order Заявка ##{order.id}
             .header-cell
-                if(order.stage == 0 && (__user.role == 2 || __user.role == 0))
+                if(order.stage === 0 && (__user.role === 2 || __user.role === 0))
                     span.delete
                         button.btn.btn-danger(onclick='deleteOrder('+ order.id + ')') Удалить заявку
         hr
@@ -23,7 +23,7 @@ append content
                         label.control-label Тип проведенных работ
                     .row-field
                         select.form-control(onChange='changeType(this.value)' required disabled)
-                            if(order.type == 0)
+                            if(order.type === 0)
                                 option(value='0' selected) Инсталляция
                             else
                                 option(value='1' selected) Ремонт
@@ -182,15 +182,18 @@ append content
                             .row-name
                                 label.control-label Комментарий клиента
                             .row-field
-                                textarea.form-control(rows=5 name='comment' disabled=(user.role != 3))=order.answers.comment
+                                textarea.form-control(rows=5 name='comment' disabled=(user.role !== 3))=order.answers.comment
             else
-                if(user.role == 3)
+                if(user.role === 3)
                     .order-part
                         .row
                             .order-alert Сперва нужно проставить исполнителей!
             
-            if(user.role == 3)
+            if(user.role === 3)
                 button(type='submit').btn.btn-success.subm Сохранить
-            
-            if(user.role != 3 && (!order.nameExec[0] || !order.nameExec[1]))
+                button(data-phone=order.info.phone).btn.btn-warning.subm.addToBlackList Попросил больше не звонить
+
+            if(user.role !== 3 && (!order.nameExec[0] || !order.nameExec[1]))
                 button(type='submit').btn.btn-success.subm Сохранить
+
+
