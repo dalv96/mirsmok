@@ -485,6 +485,7 @@ module.exports = {
         var row = 2;
 
         orders.forEach( item => {
+
             ws.cell(row, 1).number(item.id);
             if (item.tip)
                 ws.cell(row, 2).string(item.tip);
@@ -494,7 +495,7 @@ module.exports = {
                 ws.cell(row, 3).string(item.nameExec[0].name);
             } else ws.cell(row, 3).string('-');
 
-            if(item.nameExec[1] !== null) {
+            if(item.nameExec[1]) {
                 ws.cell(row, 4).string(item.nameExec[1].name);
             } else ws.cell(row, 4).string('-');
 
