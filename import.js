@@ -108,6 +108,10 @@ var imprt = async () => {
     for (let i = 0; i < popo.length; i++) {
         var item = popo[i];
 
+        var isBL = await BlackList.findOne({phone: item['Номер телефона абонента']});
+
+        !!isBl && console.log(`Номер телефона: ${item['Номер телефона абонента']} в черном списке`);
+
         var auth = robots[item['Ф.И.О. автора']];        
         if(!auth) console.log(item['Ф.И.О. автора']);
 
@@ -119,7 +123,7 @@ var imprt = async () => {
                 { 'info.dateEvent': { $lte: range[1] } }
             ]
         });
-       
+
         if(test.length === 0) {
             var order = new Order({
                 id: id,
@@ -132,7 +136,7 @@ var imprt = async () => {
                     phone: item['Номер телефона абонента'],
                     adress: item['Адрес']
                 },
-                inBlackList: await BlackList.findOne({phone: item['Номер телефона абонента']})
+                inBlackList: !!isBL
             });
             var exec;
 
