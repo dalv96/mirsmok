@@ -110,7 +110,7 @@ var imprt = async () => {
 
         var isBL = await BlackList.findOne({phone: item['Номер телефона абонента']});
 
-        !!isBl && console.log(`Номер телефона: ${item['Номер телефона абонента']} в черном списке`);
+        !!isBL && console.log(`Номер телефона: ${item['Номер телефона абонента']} в черном списке`);
 
         var auth = robots[item['Ф.И.О. автора']];        
         if(!auth) console.log(item['Ф.И.О. автора']);
