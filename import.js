@@ -83,7 +83,6 @@ var imprt = async () => {
     };
 
     var id = await Order.getNext();
-    var isBL = await BlackList.findOne({phone: item['Номер телефона абонента']});
 
     console.log(`Found installs #${installs.length}`);
     console.log(`Found remonts #${remonts.length}`);
@@ -133,7 +132,7 @@ var imprt = async () => {
                     phone: item['Номер телефона абонента'],
                     adress: item['Адрес']
                 },
-                inBlackList: !!isBL
+                inBlackList: await BlackList.findOne({phone: item['Номер телефона абонента']})
             });
             var exec;
 
