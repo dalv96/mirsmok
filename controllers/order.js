@@ -347,7 +347,6 @@ module.exports = {
 
         }
 
-
         var orders = await Order.find(filter).populate('nameExec').lean().sort({_id:-1});
 
         var wb = new xl.Workbook({
@@ -491,7 +490,7 @@ module.exports = {
                 ws.cell(row, 2).string(item.tip);
             else ws.cell(row, 2).string('-');
             
-            if(item.nameExec[0] !== null) {
+            if(item.nameExec[0]) {
                 ws.cell(row, 3).string(item.nameExec[0].name);
             } else ws.cell(row, 3).string('-');
 
