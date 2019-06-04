@@ -10,7 +10,7 @@ var BlackList = models.BlackList;
 var common = require('./common');
 var logger = require('./log');
 var xl = require('excel4node');
-
+const _ = require('lodash');
 
 var populateQuery = {
     authorCity: {
@@ -203,7 +203,7 @@ module.exports = {
             if(o.type === 1)
                 o.info.personalAcc = req.body.personalAcc;
         }
-        
+
         if(res.locals.__user.role === 3) {
             o.stage = 1;
             o.answers.values = req.body.answers;
@@ -347,7 +347,7 @@ module.exports = {
 
         }
 
-        var orders = await Order.find(filter).populate('nameExec').lean().sort({_id:-1});
+        var orders = await Order.find(filter).populate('nameExec answers.collector').lean().sort({_id:-1});
 
         var wb = new xl.Workbook({
           dateFormat: 'dd/mm/yyyy'
@@ -470,6 +470,11 @@ module.exports = {
                 text: 'Тема ТТ',
                 width: 40,
                 style: style
+            },
+            {
+                text: 'Ф.И.О. cборшика отзывов',
+                width: 30,
+                style: style
             }
         ];
 
@@ -489,7 +494,7 @@ module.exports = {
             if (item.tip)
                 ws.cell(row, 2).string(item.tip);
             else ws.cell(row, 2).string('-');
-            
+
             if(item.nameExec[0]) {
                 ws.cell(row, 3).string(item.nameExec[0].name);
             } else ws.cell(row, 3).string('-');
@@ -546,6 +551,9 @@ module.exports = {
             if(item.info.themeTT) {
                 ws.cell(row, 17).string(item.info.themeTT);
             }
+
+            ws.cell(row, 18).string(_.get(item, 'answers.collector.fullName', '––'));
+
             row++;
         });
 
