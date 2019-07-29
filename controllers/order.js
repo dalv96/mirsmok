@@ -488,57 +488,41 @@ module.exports = {
         });
         var row = 2;
 
+        const types = ['Инсталляция', 'Ремнот'];
+
         orders.forEach( item => {
 
             ws.cell(row, 1).number(item.id);
-            if (item.tip)
-                ws.cell(row, 2).string(item.tip);
-            else ws.cell(row, 2).string('-');
 
-            if(item.nameExec[0]) {
-                ws.cell(row, 3).string(item.nameExec[0].name);
-            } else ws.cell(row, 3).string('-');
+            ws.cell(row, 2).string(_.get(item, 'tip', '-'));
 
-            if(item.nameExec[1]) {
-                ws.cell(row, 4).string(item.nameExec[1].name);
-            } else ws.cell(row, 4).string('-');
+            ws.cell(row, 3).string(_.get(item, 'nameExec[0].name', '-'));
+            ws.cell(row, 4).string(_.get(item, 'nameExec[1].name', '-'));
 
-            var tp = (item.type === 0)?'Инсталляция':'Ремонт';
+            let answers = [
+                _.get(item, 'answers.values[0]', '-'),
+                _.get(item, 'answers.values[1]', '-'),
+                _.get(item, 'answers.values[2]', '-'),
+                _.get(item, 'answers.values[3]', '-'),
+            ];
 
-            if(item.answers.values[0])
-                if(item.answers.values[0] === -1)
-                    ws.cell(row, 5).string('Нет ответа').style(align);
-                else
-                    ws.cell(row, 5).number(item.answers.values[0]).style(align);
-            else ws.cell(row, 5).string('-').style(align);
-            if(item.answers.values[1])
-                if(item.answers.values[1] === -1)
-                    ws.cell(row, 6).string('Нет ответа').style(align);
-                else
-                    ws.cell(row, 6).number(item.answers.values[1]).style(align);
-            else ws.cell(row, 6).string('-').style(align);
-            if(item.answers.values[2])
-                if(item.answers.values[2] === -1)
-                    ws.cell(row, 7).string('Нет ответа').style(align);
-                else
-                    ws.cell(row, 7).number(item.answers.values[2]).style(align);
-            else ws.cell(row, 7).string('-').style(align);
-            if(item.answers.values[3])
-                if(item.answers.values[3] === -1)
-                    ws.cell(row, 8).string('Нет ответа').style(align);
-                else
-                    ws.cell(row, 8).number(item.answers.values[3]).style(align);
-            else ws.cell(row, 8).string('-').style(align);
+            answers = answers.map(answr => {
+                return answr === -1 ? 'Нет ответа' : answr;
+            });
 
-            ws.cell(row, 9).string(item.answers.comment || '');
+            ws.cell(row, 5).string(answers[0]).style(align);
+            ws.cell(row, 6).string(answers[1]).style(align);
+            ws.cell(row, 7).string(answers[2]).style(align);
+            ws.cell(row, 8).string(answers[3]).style(align);
 
-            ws.cell(row, 10).string(tp).style(align);
+            ws.cell(row, 9).string(_.get(item, 'answers.comment', '-'));
+
+            ws.cell(row, 10).string(types[item.type]).style(align);
             ws.cell(row, 11).date(item.info.dateEvent).style(align);
 
             ws.cell(row, 12).string(item.info.adress);
             ws.cell(row, 13).string(item.info.nameAbon);
             ws.cell(row, 14).string(item.info.phone);
-
 
             if(item.info.personalAcc) {
                 ws.cell(row, 15).string(item.info.personalAcc);
