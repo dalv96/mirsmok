@@ -507,38 +507,41 @@ module.exports = {
             ];
 
             answers = answers.map(answr => {
-                return answr === -1 ? 'Нет ответа' : answr.toString();
-            });
+                if (answr) {
+                    return answr === -1 ? 'Нет ответа' : answr.toString();
+                }
 
-            console.log(answers);
+                return '-';
+            });
 
             ws.cell(row, 5).string(answers[0]).style(align);
             ws.cell(row, 6).string(answers[1]).style(align);
             ws.cell(row, 7).string(answers[2]).style(align);
             ws.cell(row, 8).string(answers[3]).style(align);
 
-            // ws.cell(row, 9).string(_.get(item, 'answers.comment', '-'));
+            const comment = _.get(item, 'answers.comment', '-') || '-';
+            ws.cell(row, 9).string(comment);
 
-            // ws.cell(row, 10).string(types[item.type]).style(align);
-            // ws.cell(row, 11).date(item.info.dateEvent).style(align);
+            ws.cell(row, 10).string(types[item.type]).style(align);
+            ws.cell(row, 11).date(item.info.dateEvent).style(align);
 
-            // ws.cell(row, 12).string(item.info.adress);
-            // ws.cell(row, 13).string(item.info.nameAbon);
-            // ws.cell(row, 14).string(item.info.phone);
+            ws.cell(row, 12).string(item.info.adress);
+            ws.cell(row, 13).string(item.info.nameAbon);
+            ws.cell(row, 14).string(item.info.phone);
 
-            // if(item.info.personalAcc) {
-            //     ws.cell(row, 15).string(item.info.personalAcc);
-            // }
+            if(item.info.personalAcc) {
+                ws.cell(row, 15).string(item.info.personalAcc);
+            }
 
-            // if(item.info.numberTT) {
-            //     ws.cell(row, 16).string(item.info.numberTT);
-            // }
+            if(item.info.numberTT) {
+                ws.cell(row, 16).string(item.info.numberTT);
+            }
 
-            // if(item.info.themeTT) {
-            //     ws.cell(row, 17).string(item.info.themeTT);
-            // }
+            if(item.info.themeTT) {
+                ws.cell(row, 17).string(item.info.themeTT);
+            }
 
-            // ws.cell(row, 18).string(_.get(item, 'answers.collector.fullName', '––'));
+            ws.cell(row, 18).string(_.get(item, 'answers.collector.fullName', '––'));
 
             row++;
         });
