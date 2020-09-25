@@ -96,5 +96,13 @@ function search() {
         start = $('#search_start').val(),
         end = $('#search_end').val();
 
+    if (!checkDate(start)) {
+        start = ''
+    }
+
+    if (!checkDate(end)) {
+        end = ''
+    }
+
     window.location.search = `id=${id}&type=${type}&gus=${gus}&exec=${exec}&stage=${stage}&start=${start}&end=${end}`;
 }

@@ -11,6 +11,7 @@ var common = require('./common');
 var logger = require('./log');
 var xl = require('excel4node');
 const _ = require('lodash');
+const moment = require('moment');
 
 var populateQuery = {
     authorCity: {
@@ -559,9 +560,6 @@ module.exports = {
         res.locals.queries = query;
         res.locals.url = req.url;
 
-        var st = query.start,
-            end = query.end;
-
         var filter = { inBlackList: false };
 
         if (query.id !== '' && !isNaN(query.id)) {
@@ -603,30 +601,11 @@ module.exports = {
             filter.stage = query.stage;
         }
 
-        if (query.start) {
-            let dateParts = query.start.split(".");
-            query.start = new Date(dateParts[2], (dateParts[1] - 1), dateParts[0]);
-        }
+        const start = moment(query.start || '01.01.2015', 'DD.MM.YYYY');
+        const end = moment(query.end || '01.01.2050', 'DD.MM.YYYY');
 
-        if (query.end) {
-            let dateParts = query.end.split(".");
-            query.end = new Date(dateParts[2], (dateParts[1] - 1), dateParts[0]);
-        }
-
-        if(query.end === 'Invalid Date' || query.start === 'Invalid Date') {
-            query.end = end;
-            query.start = st;
-        } else {
-
-            if(query.start && query.end)
-                filter['info.dateEvent'] = { $gte: new Date(query.start), $lte: new Date(query.end) };
-
-            if(query.start && !query.end)
-                filter['info.dateEvent'] = { $gte: new Date(query.start) };
-
-            if(!query.start && query.end)
-                filter['info.dateEvent'] = { $gte: new Date(query.start) }
-
+        if (start.isValid() && end.isValid()) {
+            filter['info.dateEvent'] = { $gte: start.toDate(), $lte: end.toDate() };
         }
 
         const perPage = 100;

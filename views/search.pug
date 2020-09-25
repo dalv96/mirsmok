@@ -4,6 +4,7 @@ append head
     link(rel='stylesheet' href='/public/css/jquery-ui.css')
     script(src='/public/js/jquery-ui.min.js')
     script(src='/public/js/order.js')
+    script(src='/public/js/super.js')
     block title
         title СМОК | Поиск заявок
 append content
@@ -37,12 +38,10 @@ append content
                 .search-form__cell
                     span Дата выезда
                     span от:
-                    input.form-control(type='text' id='search_start' value=(queries.start)?dateToStr(queries.start):'' placeholder='дд.мм.гггг').search-date
+                    input.form-control(type='text' id='search_start' onblur=()=>alert('asdasd') value=queries.start placeholder='дд.мм.гггг').search-date
                     span до:
-                    input.form-control(type='text' id='search_end' value=(queries.end)?dateToStr(queries.end):'' placeholder='дд.мм.гггг').search-date
+                    input.form-control(type='text' id='search_end' value=queries.end placeholder='дд.мм.гггг').search-date
 
-        if(!sssss)
-            script(src='/public/js/super.js')
         .search-form__row
             .search-form__row-name Тип проведенных работ
             .search-form__row-field
