@@ -90,22 +90,24 @@ module.exports = {
             };
         });
 
-        var orders = await Order
-                        .find({$or: acc, nameExec: [], inBlackList: false})
-                        .populate(populateQuery.authorCity)
-                        .lean()
-                        .sort({ 'info.dateInit': 1 });
+        const filter = { $or: acc, nameExec: [], inBlackList: false };
 
-        var dlina = orders.length,
-            perPage = 1000,
-            pages = Math.ceil(dlina/perPage),
-            nowPage = query.page || 1;
+        const perPage = 100;
+        const page = query.page || 1;
+        const total = await Order.count(filter);
+        const pages = Math.ceil(total/perPage);
 
-        res.locals.dlina = dlina;
+        const orders = await Order
+            .find(filter)
+            .populate(populateQuery.authorCity)
+            .sort({ 'info.dateInit': -1 })
+            .skip((page - 1) * perPage)
+            .limit(perPage)
+            .lean();
+
+        res.locals.dlina = total;
         res.locals.pages = pages;
-        res.locals.nowPage = nowPage;
-        if(nowPage > pages) nowPage = pages;
-        orders = orders.slice((nowPage-1)*perPage, nowPage*perPage);
+        res.locals.nowPage = page;
 
         res.render('orders/orders', {orders: orders});
     },
@@ -113,21 +115,24 @@ module.exports = {
     getOrdersPage: async (req, res) => {
         var query = req.query;
 
-        var orders = await Order.find({ stage: 0, inBlackList: false })
-                        .populate(populateQuery.authorCity)
-                        .lean()
-                        .sort({ 'info.dateInit': 1 });
+        const filter = { stage: 0, inBlackList: false };
 
-        var dlina = orders.length,
-            perPage = 1000,
-            pages = Math.ceil(dlina/perPage),
-            nowPage = query.page || 1;
+        const perPage = 1000;
+        const page = query.page || 1;
+        const total = await Order.count(filter);
+        const pages = Math.ceil(total/perPage);
 
-        res.locals.dlina = dlina;
+        const orders = await Order
+            .find(filter)
+            .populate(populateQuery.authorCity)
+            .sort({ 'info.dateInit': 1 })
+            .skip((page - 1) * perPage)
+            .limit(perPage)
+            .lean();
+
+        res.locals.dlina = total;
         res.locals.pages = pages;
-        res.locals.nowPage = nowPage;
-        if(nowPage > pages) nowPage = pages;
-        orders = orders.slice((nowPage-1)*perPage, nowPage*perPage);
+        res.locals.nowPage = page;
 
         res.render('orders/orders', {orders: orders});
     },
@@ -624,18 +629,16 @@ module.exports = {
 
         }
 
-        var orders = await Order.find(filter).populate(populateQuery.authorCity).lean().sort({_id:-1});
+        const perPage = 100;
+        const page = query.page || 1;
+        const total = await Order.count(filter);
+        const pages = Math.ceil(total/perPage);
 
-        var dlina = orders.length,
-            perPage = 100,
-            pages = Math.ceil(dlina/perPage),
-            nowPage = query.page || 1;
+        var orders = await Order.find(filter).populate(populateQuery.authorCity).sort({_id:-1}).skip((page - 1) * perPage).limit(perPage).lean();
 
-        res.locals.dlina = dlina;
+        res.locals.dlina = total;
         res.locals.pages = pages;
-        res.locals.nowPage = nowPage;
-        if(nowPage > pages) nowPage = pages;
-        orders = orders.slice((nowPage-1)*perPage, nowPage*perPage);
+        res.locals.nowPage = page;
 
         var execs = await Exec.find().lean().sort({'name': 1});
         var cities = await City.find().lean();
