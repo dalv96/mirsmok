@@ -349,7 +349,7 @@ module.exports = {
                 filter['info.dateEvent'] = { $gte: new Date(query.start) }
 
             if(!query.start && query.end)
-                filter['info.dateEvent'] = { $gte: new Date(query.start) }
+                filter['info.dateEvent'] = { $lte: new Date(query.end) }
 
         }
 
